@@ -1,0 +1,7 @@
+-git repository	[PARTIALLY]
+-create project	[PARTIALLY]
+
+-write class for property reading
+-class representing fluid properties (providing default fluid properties, and using property file)
+
+-classes for other physx parameters
