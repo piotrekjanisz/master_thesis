@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2FA25989-A277-4DD4-B399-4CF2F38DC9C7}</ProjectGuid>
-    <RootNamespace>fluid_vis</RootNamespace>
+    <ProjectGuid>{923F5DA7-46C1-4EBE-8442-B1EA8F5F8292}</ProjectGuid>
+    <RootNamespace>test</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,15 +41,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PreBuildEvent>
-      <Command>copy *.glsl $(TargetDir)shaders &amp;&amp; copy *.cfg $(TargetDir)config</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -65,34 +60,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractScene.cpp" />
-    <ClCompile Include="BaseException.cpp" />
-    <ClCompile Include="CameraFrame.cpp" />
-    <ClCompile Include="ErrorStream.cpp" />
-    <ClCompile Include="GfxStaticObject.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="physx_utils.cpp" />
-    <ClCompile Include="Properties.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="ShapeFactory.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AbstractScene.h" />
-    <ClInclude Include="BaseException.h" />
-    <ClInclude Include="CameraFrame.h" />
-    <ClInclude Include="ErrorStream.h" />
-    <ClInclude Include="GfxStaticObject.h" />
-    <ClInclude Include="physx_utils.h" />
-    <ClInclude Include="Properties.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="ShapeFactory.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="sample.cfg" />
-    <None Include="fragment.glsl" />
-    <None Include="vertex.glsl" />
+    <ClCompile Include="PropertiesTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

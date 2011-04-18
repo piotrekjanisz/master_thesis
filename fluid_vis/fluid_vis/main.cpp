@@ -1,7 +1,7 @@
 #pragma comment(lib, "PhysXLoader.lib")
 #pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "GLUS.lib")
-
+#pragma comment(lib, "boost_regex-vc100-mt-gd-1_46_1")
 
 #include <NxCooking.h>
 #include <NxPhysics.h>
@@ -12,6 +12,7 @@
 #include "Scene.h"
 #include "ErrorStream.h"
 #include "physx_utils.h"
+#include "Properties.h"
 
 using namespace std;
 
@@ -181,6 +182,22 @@ void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned
 
 int main(int argc, char** argv)
 {
+	Properties prop;
+	try {
+		prop.load("./config/sample.cfg");
+		cout << prop.get<int>("int1") << endl;
+		cout << prop.get<int>("int2") << endl;
+		cout << prop.get<float>("float1") << endl;
+		cout << prop.get<float>("float2") << endl;
+		cout << prop.get<float>("float3") << endl;
+		cout << prop.get<float>("float4") << endl;
+		cout << prop.get<string>("str1") << endl;
+		cout << prop.get<string>("str2") << endl;
+	} catch (BaseException& ex) {
+		cout << ex.what() << endl;
+	}
+	//prop.printProperties();
+
 	atexit(releaseNx);
 
 	initNx();

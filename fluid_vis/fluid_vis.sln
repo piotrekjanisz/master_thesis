@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fluid_vis", "fluid_vis\fluid_vis.vcxproj", "{2FA25989-A277-4DD4-B399-4CF2F38DC9C7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{923F5DA7-46C1-4EBE-8442-B1EA8F5F8292}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2FA25989-A277-4DD4-B399-4CF2F38DC9C7} = {2FA25989-A277-4DD4-B399-4CF2F38DC9C7}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +18,10 @@ Global
 		{2FA25989-A277-4DD4-B399-4CF2F38DC9C7}.Debug|Win32.Build.0 = Debug|Win32
 		{2FA25989-A277-4DD4-B399-4CF2F38DC9C7}.Release|Win32.ActiveCfg = Release|Win32
 		{2FA25989-A277-4DD4-B399-4CF2F38DC9C7}.Release|Win32.Build.0 = Release|Win32
+		{923F5DA7-46C1-4EBE-8442-B1EA8F5F8292}.Debug|Win32.ActiveCfg = Debug|Win32
+		{923F5DA7-46C1-4EBE-8442-B1EA8F5F8292}.Debug|Win32.Build.0 = Debug|Win32
+		{923F5DA7-46C1-4EBE-8442-B1EA8F5F8292}.Release|Win32.ActiveCfg = Release|Win32
+		{923F5DA7-46C1-4EBE-8442-B1EA8F5F8292}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

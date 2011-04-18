@@ -16,6 +16,9 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{5e6231a8-6d8e-4b0a-bf5f-01a6eab5ed08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{79e5e6e7-becb-4838-87d6-534daa45170c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,6 +51,9 @@
     <ClCompile Include="ShapeFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Properties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -77,6 +83,9 @@
     <ClInclude Include="ShapeFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Properties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.glsl">
@@ -84,6 +93,9 @@
     </None>
     <None Include="vertex.glsl">
       <Filter>shaders</Filter>
+    </None>
+    <None Include="sample.cfg">
+      <Filter>config</Filter>
     </None>
   </ItemGroup>
 </Project>
