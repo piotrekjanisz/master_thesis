@@ -71,6 +71,7 @@
     <ClCompile Include="ErrorStream.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PhysxConfigurationFactory.cpp" />
     <ClCompile Include="physx_utils.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="CameraFrame.h" />
     <ClInclude Include="ErrorStream.h" />
     <ClInclude Include="GfxStaticObject.h" />
+    <ClInclude Include="PhysxConfigurationFactory.h" />
     <ClInclude Include="physx_utils.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="Scene.h" />

@@ -2,11 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <vmmlib/vector.hpp>
+#include <boost/filesystem.hpp>
 
 
-const boost::regex Properties::__LINE_PATTERN("^\\s*(\\w+)\\s*=\\s*([a-zA-Z0-9_.-]+)\\s*$");
+const boost::regex Properties::__LINE_PATTERN("^\\s*(\\w+)\\s*=\\s*([a-zA-Z0-9_.,()-]+).*");
 const boost::regex Properties::__INT_PATTERN("^-?\\d+i$");
 const boost::regex Properties::__FLOAT_PATTERN("^-?\\d+(.\\d+)?f$");
+const boost::regex Properties::__VEC3_PATTERN("^\\((-?\\d+(.\\d+)?)\\s*,\\s*(-?\\d+(.\\d+)?)\\s*,\\s*(-?\\d+(.\\d+)?)\\)$");
 
 Properties::Properties(void)
 {
@@ -16,7 +19,7 @@ Properties::~Properties(void)
 {
 }
 
-void Properties::processLine(const std::string& line, int lineNumber) throw(PropertiesException)
+void Properties::processLine(const std::string& fileName, const std::string& line, int lineNumber) throw(PropertiesException)
 {
 	boost::smatch match;
 	if (boost::regex_match(line, match, __LINE_PATTERN)) {
@@ -26,11 +29,18 @@ void Properties::processLine(const std::string& line, int lineNumber) throw(Prop
 			_properties[key] = (float)atof(valueStr.c_str());
 		} else if (boost::regex_match(valueStr, __INT_PATTERN)) {
 			_properties[key] = (int) atoi(valueStr.c_str());
+		} else if (boost::regex_match(valueStr, match, __VEC3_PATTERN)) {
+			vmml::vec3f v;
+			for (int i = 0 ; i < 3; i++) {
+				std::string component(match[2*i + 1].first, match[2*i + 1].second);
+				v[i] = (float)atof(component.c_str());
+			}
+			_properties[key] = v;
 		} else {
 			_properties[key] = valueStr;
 		}
 	} else {
-		std::cerr << "WARN: line " << lineNumber << ": wrong format" << std::endl;
+		std::cerr << "WARN: " << fileName << ":" << lineNumber << ": wrong format" << std::endl;
 	}
 }
 
@@ -48,7 +58,7 @@ void Properties::load(const std::string& file) throw(PropertiesException)
 		input.getline(buffer, BUFFER_SIZE);
 		if (input.gcount() == 0)
 			break;
-		processLine(buffer, line);
+		processLine(file, buffer, line);
 		line++;
 	}
 }

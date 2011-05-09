@@ -27,10 +27,11 @@ class Properties
 	static const boost::regex __LINE_PATTERN;
 	static const boost::regex __INT_PATTERN;
 	static const boost::regex __FLOAT_PATTERN;
+	static const boost::regex __VEC3_PATTERN;
 
 	std::map<std::string, boost::any> _properties;
 	
-	void processLine(const std::string& line, int lineNumber) throw(PropertiesException);
+	void processLine(const std::string& fileName, const std::string& line, int lineNumber) throw(PropertiesException);
 public:
 	Properties(void);
 	~Properties(void);

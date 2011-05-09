@@ -13,6 +13,7 @@
 #include "ErrorStream.h"
 #include "physx_utils.h"
 #include "Properties.h"
+#include "PhysxConfigurationFactory.h"
 
 using namespace std;
 
@@ -182,22 +183,6 @@ void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned
 
 int main(int argc, char** argv)
 {
-	Properties prop;
-	try {
-		prop.load("./config/sample.cfg");
-		cout << prop.get<int>("int1") << endl;
-		cout << prop.get<int>("int2") << endl;
-		cout << prop.get<float>("float1") << endl;
-		cout << prop.get<float>("float2") << endl;
-		cout << prop.get<float>("float3") << endl;
-		cout << prop.get<float>("float4") << endl;
-		cout << prop.get<string>("str1") << endl;
-		cout << prop.get<string>("str2") << endl;
-	} catch (BaseException& ex) {
-		cout << ex.what() << endl;
-	}
-	//prop.printProperties();
-
 	atexit(releaseNx);
 
 	initNx();
@@ -231,7 +216,7 @@ int main(int argc, char** argv)
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	// Only continue, if OpenGL 3.3 is supported.
+	// continue only if OpenGL 3.3 is supported.
 	if (!glewIsSupported("GL_VERSION_3_2"))
 	{
 		cout << "OpenGL 3.2 not supported." << endl;
