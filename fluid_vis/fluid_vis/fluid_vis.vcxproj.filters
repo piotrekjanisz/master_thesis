@@ -14,16 +14,13 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="shaders">
-      <UniqueIdentifier>{5e6231a8-6d8e-4b0a-bf5f-01a6eab5ed08}</UniqueIdentifier>
+      <UniqueIdentifier>{cf543b13-cd4e-4e83-91e5-74b2456831fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="config">
-      <UniqueIdentifier>{79e5e6e7-becb-4838-87d6-534daa45170c}</UniqueIdentifier>
+      <UniqueIdentifier>{6dc433f6-4abd-4df1-b058-7c638b8579a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AbstractScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PhysxConfigurationFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFluid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,15 +92,24 @@
     <ClInclude Include="PhysxConfigurationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyFluid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment.glsl">
+    <None Include="resources\shaders\vertex.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="vertex.glsl">
+    <None Include="resources\shaders\fragment.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="sample.cfg">
+    <None Include="resources\config\emitter1.cfg">
+      <Filter>config</Filter>
+    </None>
+    <None Include="resources\config\sample.cfg">
+      <Filter>config</Filter>
+    </None>
+    <None Include="resources\config\water1.cfg">
       <Filter>config</Filter>
     </None>
   </ItemGroup>

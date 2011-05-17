@@ -8,6 +8,31 @@ using namespace std;
 using namespace boost::filesystem;
 
 
+/**
+ *    Macros for shortening the code in "create.." methods
+ */
+#define SET_FLOAT(data, properties, propertyName) \
+	if (properties->hasKeyOfType<float>(#propertyName)) \
+		data.propertyName = properties->get<float>(#propertyName)
+
+#define SET_INT(data, properties, propertyName) \
+	if (properties->hasKeyOfType<int>(#propertyName)) \
+		data.propertyName = properties->get<int>(#propertyName)
+
+#define SET_VEC3(data, properties, propertyName) \
+	if (properties->hasKeyOfType<vmml::vec3f>(#propertyName)) \
+		data.propertyName = NxVec3(properties->get<vmml::vec3f>(#propertyName).array)
+
+#define SET_UINT_CONST(data, properties, propertyName, stringToConstant) \
+	if (properties->hasKeyOfType<std::string>(#propertyName)) { \
+		std::string str = properties->get<std::string>(#propertyName); \
+		if (stringToConstant.count(str) == 0) { \
+			cerr << "WARNING: unrecognized value of " #propertyName " in " #data << str << endl; \
+		} else { \
+			data.propertyName = stringToConstant[str]; \
+		} \
+	}
+
 PhysxConfigurationFactory::PhysxConfigurationFactory(const std::string& configurationRoot) throw(PhysxConfigurationException)
 	: _configurationRoot(configurationRoot) 
 {
@@ -17,6 +42,7 @@ PhysxConfigurationFactory::PhysxConfigurationFactory(const std::string& configur
 	} else if (!is_directory(_configurationRoot)) {
 		throw PhysxConfigurationException(_configurationRoot.string() + " is not a directory");
 	}
+	initStringToConstant();
 }
 
 
@@ -24,11 +50,19 @@ PhysxConfigurationFactory::~PhysxConfigurationFactory(void)
 {
 }
 
+void PhysxConfigurationFactory::initStringToConstant()
+{
+	_stringToConstant["NX_FE_CONSTANT_FLOW_RATE"] = NX_FE_CONSTANT_FLOW_RATE;
+	_stringToConstant["NX_FE_CONSTANT_PRESSURE"] = NX_FE_CONSTANT_PRESSURE;
+	_stringToConstant["NX_FE_RECTANGULAR"] = NX_FE_RECTANGULAR;
+	_stringToConstant["NX_FE_ELLIPSE"] = NX_FE_ELLIPSE;
+}
+
 string PhysxConfigurationFactory::getConfigFilePath(const string name) throw(PhysxConfigurationException)
 {
 	path configPath = _configurationRoot;
-	configPath /= name;
-	configPath = absolute(configPath.replace_extension(".cfg")).normalize();
+	configPath /= (name + ".cfg");
+	configPath = absolute(configPath).normalize();
 
 	if (!exists(configPath)) {
 		throw PhysxConfigurationException(configPath.string() + " doesn't exist");
@@ -59,47 +93,40 @@ NxFluidDesc PhysxConfigurationFactory::createFluidDesc(const std::string& name) 
 
 	boost::shared_ptr<Properties> properties = getProperties(name);
 
-	if (properties->hasKeyOfType<int>("maxParticles"))
-		retVal.maxParticles = properties->get<float>("maxParticles");
+	SET_INT(retVal, properties, maxParticles);
+	SET_FLOAT(retVal, properties, kernelRadiusMultiplier);
+	SET_FLOAT(retVal, properties, restParticlesPerMeter);
+	SET_FLOAT(retVal, properties, restDensity);
+	SET_FLOAT(retVal, properties, viscosity);
+	SET_FLOAT(retVal, properties, stiffness);
+	SET_FLOAT(retVal, properties, damping);
+	SET_FLOAT(retVal, properties, surfaceTension);
+	SET_FLOAT(retVal, properties, collisionDistanceMultiplier);
+	SET_FLOAT(retVal, properties, dynamicFrictionForStaticShapes);
+	SET_FLOAT(retVal, properties, restitutionForStaticShapes);
+	SET_FLOAT(retVal, properties, motionLimitMultiplier);
+	SET_INT(retVal, properties, packetSizeMultiplier);
+	SET_VEC3(retVal, properties, externalAcceleration);
 
-	if (properties->hasKeyOfType<float>("kernelRadiusMultiplier"))
-		retVal.kernelRadiusMultiplier = properties->get<float>("kernelRadiusMultiplier");
+	return retVal;
+}
 
-	if (properties->hasKeyOfType<float>("restParticlesPerMeter"))
-		retVal.restParticlesPerMeter = properties->get<float>("restParticlesPerMeter");
+NxFluidEmitterDesc PhysxConfigurationFactory::createFluidEmitterDesc(const std::string& name) throw(PhysxConfigurationException)
+{
+	NxFluidEmitterDesc retVal;
+	boost::shared_ptr<Properties> properties = getProperties(name);
 
-	if (properties->hasKeyOfType<float>("restDensity"))
-		retVal.restDensity = properties->get<float>("restDensity");
-
-	if (properties->hasKeyOfType<float>("viscosity"))
-		retVal.viscosity = properties->get<float>("viscosity");
-
-	if (properties->hasKeyOfType<float>("stiffness"))
-		retVal.stiffness = properties->get<float>("stiffness");
-
-	if (properties->hasKeyOfType<float>("damping"))
-		retVal.damping = properties->get<float>("damping");
-
-	if (properties->hasKeyOfType<float>("surfaceTension"))
-		retVal.surfaceTension = properties->get<float>("surfaceTension");
-
-	if (properties->hasKeyOfType<float>("collisionDistanceMultiplier"))
-		retVal.collisionDistanceMultiplier = properties->get<float>("collisionDistanceMultiplier");
-
-	if (properties->hasKeyOfType<float>("dynamicFrictionForStaticShapes"))
-		retVal.dynamicFrictionForStaticShapes = properties->get<float>("dynamicFrictionForStaticShapes");
-
-	if (properties->hasKeyOfType<float>("restitutionForStaticShapes"))
-		retVal.restitutionForStaticShapes = properties->get<float>("restitutionForStaticShapes");
-
-	if (properties->hasKeyOfType<float>("motionLimitMultiplier"))
-		retVal.motionLimitMultiplier = properties->get<float>("motionLimitMultiplier");
-
-	if (properties->hasKeyOfType<int>("packetSizeMultiplier"))
-		retVal.packetSizeMultiplier = properties->get<int>("packetSizeMultiplier");
-
-	if (properties->hasKeyOfType<vmml::vec3f>("externalAcceleration"))
-		retVal.externalAcceleration = NxVec3(properties->get<vmml::vec3f>("externalAcceleration").array);
+	SET_INT(retVal, properties, maxParticles);
+	SET_FLOAT(retVal, properties, dimensionX);
+	SET_FLOAT(retVal, properties, dimensionY);
+	SET_UINT_CONST(retVal, properties, type, _stringToConstant);
+	SET_FLOAT(retVal, properties, rate);
+	SET_FLOAT(retVal, properties, fluidVelocityMagnitude);
+	SET_FLOAT(retVal, properties, particleLifetime);
+	SET_UINT_CONST(retVal, properties, shape, _stringToConstant);
+	SET_FLOAT(retVal, properties, repulsionCoefficient);
+	SET_VEC3(retVal, properties, randomPos);
+	SET_FLOAT(retVal, properties, randomAngle);
 
 	return retVal;
 }

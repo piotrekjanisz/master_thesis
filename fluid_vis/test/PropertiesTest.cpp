@@ -1,14 +1,52 @@
-//#pragma comment(lib, "boost_unit_test_framework-vc100-mt-gd")
-#define BOOST_TEST_MODULE PropertiesTest
-#include <boost\test\unit_test.hpp>
+#include <fluid_vis/Properties.h>
+#include <boost/test/unit_test.hpp>
+#include <vmmlib\vmmlib.hpp>
 
-BOOST_AUTO_TEST_CASE(get_test)
+using namespace std;
+
+struct PropertiesTestFixture
 {
-	Properties properties;
-	BOOST_CHECK_THROW(properties.get<int>("ala"), ElementNotFoundException);
+	PropertiesTestFixture()
+		: mTestFile("test_config/test1.cfg"), mWrongTestFile("some\file\foo")
+	{
+		mProperties.load(mTestFile);
+	}
+
+	~PropertiesTestFixture()
+	{
+	}
+
+	Properties mProperties;
+	string mTestFile;
+	string mWrongTestFile;
+};
+
+BOOST_FIXTURE_TEST_SUITE(PropertiesTest, PropertiesTestFixture);
+
+BOOST_AUTO_TEST_CASE(LoadTestConfigFile)
+{
+	BOOST_CHECK_NO_THROW(mProperties.load(mTestFile));
+	BOOST_CHECK_THROW(mProperties.load(mWrongTestFile), exception);
 }
 
-int main(int argc, char** argv)
+BOOST_AUTO_TEST_CASE(HasKeyOfType)
 {
-	return 1;
+	BOOST_CHECK(mProperties.hasKeyOfType<int>("int1"));
+	BOOST_CHECK(mProperties.hasKeyOfType<int>("int2"));
+	BOOST_CHECK(mProperties.hasKeyOfType<float>("float1"));
+	BOOST_CHECK(mProperties.hasKeyOfType<float>("float2"));
+	BOOST_CHECK(mProperties.hasKeyOfType<vmml::vec3f>("vec1"));
+	BOOST_CHECK(mProperties.hasKeyOfType<string>("str1"));
 }
+
+BOOST_AUTO_TEST_CASE(GetProperties)
+{
+	BOOST_CHECK_EQUAL(mProperties.get<int>("int1"), 123);
+	BOOST_CHECK_EQUAL(mProperties.get<int>("int2"), -123);
+	BOOST_CHECK_EQUAL(mProperties.get<float>("float1"), 123.0f);
+	BOOST_CHECK_EQUAL(mProperties.get<float>("float2"), -123.123f);
+	BOOST_CHECK_EQUAL(mProperties.get<vmml::vec3f>("vec1"), vmml::vec3f(1.0f, 1.0f, -1.0f));
+	BOOST_CHECK_EQUAL(mProperties.get<string>("str1"), string("Ala ma kota"));
+}
+
+BOOST_AUTO_TEST_SUITE_END();

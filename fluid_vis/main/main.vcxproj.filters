@@ -13,30 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="config">
-      <UniqueIdentifier>{a7365e06-ac5d-4583-b8a0-cfe94d5580c7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="runner.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PropertiesTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="resources\config\PhysxConfigurationFactoryTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\test_config\test1.cfg">
-      <Filter>config</Filter>
-    </None>
-    <None Include="resources\test_config\emitter1.cfg">
-      <Filter>config</Filter>
-    </None>
-    <None Include="resources\test_config\water1.cfg">
-      <Filter>config</Filter>
-    </None>
   </ItemGroup>
 </Project>

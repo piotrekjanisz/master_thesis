@@ -7,7 +7,6 @@
 #include <vmmlib\vmmlib.hpp>
 #include <boost\smart_ptr.hpp>
 
-
 class Scene : public AbstractScene
 {	
 	int _projectionLocation;

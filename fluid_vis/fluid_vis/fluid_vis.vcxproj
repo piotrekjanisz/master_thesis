@@ -16,12 +16,12 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -48,7 +48,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>copy *.glsl $(TargetDir)shaders &amp;&amp; copy *.cfg $(TargetDir)config</Command>
+      <Command>powershell "&amp;'./copy_resources.ps1' $(TargetDir) "</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,7 +70,7 @@
     <ClCompile Include="CameraFrame.cpp" />
     <ClCompile Include="ErrorStream.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyFluid.cpp" />
     <ClCompile Include="PhysxConfigurationFactory.cpp" />
     <ClCompile Include="physx_utils.cpp" />
     <ClCompile Include="Properties.cpp" />
@@ -84,6 +84,7 @@
     <ClInclude Include="CameraFrame.h" />
     <ClInclude Include="ErrorStream.h" />
     <ClInclude Include="GfxStaticObject.h" />
+    <ClInclude Include="MyFluid.h" />
     <ClInclude Include="PhysxConfigurationFactory.h" />
     <ClInclude Include="physx_utils.h" />
     <ClInclude Include="Properties.h" />
@@ -92,9 +93,11 @@
     <ClInclude Include="ShapeFactory.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample.cfg" />
-    <None Include="fragment.glsl" />
-    <None Include="vertex.glsl" />
+    <None Include="resources\config\emitter1.cfg" />
+    <None Include="resources\config\sample.cfg" />
+    <None Include="resources\config\water1.cfg" />
+    <None Include="resources\shaders\fragment.glsl" />
+    <None Include="resources\shaders\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

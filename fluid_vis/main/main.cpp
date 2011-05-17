@@ -8,12 +8,12 @@
 #include <GL/glew.h>
 #include <GL/glus.h>
 #include <iostream>
-#include "ShaderProgram.h"
-#include "Scene.h"
-#include "ErrorStream.h"
-#include "physx_utils.h"
-#include "Properties.h"
-#include "PhysxConfigurationFactory.h"
+#include "fluid_vis/ShaderProgram.h"
+#include "fluid_vis/Scene.h"
+#include "fluid_vis/ErrorStream.h"
+#include "fluid_vis/physx_utils.h"
+#include "fluid_vis/Properties.h"
+#include "fluid_vis/PhysxConfigurationFactory.h"
 
 using namespace std;
 
@@ -183,6 +183,7 @@ void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned
 
 int main(int argc, char** argv)
 {
+
 	atexit(releaseNx);
 
 	initNx();

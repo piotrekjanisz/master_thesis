@@ -6,9 +6,11 @@
 #include <boost/filesystem.hpp>
 
 
-const boost::regex Properties::__LINE_PATTERN("^\\s*(\\w+)\\s*=\\s*([a-zA-Z0-9_.,()-]+).*");
+
+const boost::regex Properties::__LINE_PATTERN("^\\s*(\\w+)\\s*=\\s*((\\S+)|(\"[^\"]*\"))\\s*$");
 const boost::regex Properties::__INT_PATTERN("^-?\\d+i$");
 const boost::regex Properties::__FLOAT_PATTERN("^-?\\d+(.\\d+)?f$");
+const boost::regex Properties::__STRING_PATTERN("^\"([^\"]*)\"$");
 const boost::regex Properties::__VEC3_PATTERN("^\\((-?\\d+(.\\d+)?)\\s*,\\s*(-?\\d+(.\\d+)?)\\s*,\\s*(-?\\d+(.\\d+)?)\\)$");
 
 Properties::Properties(void)
@@ -29,6 +31,8 @@ void Properties::processLine(const std::string& fileName, const std::string& lin
 			_properties[key] = (float)atof(valueStr.c_str());
 		} else if (boost::regex_match(valueStr, __INT_PATTERN)) {
 			_properties[key] = (int) atoi(valueStr.c_str());
+		} else if (boost::regex_match(valueStr, __STRING_PATTERN)) {
+			_properties[key] = valueStr.substr(1, valueStr.size() - 2);
 		} else if (boost::regex_match(valueStr, match, __VEC3_PATTERN)) {
 			vmml::vec3f v;
 			for (int i = 0 ; i < 3; i++) {
@@ -37,7 +41,8 @@ void Properties::processLine(const std::string& fileName, const std::string& lin
 			}
 			_properties[key] = v;
 		} else {
-			_properties[key] = valueStr;
+			std::cerr << "WARN: " << fileName << ":" << lineNumber << ": wrong format: " << std::endl;
+			std::cerr << "\t>>" << valueStr << "<<" << std::endl;
 		}
 	} else {
 		std::cerr << "WARN: " << fileName << ":" << lineNumber << ": wrong format" << std::endl;
@@ -46,6 +51,7 @@ void Properties::processLine(const std::string& fileName, const std::string& lin
 
 void Properties::load(const std::string& file) throw(PropertiesException)
 {
+	_properties.clear();
 	std::fstream input(file.c_str(), std::fstream::in);
 	if (!input.is_open()) {
 		throw PropertiesException(std::string("Can't open file: ") + file);
