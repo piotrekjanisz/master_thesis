@@ -56,6 +56,9 @@ void PhysxConfigurationFactory::initStringToConstant()
 	_stringToConstant["NX_FE_CONSTANT_PRESSURE"] = NX_FE_CONSTANT_PRESSURE;
 	_stringToConstant["NX_FE_RECTANGULAR"] = NX_FE_RECTANGULAR;
 	_stringToConstant["NX_FE_ELLIPSE"] = NX_FE_ELLIPSE;
+	_stringToConstant["NX_F_SPH"] = NX_F_SPH;
+	_stringToConstant["NX_F_MIXED_MODE"] = NX_F_MIXED_MODE;
+	_stringToConstant["NX_F_NO_PARTICLE_INTERACTION"] = NX_F_NO_PARTICLE_INTERACTION;
 }
 
 string PhysxConfigurationFactory::getConfigFilePath(const string name) throw(PhysxConfigurationException)
@@ -107,6 +110,7 @@ NxFluidDesc PhysxConfigurationFactory::createFluidDesc(const std::string& name) 
 	SET_FLOAT(retVal, properties, motionLimitMultiplier);
 	SET_INT(retVal, properties, packetSizeMultiplier);
 	SET_VEC3(retVal, properties, externalAcceleration);
+	SET_UINT_CONST(retVal, properties, simulationMethod, _stringToConstant);
 
 	return retVal;
 }

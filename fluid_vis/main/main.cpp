@@ -8,19 +8,45 @@
 #include <GL/glew.h>
 #include <GL/glus.h>
 #include <iostream>
+#include <boost/make_shared.hpp>
 #include "fluid_vis/ShaderProgram.h"
 #include "fluid_vis/Scene.h"
 #include "fluid_vis/ErrorStream.h"
 #include "fluid_vis/physx_utils.h"
 #include "fluid_vis/Properties.h"
 #include "fluid_vis/PhysxConfigurationFactory.h"
+#include "fluid_vis/MyFluid.h"
+#include "fluid_vis/MyBilboardFluid.h"
+#include "fluid_vis/GfxObject.h"
 
 using namespace std;
 
 Scene g_scene;
 static NxPhysicsSDK* gPhysicsSDK = NULL;
 static NxScene* g_NxScene = NULL;
+static MyFluid* gFluid = NULL;
+static PhysxConfigurationFactory configurationFactory("config");
 
+void createFluid() 
+{
+	
+	try {
+		boost::shared_ptr<ShaderProgram> _shaderProgram = boost::make_shared<ShaderProgram>();
+		_shaderProgram->load("shaders/water_shader_vertex.glsl", "shaders/water_shader_fragment.glsl");
+
+		boost::shared_ptr<GfxObject> gfxObject = boost::make_shared<GfxObject>(_shaderProgram);
+		NxFluidDesc fluidDesc = configurationFactory.createFluidDesc("water1");
+		fluidDesc.flags &= ~NX_FF_HARDWARE;
+		gFluid = new MyBilboardFluid(g_NxScene, fluidDesc, NxVec3(1.0f, 0.0f, 0.0f), 100.0f, gfxObject);
+
+		NxFluidEmitterDesc emitterDesc = configurationFactory.createFluidEmitterDesc("emitter1");
+		gFluid->createEmitter(emitterDesc);
+	} catch (std::exception& ex) {
+		std::cerr << ex.what() << std::endl;
+	} catch (...) {
+		std::cerr << "Strange error during fluid creation" << std::endl;
+	}
+}
 
 void createCube(const NxVec3& pos, float size = 1.0f, const NxVec3& initialVelocity = NxVec3(0.0f, 0.0f, 0.0f))
 {
@@ -63,8 +89,9 @@ void createCubesFromEye(float size, float velocity, int count)
 
 GLUSboolean init(GLUSvoid)
 {
-	return g_scene.setup();
 	glEnable(GL_CULL_FACE);
+	createFluid();
+	return g_scene.setup();
 }
 
 GLUSvoid reshape(GLUSuint width, GLUSuint height)

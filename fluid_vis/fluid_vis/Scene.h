@@ -4,6 +4,7 @@
 #include "ShaderProgram.h"
 #include "AbstractScene.h"
 #include "GfxStaticObject.h"
+#include "MyFluid.h"
 #include <vmmlib\vmmlib.hpp>
 #include <boost\smart_ptr.hpp>
 
@@ -17,6 +18,8 @@ class Scene : public AbstractScene
 	boost::shared_ptr<ShaderProgram> _shaderProgram;
 	boost::shared_ptr<GfxStaticObject> _box;
 	boost::shared_ptr<GfxStaticObject> _plane;
+
+	MyFluid* _fluid;
 
 public:
 	Scene();

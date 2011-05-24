@@ -55,6 +55,7 @@ bool Scene::setup()
 
 void Scene::render()
 {
+	_shaderProgram->useThis();
 	setupViewMatrix();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUniformMatrix4fv(_projectionLocation, 1, GL_FALSE, _projectionMatrix);
@@ -65,9 +66,11 @@ void Scene::render()
 	glUniform4fv(_colorLocation, 1, vmml::vec4f(0.5f, 0.5f, 0.0f, 1.0f));
 	_plane->render();
 }
+	
 
 void Scene::render(NxScene* physicsScene)
 {
+	_shaderProgram->useThis();
 	setupViewMatrix();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUniformMatrix4fv(_projectionLocation, 1, GL_FALSE, _projectionMatrix);
@@ -79,6 +82,7 @@ void Scene::render(NxScene* physicsScene)
 	glUniform4fv(_colorLocation, 1, vmml::vec4f(0.9f, 0.9f, 0.9f, 1.0f));
 	int nbActors = physicsScene->getNbActors();
 	NxActor** actors = physicsScene->getActors();
+
 	vmml::mat4f modelMatrix;
 	vmml::mat4f modelViewMatrix;
 	while(nbActors--) {
@@ -91,5 +95,16 @@ void Scene::render(NxScene* physicsScene)
 		glUniformMatrix4fv(_modelViewLocation, 1, GL_FALSE, modelViewMatrix);
 		glUniformMatrix3fv(_normalMatrixLocation, 1, GL_FALSE, getNormalMatrix(modelViewMatrix));
 		_box->render();
+	}
+
+	NxFluid** fluids = physicsScene->getFluids();
+	int nbFluids = physicsScene->getNbFluids();
+
+	for(int i = 0; i < nbFluids; i++) {
+		NxFluid* fluid = fluids[i];
+		MyFluid* myFluid = (MyFluid*)fluid->userData;
+		if (myFluid) {
+			myFluid->render(_projectionMatrix, _viewMatrix);
+		}
 	}
 }

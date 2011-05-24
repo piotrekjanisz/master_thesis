@@ -57,6 +57,12 @@
     <ClCompile Include="MyFluid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GfxObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBilboardFluid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -95,6 +101,15 @@
     <ClInclude Include="MyFluid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GfxObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyBilboardFluid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\shaders\debug_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\vertex.glsl">
@@ -111,6 +126,12 @@
     </None>
     <None Include="resources\config\water1.cfg">
       <Filter>config</Filter>
+    </None>
+    <None Include="resources\shaders\water_shader_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\water_shader_fragment.glsl">
+      <Filter>shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

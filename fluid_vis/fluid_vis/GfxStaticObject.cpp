@@ -26,6 +26,7 @@ void GfxStaticObject::addAttribute(const std::string& name, float* data, int cou
 		throw GfxException(ex.what());
 	}
 
+	glBindVertexArray(_vao);
 	unsigned int vbo;
 	glGenBuffers(1, &vbo);
 	_vbos.push_back(vbo);

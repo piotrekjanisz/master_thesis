@@ -42,6 +42,7 @@ BOOST_AUTO_TEST_CASE(Creation)
 	BOOST_CHECK_THROW(mFactory.createFluidEmitterDesc("test_cofnig/emitter1.cfg"), PhysxConfigurationException);
 }
 
+
 BOOST_AUTO_TEST_CASE(CreateFluid)
 {
 	NxFluidDesc fluidDesc = mFactory.createFluidDesc("water1");
@@ -56,6 +57,7 @@ BOOST_AUTO_TEST_CASE(CreateFluid)
 	BOOST_CHECK_CLOSE_FRACTION(fluidDesc.damping, 0.0f, FLOAT_PRECISION);
 	BOOST_CHECK_CLOSE_FRACTION(fluidDesc.restitutionForStaticShapes, 0.0f, FLOAT_PRECISION);
 	BOOST_CHECK_CLOSE_FRACTION(fluidDesc.dynamicFrictionForStaticShapes, 0.05f, FLOAT_PRECISION);
+	BOOST_CHECK_EQUAL(fluidDesc.simulationMethod, NX_F_SPH);
 }
 
 BOOST_AUTO_TEST_CASE(CreateFluidEmitter)

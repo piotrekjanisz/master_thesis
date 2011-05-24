@@ -64,6 +64,7 @@ void ShaderProgram::loadAux(const std::string& vertexSoruce, const std::string& 
         glAttachShader(_programId, _geometryProgram);
 }
 
+
 int ShaderProgram::loadShader(const std::string& sourcePath, int shaderType) throw (ShaderException)
 {
     fstream sourceStream(sourcePath.c_str(), ios_base::in);
