@@ -137,3 +137,9 @@ void ShaderProgram::bindFragDataLocation(int colorNumber, const char* name)
 {
 	glBindFragDataLocation(getId(), colorNumber, name);
 }
+
+
+void ShaderProgram::setUniform1i(const char* name, int value)
+{
+	glUniform1i(glGetUniformLocation(getId(), name), value);
+}

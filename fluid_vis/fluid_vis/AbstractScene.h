@@ -9,6 +9,9 @@ class AbstractScene
 	float _fov;
 	float _zNear;
 	float _zFar;
+	float _aspect;
+	int _width;
+	int _height;
 
 	float _xTranslation;
 	float _yTranslation;
@@ -25,6 +28,8 @@ protected:
 	
 	void setProjectionMatrix(float fov, float aspect, float zNear, float zFar);
 	void setProjectionMatrix(float aspect) { setProjectionMatrix(_fov, aspect, _zNear, _zFar); }
+
+	void setOrthographicProjectionMatrix(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax);
 
 	void setupViewMatrix();
 	
@@ -47,6 +52,9 @@ public:
 	float getFov() const { return _fov; }
 	float getZNear() const { return _zNear; }
 	float getZFar() const { return _zFar; }
+
+	int getWidth() const { return _width; }
+	int getHeight() const { return _height; }
 
 	CameraFrame& cameraFrame() { return _cameraFrame; }
 	const CameraFrame& cameraFrame() const { return _cameraFrame; }

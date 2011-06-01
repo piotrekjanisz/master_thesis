@@ -1,4 +1,5 @@
 #include "AbstractScene.h"
+#include "debug_utils.h"
 #include <GL/glew.h>
 
 const float PI = 3.14159265358979323846;
@@ -8,10 +9,11 @@ bool AbstractScene::setup()
 	_xTranslation = _yTranslation = _zTranslation = 0.0f;
 	_xRotation = _yRotation = 0.0f;
 	_zNear = 1.0f;
-	_zFar = 1000.0f;
+	_zFar = 100.0f;
 	_fov = 40.0f;
+	_aspect = 1.3333f;
 
-	setProjectionMatrix(1.3333f);
+	setProjectionMatrix(_aspect);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0f);
@@ -22,6 +24,11 @@ bool AbstractScene::setup()
 
 void AbstractScene::setProjectionMatrix(float fov, float aspect, float zNear, float zFar)
 {
+	_fov = fov;
+	_aspect = aspect;
+	_zNear = zNear;
+	_zFar = zFar;
+
 	float xymax = zNear * tan(fov * PI / 360.f);
 	float ymin = -xymax;
 	float xmin = -xymax;
@@ -43,10 +50,21 @@ void AbstractScene::setProjectionMatrix(float fov, float aspect, float zNear, fl
 	_projectionMatrix.set_column(3, vmml::vec4f(0.0f, 0.0f, qn, 0.0f));
 }
 
+void AbstractScene::setOrthographicProjectionMatrix(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
+{
+	_projectionMatrix = vmml::mat4f::IDENTITY;
+	_projectionMatrix.set_column(0, vmml::vec4f(2.0f/(xMax - xMin), 0.0f, 0.0f, 0.0f));
+	_projectionMatrix.set_column(1, vmml::vec4f(0.0f, 2.0f/(yMax - yMin), 0.0f, 0.0f));
+	_projectionMatrix.set_column(2, vmml::vec4f(0.0f, 0.0f, -2.0f/(zMax - zMin), 0.0f));
+	_projectionMatrix.set_column(3, vmml::vec4f(-(xMax + xMin)/(xMax - xMin), -(yMax + yMin)/(yMax - yMin), -(zMax + zMin)/(zMax - zMin), 1.0f));
+}
 
 void AbstractScene::reshape(int width, int height)
 {
-	setProjectionMatrix(width/(float)height);
+	_width = width;
+	_height = height;
+	float aspect = (float)_width/_height;
+	setProjectionMatrix(aspect);
 }
 
 void AbstractScene::translate(float x, float y, float z)
@@ -70,12 +88,6 @@ vmml::mat3f AbstractScene::getNormalMatrix(const vmml::mat4f& modelView)
 void AbstractScene::setupViewMatrix()
 {
 	_viewMatrix = _cameraFrame.getTransformation();
-	/*
-	_viewMatrix = vmml::mat4f::IDENTITY;
-	_viewMatrix.set_translation(_xTranslation, _yTranslation, _zTranslation);
-	_viewMatrix.rotate_x(_xRotation);
-	_viewMatrix.rotate_y(_yRotation);
-	*/
 }
 
 void AbstractScene::rotateX(float val)

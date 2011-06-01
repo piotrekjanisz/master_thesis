@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 
 
-GfxStaticObject::GfxStaticObject(const boost::shared_ptr<ShaderProgram>& shaderProgram)
+GfxStaticObject::GfxStaticObject(const ShaderProgramPtr& shaderProgram)
 	: _shaderProgram(shaderProgram), _numberIndices(0)
 {
 	glGenVertexArrays(1, &_vao);
@@ -36,6 +36,17 @@ void GfxStaticObject::addAttribute(const std::string& name, float* data, int cou
 	glEnableVertexAttribArray(attribLocation);
 }
 
+void GfxStaticObject::addTexture(const std::string& name, int textureUnit) throw (GfxException)
+{
+	try {
+		int samplerLocation = _shaderProgram->getUniformLocation(name.c_str());
+		_shaderProgram->useThis();
+		glUniform1i(samplerLocation, textureUnit);
+	} catch (ShaderException& ex) {
+		throw (GfxException(ex.what()));
+	}
+}
+
 void GfxStaticObject::createFromGlusShape(const GLUSshape& shape) throw(GfxException)
 {
 	glBindVertexArray(_vao);
@@ -64,9 +75,24 @@ void GfxStaticObject::createFromShape(const ShapePtr& shape) throw(GfxException)
 	_numberIndices = shape->indicesCount;
 }
 
+void GfxStaticObject::createFromScreenQuad(const ShapePtr& quad) throw(GfxException)
+{
+	glBindVertexArray(_vao);
+	_shaderProgram->useThis();
+	addAttribute("vertex", quad->vertices, quad->verticesCount, 4);
+	_numberVertices = quad->verticesCount;
+}
+
 void GfxStaticObject::render()
 {
 	glBindVertexArray(_vao);
 	_shaderProgram->useThis();
 	glDrawElements(GL_TRIANGLES, _numberIndices, GL_UNSIGNED_INT, 0);
+}
+
+void GfxStaticObject::renderArrays(GLenum mode) 
+{
+	glBindVertexArray(_vao);
+	_shaderProgram->useThis();
+	glDrawArrays(mode, 0, _numberVertices);
 }

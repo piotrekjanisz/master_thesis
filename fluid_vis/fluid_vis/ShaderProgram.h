@@ -2,6 +2,7 @@
 
 #include <string>
 #include "BaseException.h"
+#include "NonCopyable.h"
 
 class ShaderException : public BaseException
 {
@@ -10,7 +11,7 @@ public:
 		: BaseException(msg) {}
 };
 
-class ShaderProgram
+class ShaderProgram : public NonCopyable
 {
 public:
     ShaderProgram();
@@ -38,6 +39,8 @@ public:
     int getUniformLocation(const char* name);
 
 	void bindFragDataLocation(int colorNumber, const char* name_);
+
+	void setUniform1i(const char* name, int value);
 private:
     void loadAux(const std::string& vertexSoruce, const std::string& fragmentSource, const std::string& geometrySource) throw(ShaderException);
     int loadShader(const std::string& source, int shaderType) throw(ShaderException);

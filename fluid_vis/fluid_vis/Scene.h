@@ -5,6 +5,10 @@
 #include "AbstractScene.h"
 #include "GfxStaticObject.h"
 #include "MyFluid.h"
+#include "FrameBuffer.h"
+#include "data_types.h"
+#include "Texture.h"
+#include "ScreenQuad.h"
 #include <vmmlib\vmmlib.hpp>
 #include <boost\smart_ptr.hpp>
 
@@ -15,11 +19,19 @@ class Scene : public AbstractScene
 	int _normalMatrixLocation;
 	int _colorLocation;
 
-	boost::shared_ptr<ShaderProgram> _shaderProgram;
-	boost::shared_ptr<GfxStaticObject> _box;
-	boost::shared_ptr<GfxStaticObject> _plane;
+	int _quadProjectionLocation;
+	int _quadModelViewLocation;
+
+	ShaderProgramPtr _shaderProgram;
+	GfxStaticObjectPtr _box;
+	GfxStaticObjectPtr _plane;
+	TexturePtr _screenQuadTexture;
+	FrameBufferPtr _sceneFrameBuffer;
+	ScreenQuadPtr _screenQuad;
 
 	MyFluid* _fluid;
+
+	float* _debugData;
 
 public:
 	Scene();

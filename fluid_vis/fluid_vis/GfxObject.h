@@ -42,5 +42,7 @@ public:
 	void updateUniformMat4f(const std::string& name, float* data) throw(GfxException);
 
 	void render(int count, GLenum objType);
+
+	boost::shared_ptr<ShaderProgram> getShaderProgram() const { return _shaderProgram; }
 };
 

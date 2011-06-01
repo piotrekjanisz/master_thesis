@@ -41,7 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_MBCS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -69,6 +69,7 @@
     <ClCompile Include="BaseException.cpp" />
     <ClCompile Include="CameraFrame.cpp" />
     <ClCompile Include="ErrorStream.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GfxObject.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
     <ClCompile Include="MyBilboardFluid.cpp" />
@@ -77,31 +78,42 @@
     <ClCompile Include="physx_utils.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ScreenQuad.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShapeFactory.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BaseException.h" />
     <ClInclude Include="CameraFrame.h" />
+    <ClInclude Include="data_types.h" />
+    <ClInclude Include="debug_utils.h" />
     <ClInclude Include="ErrorStream.h" />
+    <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GfxObject.h" />
     <ClInclude Include="GfxStaticObject.h" />
     <ClInclude Include="MyBilboardFluid.h" />
     <ClInclude Include="MyFluid.h" />
+    <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="PhysxConfigurationFactory.h" />
     <ClInclude Include="physx_utils.h" />
     <ClInclude Include="Properties.h" />
-    <ClInclude Include="resources\shaders\debug_utils.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ScreenQuad.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShapeFactory.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\config\emitter1.cfg" />
     <None Include="resources\config\sample.cfg" />
     <None Include="resources\config\water1.cfg" />
+    <None Include="resources\shaders\draw_image_fragment.glsl" />
+    <None Include="resources\shaders\draw_image2_fragment.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
+    <None Include="resources\shaders\pass_through_vertex.glsl" />
+    <None Include="resources\shaders\screen_quad_vertex.glsl" />
     <None Include="resources\shaders\vertex.glsl" />
     <None Include="resources\shaders\water_shader_fragment.glsl" />
     <None Include="resources\shaders\water_shader_vertex.glsl" />

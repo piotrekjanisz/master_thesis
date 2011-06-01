@@ -18,9 +18,15 @@ struct Shape
 
 	~Shape()
 	{
-		delete [] vertices;
-		delete [] normals;
-		delete [] indices;
+		if (vertices) {
+			delete [] vertices;
+		}
+		if (normals) {
+			delete [] normals;
+		}
+		if (indices) {
+			delete [] indices;
+		}
 	}
 };
 
@@ -34,5 +40,6 @@ public:
 
 	ShapePtr createPlane(float halfExtent);
 	ShapePtr createBox(float halfExtent);
+	ShapePtr createScreenQuad(float zComponent);
 };
 

@@ -3,6 +3,7 @@
 #pragma comment(lib, "GLUS.lib")
 #pragma comment(lib, "boost_regex-vc100-mt-gd-1_46_1")
 
+
 #include <NxCooking.h>
 #include <NxPhysics.h>
 #include <GL/glew.h>
@@ -18,6 +19,7 @@
 #include "fluid_vis/MyFluid.h"
 #include "fluid_vis/MyBilboardFluid.h"
 #include "fluid_vis/GfxObject.h"
+#include "fluid_vis/debug_utils.h"
 
 using namespace std;
 
@@ -35,11 +37,21 @@ void createFluid()
 		_shaderProgram->load("shaders/water_shader_vertex.glsl", "shaders/water_shader_fragment.glsl");
 
 		boost::shared_ptr<GfxObject> gfxObject = boost::make_shared<GfxObject>(_shaderProgram);
+		gfxObject->getShaderProgram()->bindFragDataLocation(0, "fragColor");
 		NxFluidDesc fluidDesc = configurationFactory.createFluidDesc("water1");
 		fluidDesc.flags &= ~NX_FF_HARDWARE;
 		gFluid = new MyBilboardFluid(g_NxScene, fluidDesc, NxVec3(1.0f, 0.0f, 0.0f), 100.0f, gfxObject);
 
 		NxFluidEmitterDesc emitterDesc = configurationFactory.createFluidEmitterDesc("emitter1");
+
+		float data[] = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f, 
+			1.0f, 1.0f, 0.0f, 0.0f, 
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+		emitterDesc.relPose.setRowMajor44(data);
+
 		gFluid->createEmitter(emitterDesc);
 	} catch (std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
