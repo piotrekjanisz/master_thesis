@@ -68,7 +68,9 @@
     <ClCompile Include="AbstractScene.cpp" />
     <ClCompile Include="BaseException.cpp" />
     <ClCompile Include="CameraFrame.cpp" />
+    <ClCompile Include="debug_utils.cpp" />
     <ClCompile Include="ErrorStream.cpp" />
+    <ClCompile Include="filters.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GfxObject.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
@@ -90,6 +92,7 @@
     <ClInclude Include="data_types.h" />
     <ClInclude Include="debug_utils.h" />
     <ClInclude Include="ErrorStream.h" />
+    <ClInclude Include="filters.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GfxObject.h" />
     <ClInclude Include="GfxStaticObject.h" />
@@ -109,8 +112,10 @@
     <None Include="resources\config\emitter1.cfg" />
     <None Include="resources\config\sample.cfg" />
     <None Include="resources\config\water1.cfg" />
+    <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
     <None Include="resources\shaders\draw_image_fragment.glsl" />
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
+    <None Include="resources\shaders\final_stage_fragment.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />

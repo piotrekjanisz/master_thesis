@@ -1,5 +1,8 @@
+#define DEBUG
+
 #include "Scene.h"
 #include "debug_utils.h"
+#include "filters.h"
 #include <GL/glus.h>
 #include <GL/glew.h>
 #include <iostream>
@@ -17,23 +20,53 @@ bool Scene::setup()
 	if (!AbstractScene::setup()) {
 		return false;
 	}
+
+	_sceneTexture = boost::make_shared<Texture>(GL_TEXTURE_2D);
+	CHECK_GL_CMD(_sceneTexture->setParameters(GL_LINEAR, GL_CLAMP_TO_EDGE));
+	CHECK_GL_CMD(_sceneTexture->load2DFloatDataNoMipMap(GL_RGBA8, 640, 480, 0, GL_RGBA, NULL));
+
+	_sceneDepthTexture = boost::make_shared<Texture>(GL_TEXTURE_2D);
+	CHECK_GL_CMD(_sceneDepthTexture->setParameters(GL_LINEAR, GL_CLAMP_TO_EDGE));
+	CHECK_GL_CMD(_sceneDepthTexture->load2DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, 640, 480, 0, GL_DEPTH_COMPONENT, NULL));
 	
 	_screenQuadTexture = boost::make_shared<Texture>(GL_TEXTURE_2D);
-	_screenQuadTexture->setParameters(GL_LINEAR, GL_CLAMP_TO_EDGE);
-	_screenQuadTexture->load2DFloatDataNoMipMap(GL_RGBA8, 640, 480, 0, GL_RGBA, NULL);
+	CHECK_GL_CMD(_screenQuadTexture->setParameters(GL_LINEAR, GL_CLAMP_TO_EDGE));
+	CHECK_GL_CMD(_screenQuadTexture->load2DFloatDataNoMipMap(GL_RGBA8, 640, 480, 0, GL_RGBA, NULL));
 
-	DEBUG_CODE(_debugData = new float[_screenQuadTexture->getWidth() * _screenQuadTexture->getHeight() * 4]);
+	_depthTexture = boost::make_shared<Texture>(GL_TEXTURE_2D);
+	CHECK_GL_CMD(_depthTexture->setParameters(GL_LINEAR, GL_CLAMP_TO_EDGE));
+	CHECK_GL_CMD(_depthTexture->load2DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, 640, 480, 0, GL_DEPTH_COMPONENT, NULL));
 
-	
-	//_sceneFrameBuffer->attachRenderbuffer(GL_RGBA8, GL_COLOR_ATTACHMENT0, 1366, 768);
+	_smoothedTexture = boost::make_shared<Texture>(GL_TEXTURE_2D);
+	CHECK_GL_CMD(_smoothedTexture->setParameters(GL_LINEAR, GL_CLAMP_TO_EDGE));
+	CHECK_GL_CMD(_smoothedTexture->load2DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, 640, 480, 0, GL_DEPTH_COMPONENT, NULL));
+
+	const int GAUSS_SIZE = 5;
+
+	float* gaussData = new float[GAUSS_SIZE*GAUSS_SIZE];
+	Filters::createGauss2D(GAUSS_SIZE, 1.0, 2.0, gaussData);
+	_gaussDistTexture = boost::make_shared<Texture>(GL_TEXTURE_2D);
+	CHECK_GL_CMD(_gaussDistTexture->setParameters(GL_LINEAR, GL_CLAMP_TO_EDGE));
+	CHECK_GL_CMD(_gaussDistTexture->load2DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, GAUSS_SIZE, GAUSS_SIZE, 0, GL_DEPTH_COMPONENT, gaussData));
+
+	Filters::createHeavisideDistribution(0.0, 1.0, 0.2, 25, gaussData);
+	_spatialDistTexture = boost::make_shared<Texture>(GL_TEXTURE_1D);
+	CHECK_GL_CMD(_spatialDistTexture->setParameters(GL_NEAREST, GL_CLAMP_TO_EDGE));
+	CHECK_GL_CMD(_spatialDistTexture->load1DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, 25, 0, GL_DEPTH_COMPONENT, gaussData));
+
+	delete [] gaussData;	
 
 	_sceneFrameBuffer = boost::make_shared<FrameBuffer>();
-	_sceneFrameBuffer->attachRenderbuffer(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT, 1366, 768);
-	_sceneFrameBuffer->attachTexture2D(_screenQuadTexture, GL_COLOR_ATTACHMENT0);
-	
-	_shaderProgram = boost::make_shared<ShaderProgram>();
-	_box = boost::make_shared<GfxStaticObject>(_shaderProgram);
-	_plane = boost::make_shared<GfxStaticObject>(_shaderProgram);
+	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneTexture, GL_COLOR_ATTACHMENT0));
+	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneDepthTexture, GL_DEPTH_ATTACHMENT));
+
+	_waterFrameBuffer = boost::make_shared<FrameBuffer>();
+	CHECK_GL_CMD(_waterFrameBuffer->attachRenderbuffer(GL_RGBA, GL_COLOR_ATTACHMENT0, 640, 480));
+	CHECK_GL_CMD(_waterFrameBuffer->attachTexture2D(_depthTexture, GL_DEPTH_ATTACHMENT));
+
+	_smoothFrameBuffer = boost::make_shared<FrameBuffer>();
+	CHECK_GL_CMD(_smoothFrameBuffer->attachRenderbuffer(GL_RGBA, GL_COLOR_ATTACHMENT0, 640, 480));
+	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_DEPTH_ATTACHMENT));
 
 	translate(0.0f, 1.5f, -0.5f);
 	rotateX(-0.4f);
@@ -41,29 +74,44 @@ bool Scene::setup()
 	translate(0.0f, 0.0f, -5.0f);
 
 	try {
+		_shaderProgram = boost::make_shared<ShaderProgram>();
 		_shaderProgram->load("shaders/vertex.glsl", "shaders/fragment.glsl");
-		_projectionLocation = _shaderProgram->getUniformLocation("projectionMatrix");
-		_modelViewLocation = _shaderProgram->getUniformLocation("modelViewMatrix");
-		_normalMatrixLocation = _shaderProgram->getUniformLocation("normalMatrix");
-		_colorLocation = _shaderProgram->getUniformLocation("color");
-		_shaderProgram->bindFragDataLocation(0, "fragColor");
+		CHECK_GL_CMD(_projectionLocation = _shaderProgram->getUniformLocation("projectionMatrix"));
+		CHECK_GL_CMD(_modelViewLocation = _shaderProgram->getUniformLocation("modelViewMatrix"));
+		CHECK_GL_CMD(_normalMatrixLocation = _shaderProgram->getUniformLocation("normalMatrix"));
+		CHECK_GL_CMD(_colorLocation = _shaderProgram->getUniformLocation("color"));
+		CHECK_GL_CMD(_shaderProgram->bindFragDataLocation(0, "fragColor"));
 
 		ShaderProgramPtr screenQuadShader = boost::make_shared<ShaderProgram>();
-		screenQuadShader->load("shaders/screen_quad_vertex.glsl", "shaders/draw_image2_fragment.glsl");
-		screenQuadShader->setUniform1i("inputImage", 0);
+		//screenQuadShader->load("shaders/screen_quad_vertex.glsl", "shaders/draw_image2_fragment.glsl");
+		CHECK_GL_CMD(screenQuadShader->load("shaders/screen_quad_vertex.glsl", "shaders/bilateral_gauss_fragment.glsl"));
+		CHECK_GL_CMD(screenQuadShader->setUniform1i("inputImage", 0));
+		CHECK_GL_CMD(screenQuadShader->setUniform1i("gaussianDist", 1));
+		CHECK_GL_CMD(screenQuadShader->setUniform1i("spatialDist", 2));
+		CHECK_GL_CMD(screenQuadShader->bindFragDataLocation(0, "frag_color"));
 		_screenQuad = boost::make_shared<ScreenQuad>(screenQuadShader);
+
+		_finalShader = boost::make_shared<ShaderProgram>();
+		CHECK_GL_CMD(_finalShader->load("shaders/screen_quad_vertex.glsl", "shaders/final_stage_fragment.glsl"));
+		CHECK_GL_CMD(_finalShader->setUniform1i("depthTexture", 0));
+		CHECK_GL_CMD(_finalShader->setUniform1i("sceneDepthTexture", 1));
+		CHECK_GL_CMD(_finalShader->setUniform1i("sceneTexture", 2));
+		CHECK_GL_CMD(_finalShader->bindFragDataLocation(0, "frag_color"));
+		_finalQuad = boost::make_shared<ScreenQuad>(_finalShader);
 	} catch (const BaseException& ex) {
 		cout << ex.what() << endl;
 		fgetc(stdin);
 		return false;
 	}
-	_shaderProgram->useThis();
+	CHECK_GL_CMD(_shaderProgram->useThis());
 
 	try {
+		_box = boost::make_shared<GfxStaticObject>(_shaderProgram);
+		_plane = boost::make_shared<GfxStaticObject>(_shaderProgram);
 		ShapePtr plane = ShapeFactory().createPlane(100.0f);
 		ShapePtr box = ShapeFactory().createBox(0.5f);
-		_box->createFromShape(box);
-		_plane->createFromShape(plane);
+		CHECK_GL_CMD(_box->createFromShape(box));
+		CHECK_GL_CMD(_plane->createFromShape(plane));
 	} catch(const GfxException& ex) {
 		cout << ex.what() << endl;
 		fgetc(stdin);
@@ -93,11 +141,7 @@ GLenum fboBuffs[] = {GL_COLOR_ATTACHMENT0};
 void Scene::render(NxScene* physicsScene)
 {
 	// render scene
-	// FrameBuffer::bindDefaultForDrawing();
-	//_sceneFrameBuffer->bindForDrawing();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
-	//glDrawBuffers(1, fboBuffs);
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _sceneFrameBuffer->getId()));
 	_shaderProgram->useThis();
 	setupViewMatrix();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -126,7 +170,7 @@ void Scene::render(NxScene* physicsScene)
 		_box->render();
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, _sceneFrameBuffer->getId());
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterFrameBuffer->getId()));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	// render fluids
 	NxFluid** fluids = physicsScene->getFluids();
@@ -136,27 +180,38 @@ void Scene::render(NxScene* physicsScene)
 		NxFluid* fluid = fluids[i];
 		MyFluid* myFluid = (MyFluid*)fluid->userData;
 		if (myFluid) {
-			// TODO move fluid rendering code here
 			myFluid->render(_projectionMatrix, _viewMatrix);
 		}
 	}
 
-	
-	//_sceneFrameBuffer->copyRenderColorToScreen(GL_COLOR_ATTACHMENT0, 0, 0, getWidth(), getHeight(), 0.0 * getWidth(), 0.0 * getHeight(), getWidth(), getHeight());
-	//_sceneFrameBuffer->copyRenderColorToScreen(GL_COLOR_ATTACHMENT0, 0, 0, getWidth(), getHeight(), 0.8 * getWidth(), 0.8 * getHeight(), getWidth(), getHeight());
-	
-	//FrameBuffer::bindDefaultForDrawing();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	//glDrawBuffers(1, windowBuffs);
-	_screenQuad->attachTexture(_screenQuadTexture, GL_TEXTURE0);
-	_screenQuad->render();
 
-	//DEBUG_CODE(_screenQuadTexture->getData(0, GL_RGBA, GL_FLOAT, _debugData));
-	//DEBUG_CODE(DebugUtils::printArray(_debugData, 100, 4));
-	
 	//_sceneFrameBuffer->copyRenderColorToScreen(GL_COLOR_ATTACHMENT0, 0, 0, getWidth(), getHeight(), 0.0 * getWidth(), 0.0 * getHeight(), getWidth(), getHeight());
 	//_sceneFrameBuffer->copyRenderColorToScreen(GL_COLOR_ATTACHMENT0, 0, 0, getWidth(), getHeight(), 0.8 * getWidth(), 0.8 * getHeight(), getWidth(), getHeight());
-	
-	
+	/*
+	//FrameBuffer::bindDefaultForDrawing();
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDistTexture, GL_TEXTURE1));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0f / getHeight()));
+	CHECK_GL_CMD(_screenQuad->render());
+	*/
+
+
+	// ------- new code ------------
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDistTexture, GL_TEXTURE1));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0f / getHeight()));
+	CHECK_GL_CMD(_screenQuad->render());
+
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	CHECK_GL_CMD(_finalQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneDepthTexture, GL_TEXTURE1));
+	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneTexture, GL_TEXTURE2));
+	CHECK_GL_CMD(_finalQuad->render());
 }

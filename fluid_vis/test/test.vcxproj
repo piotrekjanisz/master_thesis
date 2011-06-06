@@ -86,6 +86,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FiltersTest.cpp" />
     <ClCompile Include="PropertiesTest.cpp" />
     <ClCompile Include="resources\config\PhysxConfigurationFactoryTest.cpp" />
     <ClCompile Include="runner.cpp" />

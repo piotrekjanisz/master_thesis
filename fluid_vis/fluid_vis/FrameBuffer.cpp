@@ -36,6 +36,12 @@ void FrameBuffer::attachTexture2D(TexturePtr& texture, GLenum target)
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, target, texture->getTextureType(), texture->getTextureId(), 0);
 }
 
+void FrameBuffer::detachTexture2D(GLenum target)
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fboName);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, target, GL_TEXTURE_2D, 0, 0);
+}
+
 void FrameBuffer::copyRenderColorToScreen(GLenum sourceTarget, 
 							int srcX0, int srcY0, int srcX1, int srcY1,
 							int dstX0, int dstY0, int dstX1, int dstY1)

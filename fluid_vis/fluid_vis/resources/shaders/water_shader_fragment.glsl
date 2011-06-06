@@ -24,11 +24,5 @@ void main(void)
 	vec4 clipSpacePos = projectionMatrix * pixelPos;
 	float depth = (clipSpacePos.z / clipSpacePos.w)*coef1 + coef2;
 	gl_FragDepth = depth;
-
-    float diffuseIntensity = max(dot(normal.xyz, vec3(1.0f, 1.0f, 1.0f)), 0.0);
-    
-    fragColor = vec4(0.1, 0.1, 0.1, 1.0) + vec4(1.0*diffuseIntensity, 0.0, 0.0, 1.0);
-	//float color = 1.0f - gl_FragCoord.z;
-	//float color = depth;
-	//fragColor = vec4(color, color, color, 1.0f);
+	fragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

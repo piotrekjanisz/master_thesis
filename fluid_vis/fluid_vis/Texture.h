@@ -38,6 +38,8 @@ public:
 	 */
 	void load2DFloatDataNoMipMap(int internalFormat, int width, int height, int border, GLenum dataFormat, float* data);
 
+	void load1DFloatDataNoMipMap(int internalFormat, int size, int border, GLenum dataFormat, float* data);
+
 	void bind()
 	{
 		glBindTexture(_textureType, _textureId);

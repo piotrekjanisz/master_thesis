@@ -2,6 +2,7 @@
 
 #include "ShaderProgram.h"
 #include "ShaderProgram.h"
+#include "debug_utils.h"
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <fstream>
@@ -141,5 +142,14 @@ void ShaderProgram::bindFragDataLocation(int colorNumber, const char* name)
 
 void ShaderProgram::setUniform1i(const char* name, int value)
 {
-	glUniform1i(glGetUniformLocation(getId(), name), value);
+	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
+	useThis();
+	CHECK_GL_CMD(glUniform1i(location, value));
+}
+
+void ShaderProgram::setUniform2f(const char* name, float v0, float v1)
+{
+	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
+	useThis();
+	CHECK_GL_CMD(glUniform2f(location, v0, v1));
 }

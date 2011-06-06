@@ -51,6 +51,14 @@ void Texture::load2DFloatDataNoMipMap(int internalFormat, int width, int height,
 	glTexImage2D(_textureType, 0, internalFormat, width, height, border, dataFormat, GL_FLOAT, data);
 }
 
+void Texture::load1DFloatDataNoMipMap(int internalFormat, int size, int border, GLenum dataFormat, float* data)
+{
+	_width = size;
+	_height = 1;
+	glBindTexture(_textureType, _textureId);
+	glTexImage1D(_textureType, 0, internalFormat, size, border, dataFormat, GL_FLOAT, data);
+}
+
 void Texture::getData(int level, GLenum format, GLenum type, void* data)
 {
 	glGetTexImage(_textureType, level, format, type, data);

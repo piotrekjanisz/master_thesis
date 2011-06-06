@@ -1,4 +1,5 @@
 #include "ScreenQuad.h"
+#include "debug_utils.h"
 
 float ScreenQuad::quadCoords[] = {
 	-1.0f, -1.0f, 

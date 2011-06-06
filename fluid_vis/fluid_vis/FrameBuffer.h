@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <vector>
+#include <string>
 #include "data_types.h"
 #include "NonCopyable.h"
 
@@ -18,6 +19,8 @@ public:
 	void attachRenderbuffer(GLenum format, GLenum target, int width, int height);
 
 	void attachTexture2D(TexturePtr& texture, GLenum target);
+
+	void detachTexture2D(GLenum target);
 
 	void copyRenderColorToScreen(GLenum sourceTarget, 
 							int srcX0, int srcY0, int srcX1, int srcY1,

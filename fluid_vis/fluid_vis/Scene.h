@@ -23,11 +23,22 @@ class Scene : public AbstractScene
 	int _quadModelViewLocation;
 
 	ShaderProgramPtr _shaderProgram;
+	ShaderProgramPtr _smoothShader;
+	ShaderProgramPtr _finalShader;
 	GfxStaticObjectPtr _box;
 	GfxStaticObjectPtr _plane;
+	TexturePtr _sceneDepthTexture;
+	TexturePtr _sceneTexture;
 	TexturePtr _screenQuadTexture;
+	TexturePtr _depthTexture;
+	TexturePtr _smoothedTexture;
+	TexturePtr _gaussDistTexture;
+	TexturePtr _spatialDistTexture;
 	FrameBufferPtr _sceneFrameBuffer;
+	FrameBufferPtr _waterFrameBuffer;
+	FrameBufferPtr _smoothFrameBuffer;
 	ScreenQuadPtr _screenQuad;
+	ScreenQuadPtr _finalQuad;
 
 	MyFluid* _fluid;
 

@@ -48,6 +48,8 @@ void AbstractScene::setProjectionMatrix(float fov, float aspect, float zNear, fl
 	_projectionMatrix.set_column(1, vmml::vec4f(0.0f, h, 0.0f, 0.0f));
 	_projectionMatrix.set_column(2, vmml::vec4f(0.0f, 0.0f, q, -1.0f));
 	_projectionMatrix.set_column(3, vmml::vec4f(0.0f, 0.0f, qn, 0.0f));
+
+	_projectionMatrix.inverse(_inverseProjectionMatrix);
 }
 
 void AbstractScene::setOrthographicProjectionMatrix(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)

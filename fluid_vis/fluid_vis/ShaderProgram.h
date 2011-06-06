@@ -41,6 +41,8 @@ public:
 	void bindFragDataLocation(int colorNumber, const char* name_);
 
 	void setUniform1i(const char* name, int value);
+
+	void setUniform2f(const char* name, float v0, float v1);
 private:
     void loadAux(const std::string& vertexSoruce, const std::string& fragmentSource, const std::string& geometrySource) throw(ShaderException);
     int loadShader(const std::string& source, int shaderType) throw(ShaderException);

@@ -24,6 +24,7 @@ class AbstractScene
 	
 protected:
 	vmml::mat4f _projectionMatrix;
+	vmml::mat4f _inverseProjectionMatrix;
 	vmml::mat4f _viewMatrix;
 	
 	void setProjectionMatrix(float fov, float aspect, float zNear, float zFar);
