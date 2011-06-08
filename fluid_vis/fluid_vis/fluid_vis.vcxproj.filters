@@ -184,5 +184,11 @@
     <None Include="resources\shaders\final_stage_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="resources\shaders\skybox_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\skybox_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

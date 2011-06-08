@@ -37,7 +37,8 @@ void createFluid()
 		_shaderProgram->load("shaders/water_shader_vertex.glsl", "shaders/water_shader_fragment.glsl");
 
 		boost::shared_ptr<GfxObject> gfxObject = boost::make_shared<GfxObject>(_shaderProgram);
-		gfxObject->getShaderProgram()->bindFragDataLocation(0, "fragColor");
+		CHECK_GL_CMD(gfxObject->getShaderProgram()->bindFragDataLocation(0, "fragColor"));
+		//CHECK_GL_CMD(gfxObject->getShaderProgram()->bindFragDataLocation(0, "zComponent"));
 		NxFluidDesc fluidDesc = configurationFactory.createFluidDesc("water1");
 		fluidDesc.flags &= ~NX_FF_HARDWARE;
 		gFluid = new MyBilboardFluid(g_NxScene, fluidDesc, NxVec3(1.0f, 0.0f, 0.0f), 100.0f, gfxObject);

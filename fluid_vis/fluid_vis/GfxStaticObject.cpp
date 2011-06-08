@@ -1,4 +1,5 @@
 #include "GfxStaticObject.h"
+#include "debug_utils.h"
 #include <GL/glew.h>
 
 
@@ -66,13 +67,29 @@ void GfxStaticObject::createFromShape(const ShapePtr& shape) throw(GfxException)
 	glBindVertexArray(_vao);
 	_shaderProgram->useThis();
 	addAttribute("vertex", shape->vertices, shape->verticesCount, 4);
-	addAttribute("normal", shape->normals, shape->verticesCount, 3);
+	if (shape->normals != 0) {
+		addAttribute("normal", shape->normals, shape->verticesCount, 3);
+	}	
+	if (shape->texCoords != 0) {
+		addAttribute("tex_coord", shape->texCoords, shape->verticesCount, 2);
+	}
 	unsigned int indicesVBO;
 	glGenBuffers(1, &indicesVBO);
 	_vbos.push_back(indicesVBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, shape->indicesCount * sizeof(int), shape->indices, GL_STATIC_DRAW);
 	_numberIndices = shape->indicesCount;
+
+	switch(shape->primitiveType) {
+	case Shape::TRIANGLES:
+		_primitiveType = GL_TRIANGLES;
+		break;
+	case Shape::QUADS:
+		_primitiveType = GL_QUADS;
+		break;
+	default:
+		_primitiveType = GL_TRIANGLES;
+	}
 }
 
 void GfxStaticObject::createFromScreenQuad(const ShapePtr& quad) throw(GfxException)
@@ -87,7 +104,7 @@ void GfxStaticObject::render()
 {
 	glBindVertexArray(_vao);
 	_shaderProgram->useThis();
-	glDrawElements(GL_TRIANGLES, _numberIndices, GL_UNSIGNED_INT, 0);
+	CHECK_GL_CMD(glDrawElements(_primitiveType, _numberIndices, GL_UNSIGNED_INT, 0));
 }
 
 void GfxStaticObject::renderArrays(GLenum mode) 

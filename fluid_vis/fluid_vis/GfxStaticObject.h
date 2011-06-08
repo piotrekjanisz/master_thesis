@@ -28,6 +28,7 @@ class GfxStaticObject : public NonCopyable
 	int _numberIndices;
 	int _numberVertices;
 	ShaderProgramPtr _shaderProgram;
+	GLenum _primitiveType;
 
 public:
 	GfxStaticObject(const ShaderProgramPtr& shaderProgram);

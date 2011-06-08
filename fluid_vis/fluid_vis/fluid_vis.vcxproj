@@ -119,6 +119,8 @@
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />
+    <None Include="resources\shaders\skybox_fragment.glsl" />
+    <None Include="resources\shaders\skybox_vertex.glsl" />
     <None Include="resources\shaders\vertex.glsl" />
     <None Include="resources\shaders\water_shader_fragment.glsl" />
     <None Include="resources\shaders\water_shader_vertex.glsl" />

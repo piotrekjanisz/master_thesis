@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include "NonCopyable.h"
+#include "data_types.h"
 
 class Texture : public NonCopyable
 {
@@ -40,6 +41,8 @@ public:
 
 	void load1DFloatDataNoMipMap(int internalFormat, int size, int border, GLenum dataFormat, float* data);
 
+	void load2DUnsignedByteDataNoMipMap(int internalFormat, int width, int height, int border, GLenum dataFormat, void* data);
+
 	void bind()
 	{
 		glBindTexture(_textureType, _textureId);
@@ -52,6 +55,19 @@ public:
 	}
 
 	void getData(int level, GLenum format, GLenum type, void* data);
+
+	static TexturePtr create2DRGBTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int border, float* data = 0);
+	static TexturePtr create2DDepthTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int border, float* data = 0);
+	static TexturePtr createTexture2DFromImage(GLenum filteringMode, GLenum wrappingMode, const std::string& tgaPath);
+	static TexturePtr create1DDepthTexture(GLenum filteringMode, GLenum wrappingMode, int size, int border, float* data);
+
+	/**
+	 * pathPrefix - method will try to load images from following files:
+	 * patPrefix + "_neg_x.tga", patPrefix + "_pos_x.tga",
+	 * patPrefix + "_neg_y.tga", patPrefix + "_pos_y.tga",
+	 * patPrefix + "_neg_z.tga", patPrefix + "_pos_z.tga",
+	 */
+	static TexturePtr createCubeMap(GLenum filteringMode, GLenum wrappingMode, const std::string& pathPrefix);
 
 private:
 
