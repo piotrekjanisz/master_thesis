@@ -4,6 +4,7 @@
 #include "ShaderProgram.h"
 #include "AbstractScene.h"
 #include "GfxStaticObject.h"
+#include "GfxObject.h"
 #include "MyFluid.h"
 #include "FrameBuffer.h"
 #include "data_types.h"
@@ -26,15 +27,21 @@ class Scene : public AbstractScene
 	int _skyBoxProjectionLocation;
 	int _skyBoxModelViewLocation;
 
+	int _waterProjectionLocation;
+	int _waterModelViewLocation;
+
 	ShaderProgramPtr _shaderProgram;
 	ShaderProgramPtr _waterShader;
 	ShaderProgramPtr _waterDepthShader;
 	ShaderProgramPtr _smoothShader;
 	ShaderProgramPtr _finalShader;
 	ShaderProgramPtr _skyBoxShader;
+	
 	GfxStaticObjectPtr _box;
 	GfxStaticObjectPtr _plane;
 	GfxStaticObjectPtr _skyBox;
+	GfxObjectPtr _water;
+
 	TexturePtr _sceneDepthTexture;
 	TexturePtr _sceneTexture;
 	TexturePtr _screenQuadTexture;

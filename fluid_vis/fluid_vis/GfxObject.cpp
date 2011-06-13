@@ -1,84 +1,82 @@
 #include "GfxObject.h"
-#include <GL/glew.h>
+#include "debug_utils.h"
 
 using namespace std;
 
-GfxObject::GfxObject(const boost::shared_ptr<ShaderProgram>& shaderProgram)
-	: _shaderProgram(shaderProgram), _vao(-1), _numberIndices(-1)
+GfxObject::GfxObject(void)
 {
-	glGenVertexArrays(1, &_vao);
 }
 
 
 GfxObject::~GfxObject(void)
 {
-	if (_vao != -1) {
-		glDeleteVertexArrays(1, &_vao);
-	}
-	for (map<string, ShaderAttribute>::iterator it = _attributes.begin(); it != _attributes.end(); ++it) {
-		if (it->second.vbo != -1) {
+	for (map<string, Attribute>::iterator it = _attributes.begin(); it != _attributes.end(); ++it) {
+		if (it->second.vbo >= 0) {
 			glDeleteBuffers(1, &(it->second.vbo));
 		}
 	}
+	for (map<ShaderProgramPtr, unsigned int>::iterator it = _shaderVaos.begin(); it != _shaderVaos.end(); ++it) {
+		glDeleteVertexArrays(1, &(it->second));
+	}
 }
 
-void GfxObject::addAttribute(const std::string& name, float* data, int count, int components, AttributeType type) throw(GfxException)
-{	
-	ShaderAttribute attribute;
-	try {
-		attribute.location = _shaderProgram->getAttribLocation(name.c_str());
-	} catch (const ShaderException& ex) {
-		throw GfxException(ex.what());
-	}
-	
-	attribute.type = type;
+void GfxObject::addAttribute(const std::string& name, float* data, int count, int components, AttributeType type)
+{
+	Attribute attribute;
 	attribute.components = components;
-	glGenBuffers(1, &(attribute.vbo));
-	_attributes[name] = attribute;
-	
+	attribute.type = type;
+
 	GLenum bufferType;
 	switch (type) {
 	case STATIC_ATTR:
 		bufferType = GL_STATIC_DRAW; break;
 	case DYNAMIC_ATTR:
 		bufferType = GL_DYNAMIC_DRAW; break;
+	default:
+		bufferType = GL_STATIC_DRAW; break;
 	}
 
-	glBindVertexArray(_vao);
+	glGenBuffers(1, &attribute.vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, attribute.vbo);
 	glBufferData(GL_ARRAY_BUFFER, count * components * sizeof(float), data, bufferType);
-	glVertexAttribPointer(attribute.location, components, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(attribute.location);
+
+	_attributes[name] = attribute;
 }
 
-void GfxObject::updateAttribute(const std::string& name, float* data, int count) throw(GfxException)
+void GfxObject::updateAttribute(const std::string& name, float* data, int count)
 {
 	if (_attributes.count(name) > 0) {
-		ShaderAttribute attribute = _attributes[name];
+		Attribute& attribute = _attributes[name];
 		glBindBuffer(GL_ARRAY_BUFFER, attribute.vbo);
-		glBufferData(GL_ARRAY_BUFFER, attribute.components * sizeof(float) * count, data, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, count * attribute.components * sizeof(float), data, GL_DYNAMIC_DRAW);
+	} 
+}
+
+void GfxObject::addShader(ShaderProgramPtr& shader)
+{
+	if (_shaderVaos.count(shader) > 0) 
+		return;
+	
+	unsigned int newVao;
+	glGenVertexArrays(1, &newVao);
+	glBindVertexArray(newVao);
+	for (map<string, Attribute>::iterator it = _attributes.begin(); it != _attributes.end(); ++it) {
+		try {
+			int attribLocation = shader->getAttribLocation(it->first.c_str());
+			glBindBuffer(GL_ARRAY_BUFFER, it->second.vbo);
+			glVertexAttribPointer(attribLocation, it->second.components, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(attribLocation);
+		} catch (ShaderException& ex) {
+			DEBUG_COUT(<< ex.what() << std::endl);
+		}
 	}
+	_shaderVaos[shader] = newVao;
 }
 
-void GfxObject::render(int count, GLenum objType)
+void GfxObject::render(int count, GLenum primitiveType, ShaderProgramPtr& shader)
 {
-	glBindVertexArray(_vao);
-	_shaderProgram->useThis();
-	glDrawArrays(GL_POINTS, 0, count);
-}
-
-void GfxObject::addUniformMat4f(const std::string& name) throw(GfxException)
-{
-	try {
-		int uniformLocation = _shaderProgram->getUniformLocation(name.c_str());
-		_uniforms[name] = uniformLocation;
-	} catch (ShaderException& ex) {
-		throw GfxException(ex.what());
-	}
-}
-
-void GfxObject::updateUniformMat4f(const std::string& name, float* data) throw(GfxException)
-{
-	_shaderProgram->useThis();
-	glUniformMatrix4fv(_uniforms[name], 1, GL_FALSE, data);
+	addShader(shader);
+	shader->useThis();
+	glBindVertexArray(_shaderVaos[shader]);
+	glDrawArrays(primitiveType, 0, count);
 }

@@ -10,15 +10,12 @@
 #include <GL/glus.h>
 #include <iostream>
 #include <boost/make_shared.hpp>
-#include "fluid_vis/ShaderProgram.h"
 #include "fluid_vis/Scene.h"
 #include "fluid_vis/ErrorStream.h"
 #include "fluid_vis/physx_utils.h"
 #include "fluid_vis/Properties.h"
 #include "fluid_vis/PhysxConfigurationFactory.h"
 #include "fluid_vis/MyFluid.h"
-#include "fluid_vis/MyBilboardFluid.h"
-#include "fluid_vis/GfxObject.h"
 #include "fluid_vis/debug_utils.h"
 
 using namespace std;
@@ -30,18 +27,11 @@ static MyFluid* gFluid = NULL;
 static PhysxConfigurationFactory configurationFactory("config");
 
 void createFluid() 
-{
-	
+{	
 	try {
-		boost::shared_ptr<ShaderProgram> _shaderProgram = boost::make_shared<ShaderProgram>();
-		_shaderProgram->load("shaders/water_shader_vertex.glsl", "shaders/water_shader_fragment.glsl");
-
-		boost::shared_ptr<GfxObject> gfxObject = boost::make_shared<GfxObject>(_shaderProgram);
-		CHECK_GL_CMD(gfxObject->getShaderProgram()->bindFragDataLocation(0, "fragColor"));
-		//CHECK_GL_CMD(gfxObject->getShaderProgram()->bindFragDataLocation(0, "zComponent"));
 		NxFluidDesc fluidDesc = configurationFactory.createFluidDesc("water1");
 		fluidDesc.flags &= ~NX_FF_HARDWARE;
-		gFluid = new MyBilboardFluid(g_NxScene, fluidDesc, NxVec3(1.0f, 0.0f, 0.0f), 100.0f, gfxObject);
+		gFluid = new MyFluid(g_NxScene, fluidDesc, NxVec3(1.0f, 0.0f, 0.0f), 100.0f);
 
 		NxFluidEmitterDesc emitterDesc = configurationFactory.createFluidEmitterDesc("emitter1");
 

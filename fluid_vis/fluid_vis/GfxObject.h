@@ -1,48 +1,41 @@
 #pragma once
 
-#include <map>
-#include <list>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <list>
+#include <map>
 #include <GL/glew.h>
 #include "ShaderProgram.h"
-#include "GfxStaticObject.h"
+#include "data_types.h"
+#include "NonCopyable.h"
 
-enum AttributeType 
+class GfxObject : public NonCopyable
 {
-	STATIC_ATTR,
-	DYNAMIC_ATTR
-};
-
-class GfxObject
-{
-	struct ShaderAttribute 
+public:
+	enum AttributeType 
 	{
-		ShaderAttribute() :vbo(-1), components(0), type(STATIC_ATTR), location(-1) {}
+		STATIC_ATTR,
+		DYNAMIC_ATTR
+	};
+
+private:
+	struct Attribute
+	{
+		Attribute() :vbo(-1), components(0), type(STATIC_ATTR) {}
 		unsigned int vbo;
 		int components;
 		AttributeType type;
-		int location;
 	};
 
-	unsigned int _vao;
-	std::map<std::string, ShaderAttribute> _attributes;
-	std::map<std::string, int> _uniforms;
-	int _numberIndices;
-	boost::shared_ptr<ShaderProgram> _shaderProgram;
+	std::map<std::string, Attribute> _attributes;
+	std::map<ShaderProgramPtr, unsigned int> _shaderVaos;
 
 public:
-	GfxObject(const boost::shared_ptr<ShaderProgram>& shaderProgram);
+	GfxObject(void);
 	~GfxObject(void);
 
-	void addAttribute(const std::string& name, float* data, int count, int components, AttributeType type) throw(GfxException);
-	void updateAttribute(const std::string& name, float* data, int count) throw(GfxException);
-
-	void addUniformMat4f(const std::string& name) throw(GfxException);
-	void updateUniformMat4f(const std::string& name, float* data) throw(GfxException);
-
-	void render(int count, GLenum objType);
-
-	boost::shared_ptr<ShaderProgram> getShaderProgram() const { return _shaderProgram; }
+	void addAttribute(const std::string& name, float* data, int count, int components, AttributeType type);
+	void updateAttribute(const std::string& name, float* data, int count);
+	void addShader(ShaderProgramPtr& shader);
+	void render(int count, GLenum primitiveType, ShaderProgramPtr& shader);
 };
 

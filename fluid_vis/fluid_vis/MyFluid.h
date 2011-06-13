@@ -32,5 +32,8 @@ public:
 	{
 		return _fluidEmitter == NULL ? 0 : _fluidEmitter->getNbParticlesEmitted();
 	}
+
+	float* getPositions() const { return _posBuffer; }
+	int getParticlesCount() const { return _particleCount; }
 };
 

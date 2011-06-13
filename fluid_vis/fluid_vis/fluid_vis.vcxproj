@@ -74,7 +74,6 @@
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GfxObject.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
-    <ClCompile Include="MyBilboardFluid.cpp" />
     <ClCompile Include="MyFluid.cpp" />
     <ClCompile Include="PhysxConfigurationFactory.cpp" />
     <ClCompile Include="physx_utils.cpp" />
@@ -96,7 +95,6 @@
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GfxObject.h" />
     <ClInclude Include="GfxStaticObject.h" />
-    <ClInclude Include="MyBilboardFluid.h" />
     <ClInclude Include="MyFluid.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="PhysxConfigurationFactory.h" />

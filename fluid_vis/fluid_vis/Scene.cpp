@@ -95,12 +95,22 @@ bool Scene::setup()
 		CHECK_GL_CMD(_skyBoxShader->bindFragDataLocation(0, "frag_color"));
 		CHECK_GL_CMD(_skyBoxProjectionLocation = _skyBoxShader->getUniformLocation("projectionMatrix"));
 		CHECK_GL_CMD(_skyBoxModelViewLocation = _skyBoxShader->getUniformLocation("modelViewMatrix"));
+
+		_waterShader = boost::make_shared<ShaderProgram>();
+		_waterShader->load("shaders/water_shader_vertex.glsl", "shaders/water_shader_fragment.glsl");
+		CHECK_GL_CMD(_waterProjectionLocation = _waterShader->getUniformLocation("projectionMatrix"));
+		CHECK_GL_CMD(_waterModelViewLocation = _waterShader->getUniformLocation("modelViewMatrix"));
+		CHECK_GL_CMD(_waterShader->bindFragDataLocation(0, "fragColor"));
 	} catch (const BaseException& ex) {
 		cout << ex.what() << endl;
 		fgetc(stdin);
 		return false;
 	}
 	CHECK_GL_CMD(_shaderProgram->useThis());
+
+	_water = boost::make_shared<GfxObject>();
+	CHECK_GL_CMD(_water->addAttribute("vertex", 0, 70000, 4, GfxObject::DYNAMIC_ATTR));
+	CHECK_GL_CMD(_water->addShader(_waterShader));
 
 	try {
 		_box = boost::make_shared<GfxStaticObject>(_shaderProgram);
@@ -191,13 +201,18 @@ void Scene::render(NxScene* physicsScene)
 		NxFluid* fluid = fluids[i];
 		MyFluid* myFluid = (MyFluid*)fluid->userData;
 		if (myFluid) {
-			CHECK_GL_CMD(myFluid->render(_projectionMatrix, _viewMatrix));
+			//CHECK_GL_CMD(myFluid->render(_projectionMatrix, _viewMatrix));
+			_waterShader->useThis();
+			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
+			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
+			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
+			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
 		}
 	}
-
+/*
 	CHECK_GL_CMD(_zTexture->getData(0, GL_RED, GL_FLOAT, _debugData));
 	DebugUtils::printArray(_debugData, 1, 5);
-
+*/
 	// smooth water depth
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
