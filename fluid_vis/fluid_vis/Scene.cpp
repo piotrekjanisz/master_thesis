@@ -21,13 +21,16 @@ bool Scene::setup()
 		return false;
 	}
 
+	DEBUG_CODE(_debugData = new float[640*480]);
+
 	// Textures
-	_sceneTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
-	_sceneDepthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
-	_zTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
-	_screenQuadTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
-	_depthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
-	_smoothedTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
+	_sceneTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
+	_sceneDepthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
+	//_zTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
+	CHECK_GL_CMD(_zTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
+	_screenQuadTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
+	_depthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
+	_smoothedTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
 	_floorTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor.tga");
 	_boxTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/box.tga");
 	CHECK_GL_CMD(_skyBoxTexture = Texture::createCubeMap(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/sk"));
@@ -47,9 +50,9 @@ bool Scene::setup()
 	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneDepthTexture, GL_DEPTH_ATTACHMENT));
 
 	_waterFrameBuffer = boost::make_shared<FrameBuffer>();
-	CHECK_GL_CMD(_waterFrameBuffer->attachRenderbuffer(GL_RGBA, GL_COLOR_ATTACHMENT0, 640, 480));
+	//CHECK_GL_CMD(_waterFrameBuffer->attachRenderbuffer(GL_RGBA, GL_COLOR_ATTACHMENT0, 640, 480));
 	CHECK_GL_CMD(_waterFrameBuffer->attachTexture2D(_depthTexture, GL_DEPTH_ATTACHMENT));
-	//CHECK_GL_CMD(_waterFrameBuffer->attachTexture2D(_zTexture, GL_COLOR_ATTACHMENT0));
+	CHECK_GL_CMD(_waterFrameBuffer->attachTexture2D(_zTexture, GL_COLOR_ATTACHMENT0));
 
 	_smoothFrameBuffer = boost::make_shared<FrameBuffer>();
 	CHECK_GL_CMD(_smoothFrameBuffer->attachRenderbuffer(GL_RGBA, GL_COLOR_ATTACHMENT0, 640, 480));
@@ -66,7 +69,6 @@ bool Scene::setup()
 		CHECK_GL_CMD(_projectionLocation = _shaderProgram->getUniformLocation("projectionMatrix"));
 		CHECK_GL_CMD(_modelViewLocation = _shaderProgram->getUniformLocation("modelViewMatrix"));
 		CHECK_GL_CMD(_normalMatrixLocation = _shaderProgram->getUniformLocation("normalMatrix"));
-		//CHECK_GL_CMD(_colorLocation = _shaderProgram->getUniformLocation("color"));
 		CHECK_GL_CMD(_shaderProgram->bindFragDataLocation(0, "fragColor"));
 		CHECK_GL_CMD(_shaderProgram->setUniform1i("tex", 0));
 
@@ -141,12 +143,15 @@ void Scene::render(NxScene* physicsScene)
 	// render scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _sceneFrameBuffer->getId()));
 	
+	/*
+	// render skybox
 	CHECK_GL_CMD(_skyBoxShader->useThis());
 	CHECK_GL_CMD(glUniformMatrix4fv(_skyBoxProjectionLocation, 1, GL_FALSE, _projectionMatrix));
 	CHECK_GL_CMD(glUniformMatrix4fv(_skyBoxModelViewLocation, 1, GL_FALSE, _viewMatrix));
 	CHECK_GL_CMD(_skyBoxTexture->bindToTextureUnit(GL_TEXTURE0));
 	CHECK_GL_CMD(_skyBox->renderArrays(GL_QUADS));
-	
+	*/
+
 	_shaderProgram->useThis();
 	setupViewMatrix();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -156,7 +161,6 @@ void Scene::render(NxScene* physicsScene)
 	//glUniform4fv(_colorLocation, 1, vmml::vec4f(0.5f, 0.5f, 0.0f, 1.0f));
 	_floorTexture->bindToTextureUnit(GL_TEXTURE0);
 	_plane->render();
-
 
 	int nbActors = physicsScene->getNbActors();
 	NxActor** actors = physicsScene->getActors();
@@ -187,11 +191,14 @@ void Scene::render(NxScene* physicsScene)
 		NxFluid* fluid = fluids[i];
 		MyFluid* myFluid = (MyFluid*)fluid->userData;
 		if (myFluid) {
-			myFluid->render(_projectionMatrix, _viewMatrix);
+			CHECK_GL_CMD(myFluid->render(_projectionMatrix, _viewMatrix));
 		}
 	}
 
-	// smooth depth
+	CHECK_GL_CMD(_zTexture->getData(0, GL_RED, GL_FLOAT, _debugData));
+	DebugUtils::printArray(_debugData, 1, 5);
+
+	// smooth water depth
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
@@ -210,4 +217,5 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
 	CHECK_GL_CMD(glUniformMatrix4fv(_inverseProjectionLocation, 1, GL_FALSE, _inverseProjectionMatrix));
 	CHECK_GL_CMD(_finalQuad->render());
+
 }

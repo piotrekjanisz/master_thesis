@@ -56,10 +56,13 @@ public:
 
 	void getData(int level, GLenum format, GLenum type, void* data);
 
-	static TexturePtr create2DRGBTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int border, float* data = 0);
-	static TexturePtr create2DDepthTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int border, float* data = 0);
+
+	// some factory methods
+	static TexturePtr create2DRGBTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int border = 0, float* data = 0);
+	static TexturePtr create2DDepthTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int border = 0, float* data = 0);
 	static TexturePtr createTexture2DFromImage(GLenum filteringMode, GLenum wrappingMode, const std::string& tgaPath);
 	static TexturePtr create1DDepthTexture(GLenum filteringMode, GLenum wrappingMode, int size, int border, float* data);
+	static TexturePtr create2DTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int internalFormat, GLenum format, int border = 0, float* data = 0);
 
 	/**
 	 * pathPrefix - method will try to load images from following files:

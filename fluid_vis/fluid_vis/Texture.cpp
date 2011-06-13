@@ -71,6 +71,7 @@ void Texture::load1DFloatDataNoMipMap(int internalFormat, int size, int border, 
 
 void Texture::getData(int level, GLenum format, GLenum type, void* data)
 {
+	bind();
 	glGetTexImage(_textureType, level, format, type, data);
 }
 
@@ -100,6 +101,14 @@ TexturePtr Texture::createTexture2DFromImage(GLenum filteringMode, GLenum wrappi
 	retVal->load2DUnsignedByteDataNoMipMap(tgaImage.format, tgaImage.width, tgaImage.height, 0, tgaImage.format, tgaImage.data);
 	glusDestroyTgaImage(&tgaImage);
 
+	return retVal;
+}
+
+TexturePtr Texture::create2DTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int internalFormat, GLenum format, int border, float* data)
+{
+	TexturePtr retVal = boost::make_shared<Texture>(GL_TEXTURE_2D);
+	retVal->setParameters(filteringMode, wrappingMode);
+	retVal->load2DFloatDataNoMipMap(internalFormat, width, height, border, format, data);
 	return retVal;
 }
 

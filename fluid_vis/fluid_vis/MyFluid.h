@@ -23,6 +23,7 @@ public:
 
 public:
 	virtual void render(vmml::mat4f& projectionMatrix, vmml::mat4f& modelViewMatrix);
+	void render();
 
 	// TODO throw exception
 	void createEmitter(NxFluidEmitterDesc& emitterDesc);

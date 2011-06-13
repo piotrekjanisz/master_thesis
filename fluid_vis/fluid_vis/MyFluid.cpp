@@ -53,3 +53,7 @@ void MyFluid::createEmitter(NxFluidEmitterDesc& emitterDesc)
 {
 	_fluidEmitter = _fluid->createEmitter(emitterDesc);
 }
+
+void MyFluid::render()
+{
+}

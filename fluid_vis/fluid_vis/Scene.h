@@ -27,6 +27,8 @@ class Scene : public AbstractScene
 	int _skyBoxModelViewLocation;
 
 	ShaderProgramPtr _shaderProgram;
+	ShaderProgramPtr _waterShader;
+	ShaderProgramPtr _waterDepthShader;
 	ShaderProgramPtr _smoothShader;
 	ShaderProgramPtr _finalShader;
 	ShaderProgramPtr _skyBoxShader;
