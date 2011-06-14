@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vmmlib\vmmlib.hpp>
+#include <boost\timer.hpp>
 #include "CameraFrame.h"
 
 
@@ -21,6 +22,9 @@ class AbstractScene
 	float _yRotation;
 
 	CameraFrame _cameraFrame;
+
+	boost::timer _timer;
+	int _frameCount;
 	
 protected:
 	vmml::mat4f _projectionMatrix;
@@ -37,6 +41,7 @@ protected:
 	vmml::mat3f getNormalMatrix(const vmml::mat4f& modelView);
 
 public:
+	AbstractScene() : _frameCount(0) {}
 	virtual ~AbstractScene() {}
 	
 	virtual bool setup();
@@ -59,5 +64,7 @@ public:
 
 	CameraFrame& cameraFrame() { return _cameraFrame; }
 	const CameraFrame& cameraFrame() const { return _cameraFrame; }
+
+	void computeFrameRate();
 };
 

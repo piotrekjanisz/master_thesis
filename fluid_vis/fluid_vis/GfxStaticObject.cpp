@@ -79,6 +79,7 @@ void GfxStaticObject::createFromShape(const ShapePtr& shape) throw(GfxException)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, shape->indicesCount * sizeof(int), shape->indices, GL_STATIC_DRAW);
 	_numberIndices = shape->indicesCount;
+	_numberVertices = shape->verticesCount;
 
 	switch(shape->primitiveType) {
 	case Shape::TRIANGLES:
@@ -111,5 +112,5 @@ void GfxStaticObject::renderArrays(GLenum mode)
 {
 	glBindVertexArray(_vao);
 	_shaderProgram->useThis();
-	glDrawArrays(mode, 0, _numberVertices);
+	CHECK_GL_CMD(glDrawArrays(mode, 0, _numberVertices));
 }

@@ -69,6 +69,20 @@ BOOST_AUTO_TEST_CASE(create2DSize11Scale05)
 	}
 }
 
+BOOST_AUTO_TEST_CASE(normalize1D)
+{
+	const int TEST_SIZE = 11;
+	Filters::createGauss1D(TEST_SIZE, 0.5, 0.5, data);
+	Filters::normalize(data, 1, TEST_SIZE);
+
+	double sum = 0.0;
+	for (int i = 0; i < TEST_SIZE; i++) {
+		sum += data[i];
+	}
+
+	BOOST_CHECK_CLOSE_FRACTION(sum, 1, 0.000001);
+}
+
 BOOST_AUTO_TEST_CASE(createHeaviside)
 {
 	const int TEST_SIZE = 11;

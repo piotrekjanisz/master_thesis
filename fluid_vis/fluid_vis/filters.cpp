@@ -31,6 +31,22 @@ void Filters::createGauss1D(int size, double step, double sigma, float* data)
 	}
 }
 
+void Filters::normalize(float* data, int rows, int cols)
+{
+	double sum = 0.0;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			sum += data[i * cols + j];
+		}
+	}
+
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			data[i * cols + j] /= sum;
+		}
+	}
+}
+
 void Filters::createHeavisideDistribution(double first, double last, double cutoff, int size, float* data)
 {
 	double step = (last - first) / (size -1);

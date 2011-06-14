@@ -3,8 +3,10 @@
 in vec2 tex_coord;
 
 uniform sampler2D depthTexture;
+uniform sampler2D waterDepthTexture;
 uniform sampler2D sceneDepthTexture;
 uniform sampler2D sceneTexture;
+
 uniform vec2 coordStep;
 uniform mat4 inverseProjection;
 
@@ -48,7 +50,8 @@ void main(void)
 		vec3 reflection = normalize(reflect(vec3(-1.0, -1.0, -1.0), normal));
 		float spec = max(0.0, dot(normal, reflection));
 
-		frag_color = 0.8 * texture(sceneTexture, tex_coord + 0.1 * normal.xy) + vec4(0.2, 0.0, 0.0, 1.0);
+		float waterDepth = texture(waterDepthTexture, tex_coord).x;
+		frag_color = (1.0 - waterDepth) * texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)) + waterDepth * vec4(0.0, 0.5, 1.0, 1.0);
 		float powSpec = pow(spec, 64.0);
 		frag_color.rgb += vec3(powSpec, powSpec, powSpec);
 	} else {

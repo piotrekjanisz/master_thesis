@@ -103,3 +103,14 @@ void AbstractScene::rotateY(float val)
 	_yRotation += val;
 	_cameraFrame.rotateHorizontally(val);
 }
+
+void AbstractScene::computeFrameRate()
+{
+	_frameCount++;
+	if (_timer.elapsed() > 5.0) {
+		double frameRate = _frameCount / _timer.elapsed();
+		DEBUG_COUT(<< frameRate << std::endl);
+		_timer.restart();
+		_frameCount = 0;
+	}
+}

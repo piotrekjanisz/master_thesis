@@ -30,12 +30,16 @@ class Scene : public AbstractScene
 	int _waterProjectionLocation;
 	int _waterModelViewLocation;
 
+	int _waterDepthProjectionLocation;
+	int _waterDepthModelViewLocation;
+
 	ShaderProgramPtr _shaderProgram;
 	ShaderProgramPtr _waterShader;
 	ShaderProgramPtr _waterDepthShader;
 	ShaderProgramPtr _smoothShader;
 	ShaderProgramPtr _finalShader;
 	ShaderProgramPtr _skyBoxShader;
+	ShaderProgramPtr _gaussianBlurShader;
 	
 	GfxStaticObjectPtr _box;
 	GfxStaticObjectPtr _plane;
@@ -46,9 +50,11 @@ class Scene : public AbstractScene
 	TexturePtr _sceneTexture;
 	TexturePtr _screenQuadTexture;
 	TexturePtr _depthTexture;
+	TexturePtr _waterDepthTexture;
 	TexturePtr _zTexture;
 	TexturePtr _smoothedTexture;
 	TexturePtr _gaussDistTexture;
+	TexturePtr _gaussDist1DTexture;
 	TexturePtr _spatialDistTexture;
 
 	TexturePtr _boxTexture;
@@ -58,13 +64,14 @@ class Scene : public AbstractScene
 	FrameBufferPtr _sceneFrameBuffer;
 	FrameBufferPtr _waterFrameBuffer;
 	FrameBufferPtr _smoothFrameBuffer;
+	FrameBufferPtr _waterDepthFrameBuffer;
 	ScreenQuadPtr _screenQuad;
+	ScreenQuadPtr _blurQuad;
 	ScreenQuadPtr _finalQuad;
 
 	MyFluid* _fluid;
 
 	float* _debugData;
-
 public:
 	Scene();
 

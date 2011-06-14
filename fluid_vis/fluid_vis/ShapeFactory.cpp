@@ -92,22 +92,53 @@ ShapePtr ShapeFactory::createScreenQuad(float zComponent)
 	return boost::make_shared<Shape>(vertices, 4, (float*)NULL, (unsigned int*)NULL, (unsigned int)0);
 }
 
-ShapePtr ShapeFactory::createSkyBox(float halfExtent)
+void createSkyBox2(float halfExtent)
 {
-	/*  walls are facing inside cube, winding is counter clockwise
-	 *     0-----3
-	 *    /|    /| 
-	 *   / |   / |         ^y  
-	 *  4-----5  |         |
-	 *  |  |  |  |         |
-	 *  |  |  |  |         |         x
-	 *  |  1--|--2         |--------->
-	 *  | /   | /         /
-	 *  |/    |/       z /
-	 *  7-----6         v
-	 *
-	 */
+	float vertices[] = {
+		// negative z
+		-halfExtent,  halfExtent, -halfExtent, 1.0, 
+		-halfExtent, -halfExtent, -halfExtent, 1.0, 
+		 halfExtent, -halfExtent, -halfExtent, 1.0, 
+		 halfExtent,  halfExtent, -halfExtent, 1.0, 
+		// posivite z
+		-halfExtent,  halfExtent,  halfExtent, 1.0,
+		 halfExtent,  halfExtent,  halfExtent, 1.0,
+		 halfExtent, -halfExtent,  halfExtent, 1.0,
+		-halfExtent, -halfExtent,  halfExtent, 1.0,
+		// positive x
+		 halfExtent,  halfExtent, -halfExtent, 1.0,
+		 halfExtent, -halfExtent, -halfExtent, 1.0,
+		 halfExtent, -halfExtent,  halfExtent, 1.0,
+		 halfExtent,  halfExtent,  halfExtent, 1.0,
+		// negative x
+		-halfExtent,  halfExtent, -halfExtent, 1.0,
+		-halfExtent,  halfExtent,  halfExtent, 1.0,
+		-halfExtent, -halfExtent,  halfExtent, 1.0,
+		-halfExtent, -halfExtent, -halfExtent, 1.0,
+		// positive y
+		-halfExtent,  halfExtent,  halfExtent, 1.0,
+		-halfExtent,  halfExtent, -halfExtent, 1.0,
+		 halfExtent,  halfExtent, -halfExtent, 1.0,
+		 halfExtent,  halfExtent,  halfExtent, 1.0,
+		// negative y
+		-halfExtent, -halfExtent,  halfExtent, 1.0,
+		 halfExtent, -halfExtent,  halfExtent, 1.0,
+		 halfExtent, -halfExtent, -halfExtent, 1.0,
+		-halfExtent, -halfExtent, -halfExtent, 1.0,
+	};
 
+		unsigned int indices[] = {
+		 0,  1,  2,  3,      // negative z
+		 4,  5,  6,  7,      // positive z
+		 8,  9, 10, 11,      // positive x
+		12, 13, 14, 15,      // negative x
+		16, 17, 18, 19,      // positive y
+		20, 21, 22, 23,      // negative y
+	};
+
+
+		/*
+		
 	float vertices[] = {
 		// negative z
 		-halfExtent,  halfExtent, -halfExtent, 1.0, 
@@ -142,16 +173,22 @@ ShapePtr ShapeFactory::createSkyBox(float halfExtent)
 	};
 
 	unsigned int indices[] = {
-		 0,  1,  2,  3,      // negative z
-		 4,  5,  6,  7,      // positive z
-		 8,  9, 10, 11,      // positive x
-		12, 13, 14, 15,      // negative x
-		16, 17, 18, 19,      // positive y
-		20, 21, 22, 23,      // negative y
+		 0,  1,  2,      // negative z
+		 2,  3,  0,
+		 4,  5,  6,      // positive z
+		 6,  7,  4,
+		 8,  9, 10,      // positive x
+		10, 11,  8,
+		12, 13, 14,      // negative x
+		14, 15, 12,
+		16, 17, 18,      // positive y
+		18, 19, 16,
+		20, 21, 22,      // negative y
+		22, 23, 20
 	};
 
 	const unsigned int VERTICES_COUNT = 24;
-	const unsigned int INDICES_COUNT = 24;
+	const unsigned int INDICES_COUNT = 36;
 
 	float* retValVertices = new float[VERTICES_COUNT * 4];
 	memcpy(retValVertices, vertices, VERTICES_COUNT * 4 * sizeof(float));
@@ -159,5 +196,61 @@ ShapePtr ShapeFactory::createSkyBox(float halfExtent)
 	unsigned int* retValIndices = new unsigned int[INDICES_COUNT];
 	memcpy(retValIndices, indices, INDICES_COUNT * sizeof(unsigned int));
 
-	return boost::make_shared<Shape>(retValVertices, VERTICES_COUNT, (float*) 0, retValIndices, (unsigned int)INDICES_COUNT, (float*) 0, Shape::QUADS);
+	return boost::make_shared<Shape>(retValVertices, VERTICES_COUNT, (float*) 0, retValIndices, (unsigned int)INDICES_COUNT, (float*) 0, Shape::TRIANGLES);
+		*/
+}
+
+ShapePtr ShapeFactory::createSkyBox(float halfExtent)
+{
+	/*  walls are facing inside cube, winding is counter clockwise
+	 *     0-----3
+	 *    /|    /| 
+	 *   / |   / |         ^y  
+	 *  4-----5  |         |
+	 *  |  |  |  |         |
+	 *  |  |  |  |         |         x
+	 *  |  1--|--2         |--------->
+	 *  | /   | /         /
+	 *  |/    |/       z /
+	 *  7-----6         v
+	 *
+	 */
+
+	float vertices[] = {
+		-halfExtent,  halfExtent, -halfExtent, 1.0,
+		-halfExtent, -halfExtent, -halfExtent, 1.0,
+		 halfExtent, -halfExtent, -halfExtent, 1.0,
+		 halfExtent,  halfExtent, -halfExtent, 1.0,
+
+		-halfExtent,  halfExtent,  halfExtent, 1.0,
+		 halfExtent,  halfExtent,  halfExtent, 1.0,
+		 halfExtent, -halfExtent,  halfExtent, 1.0,
+		-halfExtent, -halfExtent,  halfExtent, 1.0,
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,    // negative z
+		2, 3, 0,
+		4, 5, 6,    // positive z
+		6, 7, 4,
+		4, 7, 1,    // negative x
+		1, 0, 4,
+		5, 3, 2,    // positive x
+		2, 6, 5, 
+		1, 7, 6,    // negative y 
+		6, 2, 1,
+		0, 3, 5,    // positive y
+		5, 4, 0
+	};
+
+	const unsigned int VERTICES_COUNT = 8;
+	const unsigned int INDICES_COUNT = 36;
+
+	float* retValVertices = new float[VERTICES_COUNT * 4];
+	memcpy(retValVertices, vertices, VERTICES_COUNT * 4 * sizeof(float));
+
+	unsigned int* retValIndices = new unsigned int[INDICES_COUNT];
+	memcpy(retValIndices, indices, INDICES_COUNT * sizeof(unsigned int));
+
+	return boost::make_shared<Shape>(retValVertices, VERTICES_COUNT, (float*) 0, retValIndices, (unsigned int)INDICES_COUNT, (float*) 0, Shape::TRIANGLES);
 }

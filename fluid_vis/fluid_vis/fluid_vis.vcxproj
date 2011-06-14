@@ -115,11 +115,14 @@
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
     <None Include="resources\shaders\final_stage_fragment.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
+    <None Include="resources\shaders\gaussian_blur_fragment.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />
     <None Include="resources\shaders\skybox_fragment.glsl" />
     <None Include="resources\shaders\skybox_vertex.glsl" />
     <None Include="resources\shaders\vertex.glsl" />
+    <None Include="resources\shaders\water_depth_fragment.glsl" />
+    <None Include="resources\shaders\water_depth_vertex.glsl" />
     <None Include="resources\shaders\water_shader_fragment.glsl" />
     <None Include="resources\shaders\water_shader_vertex.glsl" />
   </ItemGroup>
