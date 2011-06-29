@@ -55,6 +55,7 @@ class Scene : public AbstractScene
 	TexturePtr _smoothedTexture;
 	TexturePtr _gaussDistTexture;
 	TexturePtr _gaussDist1DTexture;
+	TexturePtr _gaussDist1DBilateralTexture;
 	TexturePtr _spatialDistTexture;
 
 	TexturePtr _boxTexture;
@@ -72,11 +73,23 @@ class Scene : public AbstractScene
 	MyFluid* _fluid;
 
 	float* _debugData;
+
+	int _particleCount;
+
+	float _particleSize;
 public:
 	Scene();
 
 	virtual bool setup();
 	virtual void render();
 	void render(NxScene* physicsScene);
+
+	virtual void reshape(int width, int height);
+
+	virtual void displayAdditionalStats();
+
+	void incParticleSize(float val) {
+		_particleSize = max(_particleSize + val, 10.0f);
+	}
 };
 

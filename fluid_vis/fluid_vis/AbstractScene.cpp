@@ -109,8 +109,9 @@ void AbstractScene::computeFrameRate()
 	_frameCount++;
 	if (_timer.elapsed() > 5.0) {
 		double frameRate = _frameCount / _timer.elapsed();
-		DEBUG_COUT(<< frameRate << std::endl);
+		DEBUG_COUT(<< "FPS: " << frameRate << std::endl);
 		_timer.restart();
 		_frameCount = 0;
+		displayAdditionalStats();
 	}
 }

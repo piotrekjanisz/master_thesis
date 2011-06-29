@@ -10,13 +10,13 @@
 #include <GL/glus.h>
 #include <iostream>
 #include <boost/make_shared.hpp>
-#include "fluid_vis/Scene.h"
-#include "fluid_vis/ErrorStream.h"
-#include "fluid_vis/physx_utils.h"
-#include "fluid_vis/Properties.h"
-#include "fluid_vis/PhysxConfigurationFactory.h"
-#include "fluid_vis/MyFluid.h"
-#include "fluid_vis/debug_utils.h"
+#include <fluid_vis/Scene.h>
+#include <fluid_vis/ErrorStream.h>
+#include <fluid_vis/physx_utils.h>
+#include <fluid_vis/Properties.h>
+#include <fluid_vis/PhysxConfigurationFactory.h>
+#include <fluid_vis/MyFluid.h>
+#include <fluid_vis/debug_utils.h>
 
 using namespace std;
 
@@ -126,6 +126,10 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 		createCubeFromEye(1.0f, 50.0f);
 	} else if (key == 100) {
 		createCubesFromEye(1.0f, 50.0f, 10);
+	} else if (key == 49) {
+		g_scene.incParticleSize(-1.0f);
+	} else if (key == 50) {
+		g_scene.incParticleSize(1.0f);
 	}
 	cout << key << endl;
 }

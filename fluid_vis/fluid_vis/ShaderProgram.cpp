@@ -147,6 +147,13 @@ void ShaderProgram::setUniform1i(const char* name, int value)
 	CHECK_GL_CMD(glUniform1i(location, value));
 }
 
+void ShaderProgram::setUniform1f(const char* name, float value)
+{
+	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
+	useThis();
+	CHECK_GL_CMD(glUniform1f(location, value));
+}
+
 void ShaderProgram::setUniform2f(const char* name, float v0, float v1)
 {
 	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));

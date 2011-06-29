@@ -11,21 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{574ED6DA-E8F7-40FD-8E50-7099139D3FA0}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
-    <RootNamespace>test</RootNamespace>
+    <ProjectGuid>{E19E4D8F-B6AC-49DC-B50A-6BF91ABBF91B}</ProjectGuid>
+    <RootNamespace>surface_extraction</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -37,84 +36,41 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <ReferencePath>$(SolutionDir);$(ReferencePath)</ReferencePath>
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <Profile>true</Profile>
     </Link>
-    <PreBuildEvent>
-      <Command>powershell "&amp;'./copy_resources.ps1' $(TargetDir) "</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Message>Copy resources</Message>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PreBuildEvent>
-      <Command>powershell "&amp;'./copy_resources.ps1' $(TargetDir) "</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AllocatorPerformanceTest.cpp" />
-    <ClCompile Include="FiltersTest.cpp" />
-    <ClCompile Include="ParticleLookupCachePerformanceTest.cpp" />
-    <ClCompile Include="ParticleLookupCacheTest.cpp" />
-    <ClCompile Include="PolygonizerTest.cpp" />
-    <ClCompile Include="PropertiesTest.cpp" />
-    <ClCompile Include="resources\config\PhysxConfigurationFactoryTest.cpp" />
-    <ClCompile Include="runner.cpp" />
-    <ClCompile Include="SurfaceExtractorPerformanceTest.cpp" />
-    <ClCompile Include="SurfaceExtractorTest.cpp" />
-    <ClCompile Include="TestUtils.cpp" />
+    <ClInclude Include="ParticleLookupCache.h" />
+    <ClInclude Include="Polygonizer.h" />
+    <ClInclude Include="Slice.h" />
+    <ClInclude Include="SurfaceExtractor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fluid_vis\fluid_vis.vcxproj">
-      <Project>{2fa25989-a277-4dd4-b399-4cf2f38dc9c7}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\surface_extraction\surface_extraction.vcxproj">
-      <Project>{e19e4d8f-b6ac-49dc-b50a-6bf91abbf91b}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\test_config\emitter1.cfg" />
-    <None Include="resources\test_config\test1.cfg" />
-    <None Include="resources\test_config\water1.cfg" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TestUtils.h" />
+    <ClCompile Include="ParticleLookupCache.cpp" />
+    <ClCompile Include="Polygonizer.cpp" />
+    <ClCompile Include="Slice.cpp" />
+    <ClCompile Include="SurfaceExtractor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

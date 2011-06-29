@@ -20,14 +20,15 @@ FrameBuffer::~FrameBuffer(void)
 void FrameBuffer::attachRenderbuffer(GLenum format, GLenum target, int width, int height)
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fboName);
-	unsigned int renderBufferId;
-	_renderBuffers.push_back(renderBufferId);
-	_renderTargets.push_back(target);
-	glGenRenderbuffers(1, &renderBufferId);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+	RenderBuffer renderBuffer;
+	glGenRenderbuffers(1, &renderBuffer.id);
+	renderBuffer.format = format;
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer.id);
 	glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
-	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, target, GL_RENDERBUFFER, renderBufferId);
+	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, target, GL_RENDERBUFFER, renderBuffer.id);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	_renderBuffers.push_back(renderBuffer);
+	_renderTargets.push_back(target);
 }
 
 void FrameBuffer::attachTexture2D(TexturePtr& texture, GLenum target)
@@ -50,4 +51,12 @@ void FrameBuffer::copyRenderColorToScreen(GLenum sourceTarget,
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glReadBuffer(sourceTarget);
 	glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+}
+
+void FrameBuffer::resize(int width, int height)
+{
+	for (std::vector<RenderBuffer>::iterator it = _renderBuffers.begin(); it != _renderBuffers.end(); ++it) {
+		glBindRenderbuffer(GL_RENDERBUFFER, it->id);
+		glRenderbufferStorage(GL_RENDERBUFFER, it->format, width, height);
+	}
 }

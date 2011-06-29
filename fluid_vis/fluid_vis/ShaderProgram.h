@@ -42,6 +42,8 @@ public:
 
 	void setUniform1i(const char* name, int value);
 
+	void setUniform1f(const char* name, float value);
+
 	void setUniform2f(const char* name, float v0, float v1);
 private:
     void loadAux(const std::string& vertexSoruce, const std::string& fragmentSource, const std::string& geometrySource) throw(ShaderException);

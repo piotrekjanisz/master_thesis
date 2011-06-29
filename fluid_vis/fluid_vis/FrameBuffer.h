@@ -9,6 +9,12 @@
 class FrameBuffer
 {
 public:
+	struct RenderBuffer {
+		unsigned int id;
+		GLenum format;
+	};
+
+public:
 	FrameBuffer(void);
 	~FrameBuffer(void);
 
@@ -51,9 +57,13 @@ public:
 	}
 
 	unsigned int getId() const { return _fboName; }
+
+	void resize(int width, int height);
 private:
 	unsigned int _fboName;
-	std::vector<unsigned int> _renderBuffers;
+	std::vector<RenderBuffer> _renderBuffers;
 	std::vector<unsigned int> _renderTargets;
+
+
 };
 

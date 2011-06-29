@@ -66,5 +66,7 @@ public:
 	const CameraFrame& cameraFrame() const { return _cameraFrame; }
 
 	void computeFrameRate();
+
+	virtual void displayAdditionalStats() = 0;
 };
 

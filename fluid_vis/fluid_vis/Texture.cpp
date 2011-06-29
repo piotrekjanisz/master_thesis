@@ -17,6 +17,15 @@ Texture::~Texture(void)
 	}
 }
 
+void Texture::setup(int width, int height, int internalFormat, GLenum dataFormat, int border, GLenum dataType)
+{
+	_width = width;
+	_height = height;
+	_internalFormat = internalFormat;
+	_dataFormat = dataFormat;
+	_border = border;
+	_dataType = dataType;
+}
 
 void Texture::setTextureFilter(GLenum filter)
 {
@@ -47,24 +56,21 @@ void Texture::setParameters(GLenum filtering, GLenum wrappingMode)
 
 void Texture::load2DFloatDataNoMipMap(int internalFormat, int width, int height, int border, GLenum dataFormat, float* data)
 {
-	_width = width;
-	_height = height;
+	setup(width, height, internalFormat, dataFormat, border, GL_FLOAT);
 	glBindTexture(_textureType, _textureId);
 	glTexImage2D(_textureType, 0, internalFormat, width, height, border, dataFormat, GL_FLOAT, data);
 }
 
 void Texture::load2DUnsignedByteDataNoMipMap(int internalFormat, int width, int height, int border, GLenum dataFormat, void* data)
 {
-	_width = width;
-	_height = height;
+	setup(width, height, internalFormat, dataFormat, border, GL_UNSIGNED_BYTE);	
 	glBindTexture(_textureType, _textureId);
 	glTexImage2D(_textureType, 0, internalFormat, width, height, border, dataFormat, GL_UNSIGNED_BYTE, data);
 }
 
 void Texture::load1DFloatDataNoMipMap(int internalFormat, int size, int border, GLenum dataFormat, float* data)
 {
-	_width = size;
-	_height = 1;
+	setup(size, 1, internalFormat, dataFormat, border, GL_FLOAT);
 	glBindTexture(_textureType, _textureId);
 	glTexImage1D(_textureType, 0, internalFormat, size, border, dataFormat, GL_FLOAT, data);
 }
@@ -150,4 +156,16 @@ TexturePtr Texture::createCubeMap(GLenum filteringMode, GLenum wrappingMode, con
 	}
 
 	return retVal;
+}
+
+void Texture::resize1D(int size)
+{
+	glBindTexture(_textureType, _textureId);
+	glTexImage1D(_textureType, 0, _internalFormat, size, _border, _dataFormat, _dataType, 0);
+}
+
+void Texture::resize2D(int width, int height)
+{
+	glBindTexture(_textureType, _textureId);
+	glTexImage2D(_textureType, 0, _internalFormat, width, height, _border, _dataFormat, _dataType, 0);
 }

@@ -2,6 +2,7 @@
 
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
+uniform float pointSize;
 in vec4 vertex;
 
 flat out vec3 eyeSpacePos;
@@ -13,7 +14,7 @@ void main(void)
 
 	float len = length(v);
 
-	gl_PointSize = 100.0f / len;
+	gl_PointSize = pointSize / len;
 
 	gl_Position = projectionMatrix * v;
 }

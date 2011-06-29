@@ -72,7 +72,12 @@ public:
 	 */
 	static TexturePtr createCubeMap(GLenum filteringMode, GLenum wrappingMode, const std::string& pathPrefix);
 
+	void resize1D(int newSize);
+
+	void resize2D(int width, int height);
 private:
+
+	void setup(int width, int height, int internalFormat, GLenum dataFormat, int border, GLenum dataType);
 
 	unsigned int _textureId;
 	/**
@@ -80,6 +85,10 @@ private:
 	 */
 	GLenum _textureType;
 	GLenum _textureFormat;
+	int _internalFormat;
+	GLenum _dataFormat;
+	GLenum _dataType;
+	int _border;
 	int _width;
 	int _height;
 };

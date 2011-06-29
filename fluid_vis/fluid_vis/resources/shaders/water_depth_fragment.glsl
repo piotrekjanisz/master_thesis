@@ -12,7 +12,7 @@ void main(void)
     if (mag > 1.0f)
         discard;
 
-	float color = 0.02;
+	float color = 0.05;
 
 	fragColor = vec4(color, color, color, 1.0);
 }

@@ -193,5 +193,8 @@
     <None Include="resources\shaders\gaussian_blur_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="resources\shaders\separable_bilateral_gauss_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

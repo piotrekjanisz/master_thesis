@@ -1,4 +1,5 @@
-#define DEBUG
+//#define DEBUG
+//#undef DEBUG
 
 #include "Scene.h"
 #include "debug_utils.h"
@@ -11,8 +12,26 @@
 using namespace std;
 
 Scene::Scene()
+	: _particleSize(100.0f)
 {
 	// don't put any opengl command here!!!
+}
+
+void Scene::reshape(int width, int height)
+{
+	AbstractScene::reshape(width, height);
+	CHECK_GL_CMD(_sceneTexture->resize2D(width, height));
+	CHECK_GL_CMD(_sceneDepthTexture->resize2D(width, height));
+	CHECK_GL_CMD(_zTexture->resize2D(width, height));
+	CHECK_GL_CMD(_screenQuadTexture->resize2D(width, height));
+	CHECK_GL_CMD(_depthTexture->resize2D(width, height));
+	CHECK_GL_CMD(_waterDepthTexture->resize2D(width, height));
+	CHECK_GL_CMD(_smoothedTexture->resize2D(width, height));
+
+	CHECK_GL_CMD(_sceneFrameBuffer->resize(width, height));
+	CHECK_GL_CMD(_waterFrameBuffer->resize(width, height));
+	CHECK_GL_CMD(_waterDepthFrameBuffer->resize(width, height));
+	CHECK_GL_CMD(_smoothFrameBuffer->resize(width, height));
 }
 
 bool Scene::setup()
@@ -41,6 +60,8 @@ bool Scene::setup()
 	float* gaussData = new float[GAUSS_SIZE*GAUSS_SIZE];
 	Filters::createGauss2D(GAUSS_SIZE, 1.0, 10.0, gaussData);
 	_gaussDistTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, GAUSS_SIZE, GAUSS_SIZE, 0, gaussData);
+	Filters::createGauss1D(GAUSS_SIZE, 1.0, 10.0, gaussData);
+	_gaussDist1DBilateralTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, GAUSS_SIZE, 0, gaussData);
 	Filters::createHeavisideDistribution(0.0, 1.0, 0.1, 25, gaussData);
 	_spatialDistTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 25, 0, gaussData);
 	Filters::createGauss1D(GAUSS_SIZE, 1.0, 5.0, gaussData);
@@ -80,7 +101,7 @@ bool Scene::setup()
 		CHECK_GL_CMD(_shaderProgram->setUniform1i("tex", 0));
 
 		ShaderProgramPtr screenQuadShader = boost::make_shared<ShaderProgram>();
-		CHECK_GL_CMD(screenQuadShader->load("shaders/screen_quad_vertex.glsl", "shaders/bilateral_gauss_fragment.glsl"));
+		CHECK_GL_CMD(screenQuadShader->load("shaders/screen_quad_vertex.glsl", "shaders/separable_bilateral_gauss_fragment.glsl"));
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("inputImage", 0));
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("gaussianDist", 1));
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("spatialDist", 2));
@@ -167,9 +188,6 @@ void Scene::render()
 	_plane->render();
 }
 
-GLenum windowBuffs[] = {GL_BACK_LEFT};
-GLenum fboBuffs[] = {GL_COLOR_ATTACHMENT0};
-
 void Scene::render(NxScene* physicsScene)
 {
 	// render scene
@@ -184,11 +202,11 @@ void Scene::render(NxScene* physicsScene)
 
 	_shaderProgram->useThis();
 	setupViewMatrix();
-	glUniformMatrix4fv(_projectionLocation, 1, GL_FALSE, _projectionMatrix);
-	glUniformMatrix4fv(_modelViewLocation, 1, GL_FALSE, _viewMatrix);
-	glUniformMatrix3fv(_normalMatrixLocation, 1, GL_FALSE, getNormalMatrix(_viewMatrix));
-	_floorTexture->bindToTextureUnit(GL_TEXTURE0);
-	_plane->render();
+	CHECK_GL_CMD(glUniformMatrix4fv(_projectionLocation, 1, GL_FALSE, _projectionMatrix));
+	CHECK_GL_CMD(glUniformMatrix4fv(_modelViewLocation, 1, GL_FALSE, _viewMatrix));
+	CHECK_GL_CMD(glUniformMatrix3fv(_normalMatrixLocation, 1, GL_FALSE, getNormalMatrix(_viewMatrix)));
+	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
+	CHECK_GL_CMD(_plane->render());
 
 	int nbActors = physicsScene->getNbActors();
 	NxActor** actors = physicsScene->getActors();
@@ -219,9 +237,11 @@ void Scene::render(NxScene* physicsScene)
 		NxFluid* fluid = fluids[i];
 		MyFluid* myFluid = (MyFluid*)fluid->userData;
 		if (myFluid) {
+			_particleCount = myFluid->getParticlesCount();
 			_waterShader->useThis();
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
+			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
 			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
 
@@ -235,6 +255,7 @@ void Scene::render(NxScene* physicsScene)
 			_waterDepthShader->useThis();
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterDepthProjectionLocation, 1, GL_FALSE, _projectionMatrix));
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterDepthModelViewLocation, 1, GL_FALSE, _viewMatrix));
+			CHECK_GL_CMD(_waterDepthShader->setUniform1f("pointSize", _particleSize));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterDepthShader));
 
 			CHECK_GL_CMD(glEnable(GL_DEPTH_TEST));
@@ -251,8 +272,8 @@ void Scene::render(NxScene* physicsScene)
 			CHECK_GL_CMD(_blurQuad->render());
 		}
 	}
-
-	// smooth water depth
+	/*
+	// smooth water
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
@@ -260,6 +281,18 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0f / getHeight()));
 	CHECK_GL_CMD(_screenQuad->render());
+	*/
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDist1DBilateralTexture, GL_TEXTURE1));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 0.0f));
+	CHECK_GL_CMD(_screenQuad->render());
+	glClear(GL_DEPTH_BUFFER_BIT);
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
+	CHECK_GL_CMD(_screenQuad->render());
+
 
 	// put water together with rest of the scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
@@ -274,6 +307,12 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_finalQuad->render());
 
 	computeFrameRate();
+}
+
+
+void Scene::displayAdditionalStats()
+{
+	std::cout << "PARTICLES: " << _particleCount << std::endl;
 }
 
 
