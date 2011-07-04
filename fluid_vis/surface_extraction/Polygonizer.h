@@ -42,6 +42,17 @@ private:
 
 	void vertexInterpolate(double isoTreshold, float* p1, float* p2, double isoVal1, double isoVal2, float* result);
 
+	void addVertex(float* p1, float* p2, double isoVal1, double isoVal2);
+
+    double _isoTreshold;
+    int _vertexComponents;
+    float* _vertices;
+    float* _currentVertex;
+    unsigned int _currentIndex;
+    unsigned int* _indices;
+    int _ntriag;
+    int _nvert;
+
 public:
 
 	enum 
@@ -54,21 +65,18 @@ public:
 		CUBE_FRONT = 32
 	};
 
-	enum {
-		EDGE_BOTTOM_BACK = 1,
-		EDGE_BOTTOM_RIGHT = 2,
-		EDGE_BOTTOM_FRONT = 4,
-		EDGE_BOTTOM_LEFT = 8,
-		EDGE_TOP_BACK = 16,
-		EDGE_TOP_RIGHT = 32,
-		EDGE_TOP_FRONT = 64,
-		EDGE_TOP_LEFT = 128
-	};
-
-	void polygonize(CornerCacheEntry** corners, double isoTreshold, float* vertices, int vertexComponents, unsigned int* indices, unsigned int indicesStart, int& ntriag, int& nvert, int& cubesToDo);
-	int cubesToDo(CornerCacheEntry** corners, double isoTreshold);
-
 	Polygonizer(void);
+    Polygonizer(double isoTreshold, float* vertices, int vertexComponents, unsigned int* indices)
+        : _isoTreshold(isoTreshold), _vertices(vertices), _vertexComponents(vertexComponents), _indices(indices), _currentIndex(0), _currentVertex(vertices), _ntriag(0), _nvert(0)
+    {
+    }
+	
 	~Polygonizer(void);
+
+	int cubesToDo(CornerCacheEntry** corners);
+    void polygonize(CornerCacheEntry** corners, int& cubesToDo);
+
+    int getTriangleNumber() { return _ntriag; }
+    int getVerticesNumber() { return _currentIndex; }
 };
 

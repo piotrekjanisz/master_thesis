@@ -1,7 +1,12 @@
 #pragma comment(lib, "PhysXLoader.lib")
 #pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "GLUS.lib")
+
+#ifdef DEBUG_BUILD
 #pragma comment(lib, "boost_regex-vc100-mt-gd-1_46_1")
+#else
+#pragma comment(lib, "boost_regex-vc100-mt-1_46_1")
+#endif
 
 
 #include <NxCooking.h>
@@ -108,7 +113,8 @@ GLUSboolean update(GLUSfloat time)
 {
 	g_NxScene->simulate(1.0f / 60.0f);
 	
-	g_scene.render(g_NxScene);
+	//g_scene.render(g_NxScene);
+	g_scene.renderIsoSurface(g_NxScene);
 
 	g_NxScene->flushStream();
 	g_NxScene->fetchResults(NX_RIGID_BODY_FINISHED, true);

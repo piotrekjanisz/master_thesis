@@ -37,5 +37,6 @@ public:
 	void updateAttribute(const std::string& name, float* data, int count);
 	void addShader(ShaderProgramPtr& shader);
 	void render(int count, GLenum primitiveType, ShaderProgramPtr& shader);
+	void renderElements(ShaderProgramPtr& shader, GLenum primitiveType, int count, unsigned int* indices);
 };
 

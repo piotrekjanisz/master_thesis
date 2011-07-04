@@ -36,13 +36,19 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_MBCS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,6 +126,7 @@
     <None Include="resources\shaders\final_stage_fragment.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\gaussian_blur_fragment.glsl" />
+    <None Include="resources\shaders\normalization_vertex.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />
     <None Include="resources\shaders\separable_bilateral_gauss_fragment.glsl" />
@@ -130,10 +137,24 @@
     <None Include="resources\shaders\water_depth_vertex.glsl" />
     <None Include="resources\shaders\water_shader_fragment.glsl" />
     <None Include="resources\shaders\water_shader_vertex.glsl" />
+    <None Include="resources\shaders\water_surface_fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\surface_extraction\surface_extraction.vcxproj">
       <Project>{e19e4d8f-b6ac-49dc-b50a-6bf91abbf91b}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="..\utils\utils.vcxproj">
+      <Project>{e0f30d9c-4cb9-407d-acd0-3c88efbe4147}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

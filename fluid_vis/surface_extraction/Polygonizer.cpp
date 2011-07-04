@@ -341,178 +341,167 @@ Polygonizer::~Polygonizer(void)
 }
 
 
-void Polygonizer::polygonize(CornerCacheEntry** corners, double isoTreshold, float* vertices, int vertexComponents, unsigned int* indices, unsigned int indicesStart, int& ntriag, int& nvert, int& cubesToDo)
+void Polygonizer::addVertex(float* p1, float* p2, double isoVal1, double isoVal2)
+{
+	const double TRESHOLD = 0.00001;
+
+	if (abs(_isoTreshold - isoVal1) < TRESHOLD) {
+		memcpy(_currentVertex, p1, 3*sizeof(float));
+	} else if (abs(_isoTreshold - isoVal2) < TRESHOLD) {
+		memcpy(_currentVertex, p2, 3*sizeof(float));
+	} else if (abs(isoVal1 - isoVal2) < TRESHOLD) {
+		memcpy(_currentVertex, p1, 3*sizeof(float));
+	} else {
+		double mu = (_isoTreshold - isoVal1) / (isoVal2 - isoVal1);
+	    _currentVertex[0] = p1[0] + mu * (p2[0] - p1[0]);
+		_currentVertex[1] = p1[1] + mu * (p2[1] - p1[1]);
+		_currentVertex[2] = p1[2] + mu * (p2[2] - p1[2]);
+	}	
+    _currentVertex += _vertexComponents;
+}
+
+
+void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 {
 	int cubeIndex = 0;
-	if (corners[0]->fieldValue < isoTreshold) cubeIndex |= 1;
-	if (corners[1]->fieldValue < isoTreshold) cubeIndex |= 2;
-	if (corners[2]->fieldValue < isoTreshold) cubeIndex |= 4;
-	if (corners[3]->fieldValue < isoTreshold) cubeIndex |= 8;
-	if (corners[4]->fieldValue < isoTreshold) cubeIndex |= 16;
-	if (corners[5]->fieldValue < isoTreshold) cubeIndex |= 32;
-	if (corners[6]->fieldValue < isoTreshold) cubeIndex |= 64;
-	if (corners[7]->fieldValue < isoTreshold) cubeIndex |= 128;
+	if (corners[0]->fieldValue < _isoTreshold) cubeIndex |= 1;
+	if (corners[1]->fieldValue < _isoTreshold) cubeIndex |= 2;
+	if (corners[2]->fieldValue < _isoTreshold) cubeIndex |= 4;
+	if (corners[3]->fieldValue < _isoTreshold) cubeIndex |= 8;
+	if (corners[4]->fieldValue < _isoTreshold) cubeIndex |= 16;
+	if (corners[5]->fieldValue < _isoTreshold) cubeIndex |= 32;
+	if (corners[6]->fieldValue < _isoTreshold) cubeIndex |= 64;
+	if (corners[7]->fieldValue < _isoTreshold) cubeIndex |= 128;
 
 	int edges = EDGE_TABLE[cubeIndex];
 	cubesToDo = TODO_TABLE[cubeIndex];
-
-	ntriag = 0;
-	nvert = 0;
 
 	if (edges == 0) 
 		return;
 
 	unsigned int vertexIndex[12];
-	unsigned int index = indicesStart;
-	float* currentVertex = vertices;
 
 	if (edges & 1) {
 		if (corners[0]->lx == -1) {
-			vertexInterpolate(isoTreshold, corners[0]->spaceCoord, corners[1]->spaceCoord, corners[0]->fieldValue, corners[1]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[0]->lx = index++;
+			addVertex(corners[0]->spaceCoord, corners[1]->spaceCoord, corners[0]->fieldValue, corners[1]->fieldValue);
+			corners[0]->lx = _currentIndex++;
 		}
 		vertexIndex[0] = corners[0]->lx;
 	}
 
 	if (edges & 2) {
 		if (corners[1]->ly == -1) {
-			vertexInterpolate(isoTreshold, corners[1]->spaceCoord, corners[2]->spaceCoord, corners[1]->fieldValue, corners[2]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[1]->ly = index++;
+			addVertex(corners[1]->spaceCoord, corners[2]->spaceCoord, corners[1]->fieldValue, corners[2]->fieldValue);
+			corners[1]->ly = _currentIndex++;
 		}
 		vertexIndex[1] = corners[1]->ly;
 	}
 
 	if (edges & 4) {
 		if (corners[3]->lx == -1) {
-			vertexInterpolate(isoTreshold, corners[2]->spaceCoord, corners[3]->spaceCoord, corners[2]->fieldValue, corners[3]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[3]->lx = index++;
+			addVertex(corners[2]->spaceCoord, corners[3]->spaceCoord, corners[2]->fieldValue, corners[3]->fieldValue);
+			corners[3]->lx = _currentIndex++;
 		}
 		vertexIndex[2] = corners[3]->lx;
 	}
     
 	if (edges & 8) {
 		if (corners[0]->ly == -1) {
-			vertexInterpolate(isoTreshold, corners[3]->spaceCoord, corners[0]->spaceCoord, corners[3]->fieldValue, corners[0]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[0]->ly = index++;
+			addVertex(corners[3]->spaceCoord, corners[0]->spaceCoord, corners[3]->fieldValue, corners[0]->fieldValue);
+			corners[0]->ly = _currentIndex++;
 		}
 		vertexIndex[3] = corners[0]->ly;
 	}
 
 	if (edges & 16) {
 		if (corners[4]->lx == -1) {
-			vertexInterpolate(isoTreshold, corners[4]->spaceCoord, corners[5]->spaceCoord, corners[4]->fieldValue, corners[5]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[4]->lx = index++;
+			addVertex(corners[4]->spaceCoord, corners[5]->spaceCoord, corners[4]->fieldValue, corners[5]->fieldValue);
+			corners[4]->lx = _currentIndex++;
 		}
 		vertexIndex[4] = corners[4]->lx;
 	}
 
 	if (edges & 32) {
 		if (corners[5]->ly == -1) {
-			vertexInterpolate(isoTreshold, corners[5]->spaceCoord, corners[6]->spaceCoord, corners[5]->fieldValue, corners[6]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[5]->ly = index++;
+			addVertex(corners[5]->spaceCoord, corners[6]->spaceCoord, corners[5]->fieldValue, corners[6]->fieldValue);
+			corners[5]->ly = _currentIndex++;
 		}
 		vertexIndex[5] = corners[5]->ly;
 	}
 
 	if (edges & 64) {
 		if (corners[7]->lx == -1) {
-			vertexInterpolate(isoTreshold, corners[6]->spaceCoord, corners[7]->spaceCoord, corners[6]->fieldValue, corners[7]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[7]->lx = index++;
+			addVertex(corners[6]->spaceCoord, corners[7]->spaceCoord, corners[6]->fieldValue, corners[7]->fieldValue);
+			corners[7]->lx = _currentIndex++;
 		}
 		vertexIndex[6] = corners[7]->lx;
 	}
 
 	if (edges & 128) {
 		if (corners[4]->ly == -1) {
-			vertexInterpolate(isoTreshold, corners[7]->spaceCoord, corners[4]->spaceCoord, corners[7]->fieldValue, corners[4]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[4]->ly = index++;
+			addVertex(corners[7]->spaceCoord, corners[4]->spaceCoord, corners[7]->fieldValue, corners[4]->fieldValue);
+			corners[4]->ly = _currentIndex++;
 		}
 		vertexIndex[7] = corners[4]->ly;
 	}
 
 	if (edges & 256) {
 		if (corners[0]->lz == -1) {
-			vertexInterpolate(isoTreshold, corners[0]->spaceCoord, corners[4]->spaceCoord, corners[0]->fieldValue, corners[4]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[0]->lz = index++;
+			addVertex(corners[0]->spaceCoord, corners[4]->spaceCoord, corners[0]->fieldValue, corners[4]->fieldValue);
+			corners[0]->lz = _currentIndex++;
 		}
 		vertexIndex[8] = corners[0]->lz;
 	}
 
 	if (edges & 512) {
 		if (corners[1]->lz == -1) {
-			vertexInterpolate(isoTreshold, corners[1]->spaceCoord, corners[5]->spaceCoord, corners[1]->fieldValue, corners[5]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[1]->lz = index++;
+			addVertex(corners[1]->spaceCoord, corners[5]->spaceCoord, corners[1]->fieldValue, corners[5]->fieldValue);
+			corners[1]->lz = _currentIndex++;
 		}
 		vertexIndex[9] = corners[1]->lz;
 	}
 
 	if (edges & 1024) {
 		if (corners[2]->lz == -1) {
-			vertexInterpolate(isoTreshold, corners[2]->spaceCoord, corners[6]->spaceCoord, corners[2]->fieldValue, corners[6]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[2]->lz = index++;
+			addVertex(corners[2]->spaceCoord, corners[6]->spaceCoord, corners[2]->fieldValue, corners[6]->fieldValue);
+			corners[2]->lz = _currentIndex++;
 		}
 		vertexIndex[10] = corners[2]->lz;
 	}
 
 	if (edges & 2048) {
 		if (corners[3]->lz == -1) {
-			vertexInterpolate(isoTreshold, corners[3]->spaceCoord, corners[7]->spaceCoord, corners[3]->fieldValue, corners[7]->fieldValue, currentVertex);
-			currentVertex += vertexComponents;
-			corners[3]->lz = index++;
+			addVertex(corners[3]->spaceCoord, corners[7]->spaceCoord, corners[3]->fieldValue, corners[7]->fieldValue);
+			corners[3]->lz = _currentIndex++;
 		}
 		vertexIndex[11] = corners[3]->lz;
 	}
 
-	nvert = index - indicesStart;
-
 	for (int i = 0; TRI_TABLE[cubeIndex][i] != -1; i += 3) {
-		indices[i + 0] = vertexIndex[TRI_TABLE[cubeIndex][i+2]];
-		indices[i + 1] = vertexIndex[TRI_TABLE[cubeIndex][i+1]];
-		indices[i + 2] = vertexIndex[TRI_TABLE[cubeIndex][i  ]];
-		ntriag++;
+		_indices[3 * _ntriag + 0] = vertexIndex[TRI_TABLE[cubeIndex][i  ]];
+		_indices[3 * _ntriag + 1] = vertexIndex[TRI_TABLE[cubeIndex][i+1]];
+		_indices[3 * _ntriag + 2] = vertexIndex[TRI_TABLE[cubeIndex][i+2]];
+		
+		/*
+		_indices[3 * _ntriag + 0] = vertexIndex[TRI_TABLE[cubeIndex][i+2]];
+		_indices[3 * _ntriag + 1] = vertexIndex[TRI_TABLE[cubeIndex][i+1]];
+		_indices[3 * _ntriag + 2] = vertexIndex[TRI_TABLE[cubeIndex][i  ]];
+		*/
+		_ntriag++;
 	}
 }
 
-void Polygonizer::vertexInterpolate(double isoTreshold, float* p1, float* p2, double isoVal1, double isoVal2, float* result)
-{
-	const double TRESHOLD = 0.00001;
-
-	if (abs(isoTreshold - isoVal1) < TRESHOLD) {
-		memcpy(result, p1, 3*sizeof(float));
-	} else if (abs(isoTreshold - isoVal2) < TRESHOLD) {
-		memcpy(result, p2, 3*sizeof(float));
-	} else if (abs(isoVal1 - isoVal2) < TRESHOLD) {
-		memcpy(result, p1, 3*sizeof(float));
-	} else {
-		double mu = (isoTreshold - isoVal1) / (isoVal2 - isoVal1);
-		result[0] = p1[0] + mu * (p2[0] - p1[0]);
-		result[1] = p1[1] + mu * (p2[1] - p1[1]);
-		result[2] = p1[2] + mu * (p2[2] - p1[2]);
-	}	
-}
-
-int Polygonizer::cubesToDo(CornerCacheEntry** corners, double isoTreshold)
+int Polygonizer::cubesToDo(CornerCacheEntry** corners)
 {
 	int cubeIndex = 0;
-	if (corners[0]->fieldValue < isoTreshold) cubeIndex |= 1;
-	if (corners[1]->fieldValue < isoTreshold) cubeIndex |= 2;
-	if (corners[2]->fieldValue < isoTreshold) cubeIndex |= 4;
-	if (corners[3]->fieldValue < isoTreshold) cubeIndex |= 8;
-	if (corners[4]->fieldValue < isoTreshold) cubeIndex |= 16;
-	if (corners[5]->fieldValue < isoTreshold) cubeIndex |= 32;
-	if (corners[6]->fieldValue < isoTreshold) cubeIndex |= 64;
-	if (corners[7]->fieldValue < isoTreshold) cubeIndex |= 128;
+	if (corners[0]->fieldValue < _isoTreshold) cubeIndex |= 1;
+	if (corners[1]->fieldValue < _isoTreshold) cubeIndex |= 2;
+	if (corners[2]->fieldValue < _isoTreshold) cubeIndex |= 4;
+	if (corners[3]->fieldValue < _isoTreshold) cubeIndex |= 8;
+	if (corners[4]->fieldValue < _isoTreshold) cubeIndex |= 16;
+	if (corners[5]->fieldValue < _isoTreshold) cubeIndex |= 32;
+	if (corners[6]->fieldValue < _isoTreshold) cubeIndex |= 64;
+	if (corners[7]->fieldValue < _isoTreshold) cubeIndex |= 128;
 
 	return TODO_TABLE[cubeIndex];
 }

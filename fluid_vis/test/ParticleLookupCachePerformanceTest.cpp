@@ -39,9 +39,9 @@ BOOST_AUTO_TEST_CASE(getFieldValueAtTest_100x100x100_3000part)
 
 	double sum = 0.0;
 	MEASURE_TIME("getFieldValueAtTest_100x100x100_3000part",
-		for (int x = 0; x < SIZE; x++) {
+		for (int z = 0; z < SIZE; z++) {
 			for (int y = 0; y < SIZE; y++) {
-				for (int z = 0; z < SIZE; z++) {
+				for (int x = 0; x < SIZE; x++) {
 					sum += cache.getFieldValueAt(x, y, z);
 				}
 			}

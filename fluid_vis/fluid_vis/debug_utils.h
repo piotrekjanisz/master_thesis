@@ -53,10 +53,14 @@ void DebugUtils::printArray(T* array, int size, int componentNum)
 			std::cerr << "\tCODE     : " << DebugUtils::glErrorToString(error) << std::endl; \
 		} \
 	}
+#define DEBUG_PRINT_VAR(var) \
+	std::cout << #var << ": " << var << std::endl;
+
 #else
 #define DEBUG_CODE(code)
 #define DEBUG_COUT(code)
 #define CHECK_GL_CMD(cmd) cmd
+#define DEBUG_PRINT_VAR(var)
 #endif
 
 

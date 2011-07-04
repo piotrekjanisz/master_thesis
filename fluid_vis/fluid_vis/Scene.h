@@ -10,6 +10,7 @@
 #include "data_types.h"
 #include "Texture.h"
 #include "ScreenQuad.h"
+#include <surface_extraction/SurfaceExtractor.h>
 #include <vmmlib\vmmlib.hpp>
 #include <boost\smart_ptr.hpp>
 
@@ -33,7 +34,12 @@ class Scene : public AbstractScene
 	int _waterDepthProjectionLocation;
 	int _waterDepthModelViewLocation;
 
+	int _isoWaterProjectionLocation;
+	int _isoWaterModelViewLocation;
+	int _isoWaterNormalLocation;
+
 	ShaderProgramPtr _shaderProgram;
+	ShaderProgramPtr _isoSurfaceProgram;
 	ShaderProgramPtr _waterShader;
 	ShaderProgramPtr _waterDepthShader;
 	ShaderProgramPtr _smoothShader;
@@ -45,6 +51,7 @@ class Scene : public AbstractScene
 	GfxStaticObjectPtr _plane;
 	GfxStaticObjectPtr _skyBox;
 	GfxObjectPtr _water;
+	GfxObjectPtr _isoWater;
 
 	TexturePtr _sceneDepthTexture;
 	TexturePtr _sceneTexture;
@@ -77,12 +84,19 @@ class Scene : public AbstractScene
 	int _particleCount;
 
 	float _particleSize;
+
+	SurfaceExtractorPtr _surfaceExtractor;
+
+	float* _verticesBuffer;
+	float* _normalsBuffer;
+	unsigned int* _indicesBuffer;
 public:
 	Scene();
 
 	virtual bool setup();
 	virtual void render();
 	void render(NxScene* physicsScene);
+	void renderIsoSurface(NxScene* physicsScene);
 
 	virtual void reshape(int width, int height);
 

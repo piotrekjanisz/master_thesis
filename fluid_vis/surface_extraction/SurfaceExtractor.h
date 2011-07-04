@@ -49,10 +49,7 @@ private:
 		return retVal;
 	}
 
-	void lookupOrEval(int x, int y, int z, double& fieldValue, float*& spaceCoords);
-
 	void lookupOrEval(int x, int y, int z, CornerCacheEntry*& corner);
-	double lookupOrEval(int x, int y, int z) { return 0.0; };
 
 	bool cubeInMargin(int x, int y, int z) 
 	{
@@ -99,8 +96,6 @@ private:
 	std::set<int> _slabsWithTodo;
 
 	ParticleLookupCache _particleLookupCache;
-
-	Polygonizer _polygonizer;
 
 	SliceAllocatorPtr _sliceAllocator;
 };

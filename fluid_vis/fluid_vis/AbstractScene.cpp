@@ -1,5 +1,4 @@
 #include "AbstractScene.h"
-#include "debug_utils.h"
 #include <GL/glew.h>
 
 const float PI = 3.14159265358979323846;
@@ -109,7 +108,7 @@ void AbstractScene::computeFrameRate()
 	_frameCount++;
 	if (_timer.elapsed() > 5.0) {
 		double frameRate = _frameCount / _timer.elapsed();
-		DEBUG_COUT(<< "FPS: " << frameRate << std::endl);
+		std::cout << frameRate << "fps" << std::endl;
 		_timer.restart();
 		_frameCount = 0;
 		displayAdditionalStats();

@@ -11,30 +11,12 @@
 struct SurfaceExtractorPerformanceTestFixture 
 {
 	SurfaceExtractorPerformanceTestFixture()
-		: surfaceExtractor(0.0, 50.0, 0.0, 50.0, 0.0, 50.0, 1.0, 0.5, 0.01)
 	{
 	}
 
 	~SurfaceExtractorPerformanceTestFixture()
 	{
 	}
-
-	int getLowestSlabWithTodo()
-	{
-		return surfaceExtractor.getLowestSlabWithTodo();
-	}
-
-	void initCache(float** particles, int particleCount, int particleSize, double rc, double cubeSize) 
-	{
-		surfaceExtractor._particleLookupCache.init(particles, particleCount, particleSize, rc, cubeSize);
-	}
-
-	void findSeedCubes(float** particles, int particleCount) 
-	{
-		surfaceExtractor.findSeedCubes(particles, particleCount);
-	}
-
-	SurfaceExtractor surfaceExtractor;
 };
 
 BOOST_FIXTURE_TEST_SUITE(SurfaceExtractorPerformanceTest, SurfaceExtractorPerformanceTestFixture);
@@ -68,6 +50,7 @@ BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_1000p_100x100x100)
 	)
 	std::cout << "\tntriag: " << ntriag << std::endl;
 	std::cout << "\tnvert: " << nvert << std::endl;
+	TestUtils::printArray(indicesBuffer, 3, 10);
 }
 
 BOOST_AUTO_TEST_SUITE_END();

@@ -80,3 +80,11 @@ void GfxObject::render(int count, GLenum primitiveType, ShaderProgramPtr& shader
 	glBindVertexArray(_shaderVaos[shader]);
 	glDrawArrays(primitiveType, 0, count);
 }
+
+void GfxObject::renderElements(ShaderProgramPtr& shader, GLenum primitiveType, int count, unsigned int* indices)
+{
+	addShader(shader);
+	shader->useThis();
+	glBindVertexArray(_shaderVaos[shader]);
+	glDrawElements(primitiveType, count, GL_UNSIGNED_INT, indices);
+}

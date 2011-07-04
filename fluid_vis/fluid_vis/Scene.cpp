@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "debug_utils.h"
 #include "filters.h"
+#include <utils/utils.h>
 #include <GL/glus.h>
 #include <GL/glew.h>
 #include <iostream>
@@ -34,11 +35,26 @@ void Scene::reshape(int width, int height)
 	CHECK_GL_CMD(_smoothFrameBuffer->resize(width, height));
 }
 
+int _ntriag = 0;
+int _nvert = 0;
+
 bool Scene::setup()
 {
 	if (!AbstractScene::setup()) {
 		return false;
 	}
+
+	_verticesBuffer = new float[140000 * 4];
+	_normalsBuffer = new float[140000 * 3];
+	_indicesBuffer = new unsigned int[140000*6];
+	for (int i = 3; i < 140000; i += 4) {
+		_verticesBuffer[i] = 1.0f;
+	}
+
+	float positions[3] = {0.0f, 5.0f, 5.0f};
+	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.2, 0.05, 0.1);
+	//_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, 0, 10.0, -5.0, 5.0, 4.0, 0.05, 0.2);
+	//_surfaceExtractor->extractSurface(positions, 1, 3, 4, _verticesBuffer, _normalsBuffer, _indicesBuffer, _nvert, _ntriag, 140000, 140000);
 
 	DEBUG_CODE(_debugData = new float[640*480*4]);
 
@@ -100,6 +116,13 @@ bool Scene::setup()
 		CHECK_GL_CMD(_shaderProgram->bindFragDataLocation(0, "fragColor"));
 		CHECK_GL_CMD(_shaderProgram->setUniform1i("tex", 0));
 
+		_isoSurfaceProgram = boost::make_shared<ShaderProgram>();
+		CHECK_GL_CMD(_isoSurfaceProgram->load("shaders/normalization_vertex.glsl", "shaders/water_surface_fragment.glsl"));
+		CHECK_GL_CMD(_isoSurfaceProgram->bindFragDataLocation(0, "fragColor"));
+		CHECK_GL_CMD(_isoWaterProjectionLocation = _isoSurfaceProgram->getUniformLocation("projectionMatrix"));
+		CHECK_GL_CMD(_isoWaterModelViewLocation = _isoSurfaceProgram->getUniformLocation("modelViewMatrix"));
+		CHECK_GL_CMD(_isoWaterNormalLocation = _isoSurfaceProgram->getUniformLocation("normalMatrix"));
+
 		ShaderProgramPtr screenQuadShader = boost::make_shared<ShaderProgram>();
 		CHECK_GL_CMD(screenQuadShader->load("shaders/screen_quad_vertex.glsl", "shaders/separable_bilateral_gauss_fragment.glsl"));
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("inputImage", 0));
@@ -155,6 +178,11 @@ bool Scene::setup()
 	CHECK_GL_CMD(_water->addShader(_waterShader));
 	CHECK_GL_CMD(_water->addShader(_waterDepthShader));
 
+	_isoWater = boost::make_shared<GfxObject>();
+	CHECK_GL_CMD(_isoWater->addAttribute("vertex", 0, 140000, 4, GfxObject::DYNAMIC_ATTR));
+	CHECK_GL_CMD(_isoWater->addAttribute("normal", 0, 140000, 3, GfxObject::DYNAMIC_ATTR));
+	CHECK_GL_CMD(_water->addShader(_isoSurfaceProgram));
+
 	try {
 		_box = boost::make_shared<GfxStaticObject>(_shaderProgram);
 		_plane = boost::make_shared<GfxStaticObject>(_shaderProgram);
@@ -186,6 +214,81 @@ void Scene::render()
 	_box->render();
 	glUniform4fv(_colorLocation, 1, vmml::vec4f(0.5f, 0.5f, 0.0f, 1.0f));
 	_plane->render();
+}
+
+void Scene::renderIsoSurface(NxScene* physicsScene)
+{
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	CHECK_GL_CMD(_skyBoxShader->useThis());
+	CHECK_GL_CMD(glUniformMatrix4fv(_skyBoxProjectionLocation, 1, GL_FALSE, _projectionMatrix));
+	CHECK_GL_CMD(glUniformMatrix4fv(_skyBoxModelViewLocation, 1, GL_FALSE, _viewMatrix));
+	CHECK_GL_CMD(_skyBoxTexture->bindToTextureUnit(GL_TEXTURE0));
+	CHECK_GL_CMD(_skyBox->render());
+
+	_shaderProgram->useThis();
+	setupViewMatrix();
+	CHECK_GL_CMD(glUniformMatrix4fv(_projectionLocation, 1, GL_FALSE, _projectionMatrix));
+	CHECK_GL_CMD(glUniformMatrix4fv(_modelViewLocation, 1, GL_FALSE, _viewMatrix));
+	CHECK_GL_CMD(glUniformMatrix3fv(_normalMatrixLocation, 1, GL_FALSE, getNormalMatrix(_viewMatrix)));
+	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
+	CHECK_GL_CMD(_plane->render());
+
+	int nbActors = physicsScene->getNbActors();
+	NxActor** actors = physicsScene->getActors();
+
+	// render boxes
+	_boxTexture->bindToTextureUnit(GL_TEXTURE0);
+	vmml::mat4f modelMatrix;
+	vmml::mat4f modelViewMatrix;
+	while(nbActors--) {
+		NxActor* actor = *actors++;
+		if (!actor->userData) 
+			continue;
+
+		actor->getGlobalPose().getColumnMajor44(modelMatrix);
+		modelViewMatrix = _viewMatrix * modelMatrix;
+		glUniformMatrix4fv(_modelViewLocation, 1, GL_FALSE, modelViewMatrix);
+		glUniformMatrix3fv(_normalMatrixLocation, 1, GL_FALSE, getNormalMatrix(modelViewMatrix));
+		_box->render();
+	}
+
+	NxFluid** fluids = physicsScene->getFluids();
+	int nbFluids = physicsScene->getNbFluids();
+
+	for(int i = 0; i < nbFluids; i++) {
+		NxFluid* fluid = fluids[i];
+		MyFluid* myFluid = (MyFluid*)fluid->userData;
+		if (myFluid) {
+			int nvert;
+			int ntriag;
+
+			_surfaceExtractor->extractSurface(myFluid->getPositions(), myFluid->getParticlesCount(), 4, 4, _verticesBuffer, _normalsBuffer, _indicesBuffer, nvert, ntriag, 140000, 140000);
+			DEBUG_PRINT_VAR(ntriag);
+			DEBUG_PRINT_VAR(nvert);
+			//Utils::printArray(_verticesBuffer, 4, 10);
+			//Utils::printArray(_indicesBuffer, 3, 10);
+			//Utils::printArray(_normalsBuffer, 3, 10);
+			//std::cout << "------------------------" << std::endl;
+
+			CHECK_GL_CMD(_isoSurfaceProgram->useThis());
+			CHECK_GL_CMD(glUniformMatrix4fv(_isoWaterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
+			CHECK_GL_CMD(glUniformMatrix4fv(_isoWaterModelViewLocation, 1, GL_FALSE, _viewMatrix));
+			CHECK_GL_CMD(glUniformMatrix3fv(_isoWaterNormalLocation, 1, GL_FALSE, getNormalMatrix(_viewMatrix)));
+
+			CHECK_GL_CMD(_isoWater->updateAttribute("vertex", _verticesBuffer, nvert));
+			CHECK_GL_CMD(_isoWater->updateAttribute("normal", _normalsBuffer, nvert));
+			CHECK_GL_CMD(_isoWater->renderElements(_isoSurfaceProgram, GL_TRIANGLES, ntriag*3, _indicesBuffer));
+
+			/*
+			CHECK_GL_CMD(_isoWater->updateAttribute("vertex", _verticesBuffer, _nvert));
+			CHECK_GL_CMD(_isoWater->updateAttribute("normal", _normalsBuffer, _nvert));
+			CHECK_GL_CMD(_isoWater->renderElements(_isoSurfaceProgram, GL_TRIANGLES, _ntriag*3, _indicesBuffer));
+			*/
+		}
+	}
+
+	computeFrameRate();
 }
 
 void Scene::render(NxScene* physicsScene)

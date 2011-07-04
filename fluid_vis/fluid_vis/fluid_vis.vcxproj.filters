@@ -196,5 +196,11 @@
     <None Include="resources\shaders\separable_bilateral_gauss_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="resources\shaders\normalization_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\water_surface_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -76,6 +76,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -88,7 +90,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AllocatorPerformanceTest.cpp" />
     <ClCompile Include="FiltersTest.cpp" />
     <ClCompile Include="ParticleLookupCachePerformanceTest.cpp" />
     <ClCompile Include="ParticleLookupCacheTest.cpp" />
