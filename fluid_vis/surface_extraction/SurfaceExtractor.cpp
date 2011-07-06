@@ -20,7 +20,6 @@ inline int myRound(double x)
 SurfaceExtractor::SurfaceExtractor(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax, double rc, double cubeSize, double isoTreshold)
 	: _xMin(xMin), _xMax(xMax), _yMin(yMin), _yMax(yMax), _zMin(zMin), _zMax(zMax), _rc(rc), _cubeSize(cubeSize), _isoTreshold(isoTreshold),
 	  _xSize(ceil((xMax - xMin) / cubeSize)), _ySize(ceil((yMax - yMin) / cubeSize)), _zSize(ceil((zMax - zMin) / cubeSize)),
-	  //_particleLookupCache(_xSize+1, _ySize+1, _zSize+1)
 	  _particleLookupCache(xMin, xMax, yMin, yMax, zMin, zMax, rc, cubeSize)
 {
 	_particlePtrs = new float*[64000];
@@ -44,7 +43,7 @@ void SurfaceExtractor::extractSurface(float* particles, int particleCount, int p
 	for (int i = 0; i < particleCount; i++) {
 		_particlePtrs[i] = &particles[i * particleComponents];
 	}
-	//_particleLookupCache.init(_particlePtrs, particleCount, particleComponents, _rc, _cubeSize);
+
 	_particleLookupCache.init(_particlePtrs, particleCount, particleComponents);
 
 	findSeedCubes(_particlePtrs, particleCount);
@@ -187,6 +186,7 @@ void SurfaceExtractor::computeNormals(float* vertices, unsigned int* indices, in
 		unsigned int i1 = indices[i*3 + 0];
 		unsigned int i2 = indices[i*3 + 1];
 		unsigned int i3 = indices[i*3 + 2];
+		
 		float *v1 = &vertices[i1 * 4];
 		float *v2 = &vertices[i2 * 4];
 		float *v3 = &vertices[i3 * 4];
@@ -203,6 +203,7 @@ void SurfaceExtractor::computeNormals(float* vertices, unsigned int* indices, in
 		float ny = z1 * x2 - x1 * z2;
 		float nz = x1 * y2 - y1 * x2;
 		normalize(nx, ny, nz);
+		// TODO multiply by triangle area
 		normals[indices[i*3+0]*3 + 0] += nx;
 		normals[indices[i*3+0]*3 + 1] += ny;
 		normals[indices[i*3+0]*3 + 2] += nz;

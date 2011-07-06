@@ -44,16 +44,16 @@ bool Scene::setup()
 		return false;
 	}
 
-	_verticesBuffer = new float[140000 * 4];
-	_normalsBuffer = new float[140000 * 3];
-	_indicesBuffer = new unsigned int[140000*6];
-	for (int i = 3; i < 140000; i += 4) {
+	_verticesBuffer = new float[1400000 * 4];
+	_normalsBuffer = new float[1400000 * 3];
+	_indicesBuffer = new unsigned int[1400000*6];
+	for (int i = 3; i < 1400000; i += 4) {
 		_verticesBuffer[i] = 1.0f;
 	}
 
-	float positions[3] = {0.0f, 5.0f, 5.0f};
-	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.2, 0.05, 0.1);
-	//_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, 0, 10.0, -5.0, 5.0, 4.0, 0.05, 0.2);
+	float positions[3] = {0.0f, 3.0f, 0.0f};
+	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.2, 0.05, 0.2);
+	//_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.2, 0.05, 0.1);
 	//_surfaceExtractor->extractSurface(positions, 1, 3, 4, _verticesBuffer, _normalsBuffer, _indicesBuffer, _nvert, _ntriag, 140000, 140000);
 
 	DEBUG_CODE(_debugData = new float[640*480*4]);
@@ -263,9 +263,9 @@ void Scene::renderIsoSurface(NxScene* physicsScene)
 			int nvert;
 			int ntriag;
 
+			//_surfaceExtractor->extractSurface(myFluid->getPositions(), myFluid->getParticlesCount(), 4, 4, current->vertices, current->normals, current->indices, current->verticesCount, current->trianglesCount, current->maxVertices, current->maxTriangles);
 			_surfaceExtractor->extractSurface(myFluid->getPositions(), myFluid->getParticlesCount(), 4, 4, _verticesBuffer, _normalsBuffer, _indicesBuffer, nvert, ntriag, 140000, 140000);
-			DEBUG_PRINT_VAR(ntriag);
-			DEBUG_PRINT_VAR(nvert);
+			//DEBUG_PRINT_VAR(nvert);
 			//Utils::printArray(_verticesBuffer, 4, 10);
 			//Utils::printArray(_indicesBuffer, 3, 10);
 			//Utils::printArray(_normalsBuffer, 3, 10);
@@ -278,7 +278,7 @@ void Scene::renderIsoSurface(NxScene* physicsScene)
 
 			CHECK_GL_CMD(_isoWater->updateAttribute("vertex", _verticesBuffer, nvert));
 			CHECK_GL_CMD(_isoWater->updateAttribute("normal", _normalsBuffer, nvert));
-			CHECK_GL_CMD(_isoWater->renderElements(_isoSurfaceProgram, GL_TRIANGLES, ntriag*3, _indicesBuffer));
+			CHECK_GL_CMD(_isoWater->renderElements(_isoSurfaceProgram, GL_TRIANGLES, ntriag*3, _indicesBuffer));			
 
 			/*
 			CHECK_GL_CMD(_isoWater->updateAttribute("vertex", _verticesBuffer, _nvert));

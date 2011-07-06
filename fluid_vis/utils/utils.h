@@ -1,5 +1,9 @@
 #pragma once
 
+
+#define UTILS_PRINT_VAR(var) \
+	std::cout << #var << ": " << var << std::endl;
+
 namespace Utils
 {
 	template <typename T>
@@ -35,6 +39,54 @@ namespace Utils
 		ArrayHandle(T* mem)
 			: _mem(mem) {}
 		~ArrayHandle() { if (_mem) delete [] _mem; }
+	};
+
+	template <typename PTR>
+	class RoundRobinPtr
+	{
+		int _size;
+		int _capacity;
+		int _current;
+		int _prev;
+
+		PTR* _buf;
+	public:
+		RoundRobinPtr(int capacity)
+			: _capacity(capacity), _current(0), _size(0), _buf(0), _prev(0)
+		{
+			if (_capacity > 0)
+				_buf = new PTR[_capacity];
+		}
+
+		~RoundRobinPtr()
+		{
+			if (_buf)
+				delete [] _buf;
+		}
+
+		void add(const PTR& ptr) 
+		{
+			if (_size < _capacity) {
+				_buf[_size++] = ptr;
+			}
+		}
+
+		PTR& next()
+		{
+			_prev = _current;
+			_current = (_current + 1) % _size;
+			return _buf[_current];
+		}
+
+		PTR& getCurrent()
+		{
+			return _buf[_current];
+		}
+
+		PTR& getPrev()
+		{
+			return _buf[_prev];
+		}
 	};
 }; // namespace Utils
 

@@ -92,11 +92,10 @@ void ParticleLookupCache::init(float** particles, int particleCount, int particl
 		float py = p[Y];
 		float pz = p[Z];
 		for (int x = max(1, (int)ceil((p[X] - _rc - _xMin) / _cubeSize)); x <= min((double)_sizeX-2, floor((p[X] + _rc - _xMin) / _cubeSize)); x++) {
-			double rdy = _rc*_rc - (p[X] - (_xMin + x*_cubeSize))*(p[X] - (_xMin + x*_cubeSize));
+			double rdy = sqrt(_rc*_rc - (p[X] - (_xMin + x*_cubeSize))*(p[X] - (_xMin + x*_cubeSize)));
 			for (int y = max(1, (int)ceil((p[Y] - rdy - _yMin) / _cubeSize)); y <= min((double)_sizeY-2, floor((p[Y] + rdy - _yMin) / _cubeSize)); y++) {
-				double rdz = rdy*rdy - (p[Y] - (_yMin + y*_cubeSize))*(p[Y] - (_yMin + y*_cubeSize));
+				double rdz = sqrt(rdy*rdy - (p[Y] - (_yMin + y*_cubeSize))*(p[Y] - (_yMin + y*_cubeSize)));
 				ListType& column = get(x, y).second;
-				/*
 				get(x, y).second.push_back(
 					ParticleLookupCacheEntry(
 						max(1,      (int)ceil((p[Z] - rdz - _zMin) / _cubeSize)),
@@ -105,7 +104,7 @@ void ParticleLookupCache::init(float** particles, int particleCount, int particl
 						p
 					)
 				);
-				*/
+				/*
 				get(x, y).second.push_back(
 					ParticleLookupCacheEntry(
 						max(1,      (int)floor((p[Z] - rdz - _zMin) / _cubeSize)),
@@ -114,6 +113,7 @@ void ParticleLookupCache::init(float** particles, int particleCount, int particl
 						p
 					)
 				);
+				*/
 			}
 		}
 	}

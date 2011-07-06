@@ -10,7 +10,9 @@
 #include "data_types.h"
 #include "Texture.h"
 #include "ScreenQuad.h"
+#include "ShapeFactory.h"
 #include <surface_extraction/SurfaceExtractor.h>
+#include <utils/utils.h>
 #include <vmmlib\vmmlib.hpp>
 #include <boost\smart_ptr.hpp>
 
