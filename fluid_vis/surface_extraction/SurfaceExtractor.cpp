@@ -202,7 +202,7 @@ void SurfaceExtractor::computeNormals(float* vertices, unsigned int* indices, in
 		float nx = y1 * z2 - z1 * y2;
 		float ny = z1 * x2 - x1 * z2;
 		float nz = x1 * y2 - y1 * x2;
-		normalize(nx, ny, nz);
+		//normalize(nx, ny, nz);
 		// TODO multiply by triangle area
 		normals[indices[i*3+0]*3 + 0] += nx;
 		normals[indices[i*3+0]*3 + 1] += ny;

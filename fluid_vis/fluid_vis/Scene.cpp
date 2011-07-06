@@ -52,7 +52,7 @@ bool Scene::setup()
 	}
 
 	float positions[3] = {0.0f, 3.0f, 0.0f};
-	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.2, 0.05, 0.2);
+	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.15, 0.05, 0.2);
 	//_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.2, 0.05, 0.1);
 	//_surfaceExtractor->extractSurface(positions, 1, 3, 4, _verticesBuffer, _normalsBuffer, _indicesBuffer, _nvert, _ntriag, 140000, 140000);
 

@@ -9,6 +9,44 @@
 #include <set>
 
 
+class Block
+{
+	int _capacity;
+public:
+	float** particles;
+	int particlesCount;
+
+	double xMin;
+	double xMax;
+	double yMin;
+	double yMax;
+	double zMin;
+	double zMax;
+
+	int xSize;
+	int ySize;
+	int zSize;
+
+	int margin;
+
+	Block(int capacity) 
+		: _capacity(capacity), particles(0), particlesCount(0)
+	{
+		particles = new float*[_capacity];
+	}
+
+	~Block()
+	{
+		if (particles)
+			delete [] particles;
+	}
+
+	void addParticles(float* particle)
+	{
+		particles[particlesCount++] = particle;
+	}
+};
+
 /*
  *   
  *	 y^   ^z
@@ -26,6 +64,8 @@ public:
 	~SurfaceExtractor();
 
 	void extractSurface(float* particles, int particleCount, int particleComponents, int vertexComponents, float* vertices, float* normals, unsigned int* indices, int& vertCount, int& triangleCount, int maxVertices, int maxIndices);
+
+	void extractSurface(Block& block);
 
 	int getXSize() const { return _xSize; }
 	int getYSize() const { return _ySize; }
