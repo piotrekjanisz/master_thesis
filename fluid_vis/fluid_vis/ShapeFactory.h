@@ -47,39 +47,7 @@ struct Shape
 	}
 };
 
-struct TriangleMesh
-{
-	float* vertices;
-	float* normals;
-	unsigned int* indices;
-	
-	int verticesCount;
-	int trianglesCount;
-
-	int maxVertices;
-	int maxTriangles;
-
-	TriangleMesh(int _maxVertices, int _maxTriangles)
-		: maxVertices(_maxVertices), maxTriangles(_maxTriangles), verticesCount(0), trianglesCount(0), vertices(0), normals(0), indices(0)
-	{
-		vertices = new float[_maxVertices * 4];
-		normals = new float[_maxVertices * 3];
-		indices = new unsigned int[_maxTriangles * 3];
-	}
-
-	~TriangleMesh()
-	{
-		if (vertices)
-			delete [] vertices;
-		if (normals) 
-			delete [] normals;
-		if (indices) 
-			delete [] indices;
-	}
-};
-
 typedef boost::shared_ptr<Shape> ShapePtr;
-typedef boost::shared_ptr<TriangleMesh> TriangleMeshPtr;
 
 class ShapeFactory
 {

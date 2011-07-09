@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Block.h"
 #include <list>
 #include <vector>
 #include <boost/pool/pool_alloc.hpp>
@@ -39,15 +40,15 @@ class ParticleLookupCache
 
 public:
 	ParticleLookupCache(int sizeX, int sizeY, int sizeZ);
-	ParticleLookupCache(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax, double rc, double cubeSize);
 	~ParticleLookupCache();
 
-	void init(float** particles, int particleCount, int particleSize, double rc, double cubeSize);
-	void init(float** particles, int particleCount, int particleSize);
+	void init(Block& block);
 
 	double getFieldValueAt(int x, int y, int z);
 
 	double getFieldValueAt2(int x, int y, int z);
 };
+
+
 
 

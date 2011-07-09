@@ -1,14 +1,17 @@
-//#define DEBUG
-//#undef DEBUG
+
 
 #include "Scene.h"
 #include "debug_utils.h"
 #include "filters.h"
 #include <utils/utils.h>
+#include <surface_extraction\data_types.h>
+#include <surface_extraction\Block.h>
+
 #include <GL/glus.h>
 #include <GL/glew.h>
 #include <iostream>
 #include <boost/make_shared.hpp>
+#include <list>
 
 using namespace std;
 
@@ -44,17 +47,27 @@ bool Scene::setup()
 		return false;
 	}
 
-	_verticesBuffer = new float[1400000 * 4];
-	_normalsBuffer = new float[1400000 * 3];
-	_indicesBuffer = new unsigned int[1400000*6];
-	for (int i = 3; i < 1400000; i += 4) {
-		_verticesBuffer[i] = 1.0f;
-	}
+	SurfaceExtractorDesc desc;
+	desc.xMin = -5.0;
+	desc.xMax =  5.0;
+	desc.yMin = -1.0;
+	desc.yMax =  9.0;
+	desc.zMin = -5.0;
+	desc.zMax =  5.0;
+	desc.isoTreshold = 0.2;
+	desc.blockSize = 5.0;
+	desc.cubeSize = 0.05;
+	desc.rc = 0.15;
+	desc.maxParticles = 3000;
+	desc.threads = 3;
+	desc.maxTrianglesPerThread = 500000;
+	desc.maxVerticesPerThread = 500000;
 
-	float positions[3] = {0.0f, 3.0f, 0.0f};
-	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.15, 0.05, 0.2);
-	//_surfaceExtractor = boost::make_shared<SurfaceExtractor>(-5.0, 5.0, -1.0, 9.0, -5.0, 5.0, 0.2, 0.05, 0.1);
-	//_surfaceExtractor->extractSurface(positions, 1, 3, 4, _verticesBuffer, _normalsBuffer, _indicesBuffer, _nvert, _ntriag, 140000, 140000);
+	_currentOutput = 0;
+
+	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(desc);
+	_mtSurfaceExtractor = boost::make_shared<MtSurfaceExtractor>(desc);
+	_block = boost::make_shared<Block>(3000, desc.xMin, desc.xMax, desc.yMin, desc.yMax, desc.zMin, desc.zMax, desc.rc, desc.cubeSize);
 
 	DEBUG_CODE(_debugData = new float[640*480*4]);
 
@@ -187,7 +200,7 @@ bool Scene::setup()
 		_box = boost::make_shared<GfxStaticObject>(_shaderProgram);
 		_plane = boost::make_shared<GfxStaticObject>(_shaderProgram);
 		_skyBox = boost::make_shared<GfxStaticObject>(_skyBoxShader);
-		ShapePtr plane = ShapeFactory().createPlane(100.0f, 10.0);
+		ShapePtr plane = ShapeFactory().createPlane(100.0f, 160.0);
 		ShapePtr box = ShapeFactory().createBox(0.5f);
 		ShapePtr skyBox = ShapeFactory().createSkyBox(50.0f);
 		CHECK_GL_CMD(_box->createFromShape(box));
@@ -260,31 +273,20 @@ void Scene::renderIsoSurface(NxScene* physicsScene)
 		NxFluid* fluid = fluids[i];
 		MyFluid* myFluid = (MyFluid*)fluid->userData;
 		if (myFluid) {
-			int nvert;
-			int ntriag;
-
-			//_surfaceExtractor->extractSurface(myFluid->getPositions(), myFluid->getParticlesCount(), 4, 4, current->vertices, current->normals, current->indices, current->verticesCount, current->trianglesCount, current->maxVertices, current->maxTriangles);
-			_surfaceExtractor->extractSurface(myFluid->getPositions(), myFluid->getParticlesCount(), 4, 4, _verticesBuffer, _normalsBuffer, _indicesBuffer, nvert, ntriag, 140000, 140000);
-			//DEBUG_PRINT_VAR(nvert);
-			//Utils::printArray(_verticesBuffer, 4, 10);
-			//Utils::printArray(_indicesBuffer, 3, 10);
-			//Utils::printArray(_normalsBuffer, 3, 10);
-			//std::cout << "------------------------" << std::endl;
-
+			_outputs[_currentOutput].clear();
+			list<TriangleMesh> meshes;
+			_mtSurfaceExtractor->waitForResults();
+			_mtSurfaceExtractor->extractSurface(myFluid->getPositions(), myFluid->getParticlesCount(), 4, &_outputs[_currentOutput]);
+			_currentOutput = (_currentOutput + 1) % 2;
 			CHECK_GL_CMD(_isoSurfaceProgram->useThis());
 			CHECK_GL_CMD(glUniformMatrix4fv(_isoWaterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
 			CHECK_GL_CMD(glUniformMatrix4fv(_isoWaterModelViewLocation, 1, GL_FALSE, _viewMatrix));
 			CHECK_GL_CMD(glUniformMatrix3fv(_isoWaterNormalLocation, 1, GL_FALSE, getNormalMatrix(_viewMatrix)));
-
-			CHECK_GL_CMD(_isoWater->updateAttribute("vertex", _verticesBuffer, nvert));
-			CHECK_GL_CMD(_isoWater->updateAttribute("normal", _normalsBuffer, nvert));
-			CHECK_GL_CMD(_isoWater->renderElements(_isoSurfaceProgram, GL_TRIANGLES, ntriag*3, _indicesBuffer));			
-
-			/*
-			CHECK_GL_CMD(_isoWater->updateAttribute("vertex", _verticesBuffer, _nvert));
-			CHECK_GL_CMD(_isoWater->updateAttribute("normal", _normalsBuffer, _nvert));
-			CHECK_GL_CMD(_isoWater->renderElements(_isoSurfaceProgram, GL_TRIANGLES, _ntriag*3, _indicesBuffer));
-			*/
+			for (list<TriangleMesh>::iterator it = _outputs[_currentOutput].begin(); it != _outputs[_currentOutput].end(); ++it) {
+				CHECK_GL_CMD(_isoWater->updateAttribute("vertex", it->vertices, it->verticesCount));
+				CHECK_GL_CMD(_isoWater->updateAttribute("normal", it->normals, it->verticesCount));
+				CHECK_GL_CMD(_isoWater->renderElements(_isoSurfaceProgram, GL_TRIANGLES, it->trianglesCount*3, it->indices));			
+			}
 		}
 	}
 

@@ -3,6 +3,7 @@
 #include <NxPhysics.h>
 #include <boost/shared_ptr.hpp>
 #include <vmmlib/vmmlib.hpp>
+#include <cstring>
 
 class MyFluid
 {
@@ -11,6 +12,8 @@ protected:
 
 	virtual void simpleRender();
 	float* _posBuffer;
+	float* _currentPosBuffer;
+	unsigned _currentPartCount;
 	unsigned _particleCount;
 	unsigned _maxParticles;
 	NxFluid* _fluid;
@@ -33,7 +36,12 @@ public:
 		return _fluidEmitter == NULL ? 0 : _fluidEmitter->getNbParticlesEmitted();
 	}
 
-	float* getPositions() const { return _posBuffer; }
-	int getParticlesCount() const { return _particleCount; }
+	float* getPositions() 
+	{ 
+		memcpy(_currentPosBuffer, _posBuffer, _particleCount*4*sizeof(float));
+		_currentPartCount = _particleCount;
+		return _currentPosBuffer; 
+	}
+	int getParticlesCount() const { return _currentPartCount; }
 };
 

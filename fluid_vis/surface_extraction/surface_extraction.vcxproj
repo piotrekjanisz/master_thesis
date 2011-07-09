@@ -68,16 +68,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="data_types.h" />
+    <ClInclude Include="IWorkCoordinator.h" />
+    <ClInclude Include="MtSurfaceExtractor.h" />
     <ClInclude Include="ParticleLookupCache.h" />
     <ClInclude Include="Polygonizer.h" />
     <ClInclude Include="Slice.h" />
     <ClInclude Include="SurfaceExtractor.h" />
+    <ClInclude Include="SurfaceExtractorWorker.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="MtSurfaceExtractor.cpp" />
     <ClCompile Include="ParticleLookupCache.cpp" />
     <ClCompile Include="Polygonizer.cpp" />
     <ClCompile Include="Slice.cpp" />
     <ClCompile Include="SurfaceExtractor.cpp" />
+    <ClCompile Include="SurfaceExtractorWorker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.vcxproj">

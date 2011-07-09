@@ -88,6 +88,71 @@ namespace Utils
 			return _buf[_prev];
 		}
 	};
+
+	template <typename T>
+	class Linear3dArray
+	{
+		T* _data;
+		int _xSize;
+		int _ySize;
+		int _zSize;
+
+	public:
+		Linear3dArray(int xSize, int ySize, int zSize)
+			: _xSize(xSize), _ySize(ySize), _zSize(zSize), _data(0)
+		{
+			_data = new T[_xSize * _ySize * _zSize];
+		}
+
+		Linear3dArray()
+			: _xSize(0), _ySize(0), _zSize(0), _data(0)
+		{
+		}
+
+		void destroy() 
+		{
+			if (_data)
+				delete [] _data;
+			_data = 0;
+		}
+
+		void allocate(int xSize, int ySize, int zSize)
+		{
+			destroy();
+			_xSize = xSize;
+			_ySize = ySize;
+			_zSize = zSize;
+			_data = new T[_xSize * _ySize * _zSize];
+		}
+
+		~Linear3dArray()
+		{
+			destroy();
+		}
+
+		T& operator()(int x, int y, int z)
+		{
+			return _data[x * _ySize * _zSize + y * _zSize + z];
+		}
+
+		T& operator()(int index)
+		{
+			return _data[index];
+		}
+
+		int size()
+		{
+			return _xSize * _ySize * _zSize;
+		}
+
+		int xSize() { return _xSize; }
+
+		int ySize() { return _ySize; }
+
+		int zSize() { return _zSize; }
+
+		T* getData() { return _data; }
+	};
 }; // namespace Utils
 
 template <typename T>

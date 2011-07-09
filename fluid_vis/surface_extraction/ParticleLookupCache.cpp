@@ -17,13 +17,6 @@ ParticleLookupCache::ParticleLookupCache(int sizeX, int sizeY, int sizeZ)
 	_data = new std::pair<int, ListType>[sizeX * sizeY];
 }
 
-ParticleLookupCache::ParticleLookupCache(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax, double rc, double cubeSize)
-	: _xMin(xMin), _xMax(xMax), _yMin(yMin), _yMax(yMax), _zMin(zMin), _zMax(zMax),
-	  _sizeX(ceil((xMax - xMin) / cubeSize) + 1), _sizeY(ceil((yMax - yMin) / cubeSize) + 1), _sizeZ(ceil((zMax - zMin) / cubeSize) + 1), _rc(rc), _cubeSize(cubeSize)
-{
-	_data = new std::pair<int, ListType>[_sizeX * _sizeY];
-}
-
 ParticleLookupCache::~ParticleLookupCache()
 {
 	if (_data) {
@@ -43,13 +36,19 @@ private:
 	int _component;
 };
 
-
-void ParticleLookupCache::init(float** particles, int particleCount, int particleSize, double rc, double cubeSize)
+void ParticleLookupCache::init(Block& block)
 {
-	_rc = rc;
-	_cubeSize = cubeSize;
+	_xMin = block.xMin;
+	_xMax = block.xMax;
+	_yMin = block.yMin;
+	_yMax = block.yMax;
+	_zMin = block.zMin;
+	_zMax = block.zMax;
 
-	sort(particles, particles + particleCount, ParticleComp(2));
+	_rc = block.rc;
+	_cubeSize = block.cubeSize;
+
+	sort(block.particles, block.particles + block.particlesCount, ParticleComp(2));
 
 	for (int i = 0; i < _sizeX * _sizeY; i++)
 	{
@@ -57,37 +56,8 @@ void ParticleLookupCache::init(float** particles, int particleCount, int particl
 		_data[i].first = 0;
 	}
 
-	for (int i = 0; i < particleCount; i++) {
-		float* p = particles[i];
-		for (int x = max(1, (int)ceil((p[X] - rc) / cubeSize)); x <= min((double)_sizeX-2, floor((p[X] + rc) / cubeSize)); x++) {
-			double rdy = rc*rc - (p[X] - x*cubeSize)*(p[X] - x*cubeSize);
-			for (int y = max(1, (int)ceil((p[Y] - rdy) / cubeSize)); y <= min((double)_sizeY-2, floor((p[Y] + rdy) / cubeSize)); y++) {
-				double rdz = rdy*rdy - (p[Y] - y*cubeSize)*(p[Y] - y*cubeSize);
-				get(x, y).second.push_back(
-					ParticleLookupCacheEntry(
-						max(1,      (int)ceil((p[Z] - rdz) / cubeSize)),
-						min(_sizeZ-2, (int)floor((p[Z] + rdz) / cubeSize)),
-						floor(p[Z] / cubeSize),
-						p
-					)
-				);
-			}
-		}
-	}
-}
-
-void ParticleLookupCache::init(float** particles, int particleCount, int particleSize)
-{
-	sort(particles, particles + particleCount, ParticleComp(2));
-
-	for (int i = 0; i < _sizeX * _sizeY; i++)
-	{
-		_data[i].second.clear();
-		_data[i].first = 0;
-	}
-
-	for (int i = 0; i < particleCount; i++) {
-		float* p = particles[i];
+	for (int i = 0; i < block.particlesCount; i++) {
+		float* p = block.particles[i];
 		float px = p[X];
 		float py = p[Y];
 		float pz = p[Z];
@@ -104,16 +74,6 @@ void ParticleLookupCache::init(float** particles, int particleCount, int particl
 						p
 					)
 				);
-				/*
-				get(x, y).second.push_back(
-					ParticleLookupCacheEntry(
-						max(1,      (int)floor((p[Z] - rdz - _zMin) / _cubeSize)),
-						min(_sizeZ-2, (int)ceil((p[Z] + rdz - _zMin) / _cubeSize)),
-						floor((p[Z] - _zMin) / _cubeSize),
-						p
-					)
-				);
-				*/
 			}
 		}
 	}

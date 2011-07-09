@@ -17,12 +17,11 @@ inline int myRound(double x)
 	return ceil(x - 0.5);
 }
 
-SurfaceExtractor::SurfaceExtractor(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax, double rc, double cubeSize, double isoTreshold)
-	: _xMin(xMin), _xMax(xMax), _yMin(yMin), _yMax(yMax), _zMin(zMin), _zMax(zMax), _rc(rc), _cubeSize(cubeSize), _isoTreshold(isoTreshold),
-	  _xSize(ceil((xMax - xMin) / cubeSize)), _ySize(ceil((yMax - yMin) / cubeSize)), _zSize(ceil((zMax - zMin) / cubeSize)),
-	  _particleLookupCache(xMin, xMax, yMin, yMax, zMin, zMax, rc, cubeSize)
+SurfaceExtractor::SurfaceExtractor(const SurfaceExtractorDesc& desc)
+	: _xSize(desc.getCubesInBlock()), _ySize(desc.getCubesInBlock()), _zSize(desc.getCubesInBlock()), 
+	_particleLookupCache(desc.getCubesInBlock()+1, desc.getCubesInBlock()+1, desc.getCubesInBlock()+1),
+	_isoTreshold(desc.isoTreshold)
 {
-	_particlePtrs = new float*[64000];
 	_slabs.resize(_zSize);
 	_slices.resize(_zSize + 1);
 	_sliceAllocator = SliceAllocator::getNewAllocator(_xSize+1, _ySize+1, 10);
@@ -30,28 +29,20 @@ SurfaceExtractor::SurfaceExtractor(double xMin, double xMax, double yMin, double
 
 SurfaceExtractor::~SurfaceExtractor()
 {
-	if (_particlePtrs) {
-		delete [] _particlePtrs;
-	}
 }
 
-
-void SurfaceExtractor::extractSurface(float* particles, int particleCount, int particleComponents, int vertexComponents, float* vertices, float* normals, unsigned int* indices, int& vertCount, int& triangleCount, int maxVertices, int maxIndices)
+void SurfaceExtractor::extractSurface(Block& block, int vertexComponents, float* vertices, float* normals, unsigned int* indices, int& nvert, int& ntriag, int maxVert, int maxTriag)
 {
-    Polygonizer polygonizer(_isoTreshold, vertices, vertexComponents, indices);
+	Polygonizer polygonizer(_isoTreshold, vertices, vertexComponents, indices);
 
-	for (int i = 0; i < particleCount; i++) {
-		_particlePtrs[i] = &particles[i * particleComponents];
-	}
+	_particleLookupCache.init(block);
 
-	_particleLookupCache.init(_particlePtrs, particleCount, particleComponents);
-
-	findSeedCubes(_particlePtrs, particleCount);
+	findSeedCubes(block, block.particles, block.particlesCount);
 
 	int currentIndex = 0;
 
-	triangleCount = 0;
-	vertCount = 0;
+	ntriag = 0;
+	nvert = 0;
 
 	int z;
 	while ((z = popLowestSlabWithTodo()) >= 0) {
@@ -80,17 +71,17 @@ void SurfaceExtractor::extractSurface(float* particles, int particleCount, int p
 
 			CornerCacheEntry* corners[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
-			lookupOrEval(x,   y,   z,   corners[0]);
-			lookupOrEval(x+1, y,   z,   corners[1]);
-			lookupOrEval(x+1, y+1, z,   corners[2]);
-			lookupOrEval(x,   y+1, z,   corners[3]);
-			lookupOrEval(x,   y,   z+1, corners[4]);
-			lookupOrEval(x+1, y,   z+1, corners[5]);
-			lookupOrEval(x+1, y+1, z+1, corners[6]);
-			lookupOrEval(x,   y+1, z+1, corners[7]);
+			lookupOrEval(block, x,   y,   z,   corners[0]);
+			lookupOrEval(block, x+1, y,   z,   corners[1]);
+			lookupOrEval(block, x+1, y+1, z,   corners[2]);
+			lookupOrEval(block, x,   y+1, z,   corners[3]);
+			lookupOrEval(block, x,   y,   z+1, corners[4]);
+			lookupOrEval(block, x+1, y,   z+1, corners[5]);
+			lookupOrEval(block, x+1, y+1, z+1, corners[6]);
+			lookupOrEval(block, x,   y+1, z+1, corners[7]);
 
 			int toDo;
-			if (!cubeInMargin(x, y, z)) {
+			if (!block.cubeInMargin(x, y, z)) {
                 polygonizer.polygonize(corners, toDo);
 			} else {
 				toDo = polygonizer.cubesToDo(corners);
@@ -125,26 +116,26 @@ void SurfaceExtractor::extractSurface(float* particles, int particleCount, int p
 			sliceAbove.deallocate();
 	}
 
-    vertCount = polygonizer.getVerticesNumber();
-    triangleCount = polygonizer.getTriangleNumber();
+    nvert = polygonizer.getVerticesNumber();
+    ntriag = polygonizer.getTriangleNumber();
 
-	computeNormals(vertices, indices, vertCount, triangleCount, normals);
+	computeNormals(vertices, indices, nvert, ntriag, normals);
 }
 
-void SurfaceExtractor::findSeedCubes(float** particles, int particleCount)
+void SurfaceExtractor::findSeedCubes(Block& block, float** particles, int particleCount)
 {
 	for (int i = 0; i < particleCount; i++) {
 		float* p = particles[i];
-		int x = myRound((p[X] - _xMin) / _cubeSize);
-		int y = myRound((p[Y] - _yMin) / _cubeSize);
-		int z = max(0, min(_zSize-1, myRound((p[Z] - _zMin) / _cubeSize)));
+		int x = myRound((p[X] - block.xMin) / block.cubeSize);
+		int y = myRound((p[Y] - block.yMin) / block.cubeSize);
+		int z = max(0, min(_zSize-1, myRound((p[Z] - block.zMin) / block.cubeSize)));
 
 		if (x >= _xSize || x < 0 || y >= _ySize || y < 0)
 			continue;
 
 		double isoVal = _isoTreshold + 0.25;
 
-		while ((isoVal = _particleLookupCache.getFieldValueAt2(x, y, z)) > _isoTreshold && (p[Z] - z * _cubeSize) < _rc)
+		while ((isoVal = _particleLookupCache.getFieldValueAt2(x, y, z)) > _isoTreshold && (p[Z] - z * block.cubeSize) < block.rc)
 			z--;
 
 		if (isoVal <= _isoTreshold) {
@@ -155,7 +146,7 @@ void SurfaceExtractor::findSeedCubes(float** particles, int particleCount)
 	}
 }
 
-void SurfaceExtractor::lookupOrEval(int x, int y, int z, CornerCacheEntry*& corner)
+void SurfaceExtractor::lookupOrEval(Block& block, int x, int y, int z, CornerCacheEntry*& corner)
 {
 	Slice& slice = _slices[z];
 	SliceEntry& sliceEntry = slice(x, y);
@@ -163,9 +154,9 @@ void SurfaceExtractor::lookupOrEval(int x, int y, int z, CornerCacheEntry*& corn
 	if (sliceEntry.cornerCacheIndex == -1) {
 		sliceEntry.cornerCacheIndex = slice.cornerCache.size();
 		slice.cornerCache.push_back(CornerCacheEntry(x, y, _particleLookupCache.getFieldValueAt2(x, y, z), true));		
-		slice.cornerCache.back().spaceCoord[X] = _xMin + x * _cubeSize;
-		slice.cornerCache.back().spaceCoord[Y] = _yMin + y * _cubeSize;
-		slice.cornerCache.back().spaceCoord[Z] = _zMin + z * _cubeSize;
+		slice.cornerCache.back().spaceCoord[X] = block.xMin + x * block.cubeSize;
+		slice.cornerCache.back().spaceCoord[Y] = block.yMin + y * block.cubeSize;
+		slice.cornerCache.back().spaceCoord[Z] = block.zMin + z * block.cubeSize;
 	}
 
 	corner = &(slice.cornerCache[sliceEntry.cornerCacheIndex]);
@@ -203,7 +194,6 @@ void SurfaceExtractor::computeNormals(float* vertices, unsigned int* indices, in
 		float ny = z1 * x2 - x1 * z2;
 		float nz = x1 * y2 - y1 * x2;
 		//normalize(nx, ny, nz);
-		// TODO multiply by triangle area
 		normals[indices[i*3+0]*3 + 0] += nx;
 		normals[indices[i*3+0]*3 + 1] += ny;
 		normals[indices[i*3+0]*3 + 2] += nz;

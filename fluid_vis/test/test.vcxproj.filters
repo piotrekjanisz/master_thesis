@@ -48,6 +48,9 @@
     <ClCompile Include="ParticleLookupCachePerformanceTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MtSurfaceExtractorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\test_config\test1.cfg">

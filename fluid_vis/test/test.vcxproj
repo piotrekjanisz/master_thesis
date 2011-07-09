@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FiltersTest.cpp" />
+    <ClCompile Include="MtSurfaceExtractorTest.cpp" />
     <ClCompile Include="ParticleLookupCachePerformanceTest.cpp" />
     <ClCompile Include="ParticleLookupCacheTest.cpp" />
     <ClCompile Include="PolygonizerTest.cpp" />

@@ -12,6 +12,7 @@
 #include "ScreenQuad.h"
 #include "ShapeFactory.h"
 #include <surface_extraction/SurfaceExtractor.h>
+#include <surface_extraction/MtSurfaceExtractor.h>
 #include <utils/utils.h>
 #include <vmmlib\vmmlib.hpp>
 #include <boost\smart_ptr.hpp>
@@ -81,6 +82,8 @@ class Scene : public AbstractScene
 
 	MyFluid* _fluid;
 
+	boost::shared_ptr<Block> _block;
+
 	float* _debugData;
 
 	int _particleCount;
@@ -88,10 +91,11 @@ class Scene : public AbstractScene
 	float _particleSize;
 
 	SurfaceExtractorPtr _surfaceExtractor;
+	MtSurfaceExtractorPtr _mtSurfaceExtractor;
 
-	float* _verticesBuffer;
-	float* _normalsBuffer;
-	unsigned int* _indicesBuffer;
+	std::list<TriangleMesh> _outputs[2];
+	int _currentOutput;
+
 public:
 	Scene();
 
