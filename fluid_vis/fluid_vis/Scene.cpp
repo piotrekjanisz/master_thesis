@@ -6,6 +6,7 @@
 #include <utils/utils.h>
 #include <surface_extraction\data_types.h>
 #include <surface_extraction\Block.h>
+#include "PhysxConfigurationFactory.h"
 
 #include <GL/glus.h>
 #include <GL/glew.h>
@@ -48,6 +49,7 @@ bool Scene::setup()
 	}
 
 	SurfaceExtractorDesc desc;
+	/*
 	desc.xMin = -5.0;
 	desc.xMax =  5.0;
 	desc.yMin = -1.0;
@@ -62,6 +64,9 @@ bool Scene::setup()
 	desc.threads = 3;
 	desc.maxTrianglesPerThread = 500000;
 	desc.maxVerticesPerThread = 500000;
+	*/
+	PhysxConfigurationFactory configurationFactory("config");
+	desc = configurationFactory.createSurfaceExtractorDesc("extractor");
 
 	_currentOutput = 0;
 
@@ -276,7 +281,7 @@ void Scene::renderIsoSurface(NxScene* physicsScene)
 			_outputs[_currentOutput].clear();
 			list<TriangleMesh> meshes;
 			_mtSurfaceExtractor->waitForResults();
-			_mtSurfaceExtractor->extractSurface(myFluid->getPositions(), myFluid->getParticlesCount(), 4, &_outputs[_currentOutput]);
+			_mtSurfaceExtractor->extractSurface(myFluid->getPositionsAsync(), myFluid->getParticlesCount(), 4, &_outputs[_currentOutput]);
 			_currentOutput = (_currentOutput + 1) % 2;
 			CHECK_GL_CMD(_isoSurfaceProgram->useThis());
 			CHECK_GL_CMD(glUniformMatrix4fv(_isoWaterProjectionLocation, 1, GL_FALSE, _projectionMatrix));

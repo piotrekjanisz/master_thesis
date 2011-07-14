@@ -31,11 +31,14 @@ static NxScene* g_NxScene = NULL;
 static MyFluid* gFluid = NULL;
 static PhysxConfigurationFactory configurationFactory("config");
 
+bool g_useSurfaceExtraction = true;
+
 void createFluid() 
 {	
 	try {
 		NxFluidDesc fluidDesc = configurationFactory.createFluidDesc("water1");
 		fluidDesc.flags &= ~NX_FF_HARDWARE;
+		//fluidDesc.flags |= NX_FF_HARDWARE;
 		gFluid = new MyFluid(g_NxScene, fluidDesc, NxVec3(1.0f, 0.0f, 0.0f), 100.0f);
 
 		NxFluidEmitterDesc emitterDesc = configurationFactory.createFluidEmitterDesc("emitter1");
@@ -113,8 +116,11 @@ GLUSboolean update(GLUSfloat time)
 {
 	g_NxScene->simulate(1.0f / 60.0f);
 	
-	//g_scene.render(g_NxScene);
-	g_scene.renderIsoSurface(g_NxScene);
+	if (g_useSurfaceExtraction)
+		g_scene.renderIsoSurface(g_NxScene);
+	else 
+		g_scene.render(g_NxScene);
+	
 
 	g_NxScene->flushStream();
 	g_NxScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
@@ -223,7 +229,6 @@ void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned
 
 int main(int argc, char** argv)
 {
-
 	atexit(releaseNx);
 
 	initNx();

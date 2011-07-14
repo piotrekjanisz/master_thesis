@@ -15,6 +15,10 @@ using namespace boost::filesystem;
 	if (properties->hasKeyOfType<float>(#propertyName)) \
 		data.propertyName = properties->get<float>(#propertyName)
 
+#define SET_DOUBLE(data, properties, propertyName) \
+	if (properties->hasKeyOfType<double>(#propertyName)) \
+		data.propertyName = properties->get<double>(#propertyName)
+
 #define SET_INT(data, properties, propertyName) \
 	if (properties->hasKeyOfType<int>(#propertyName)) \
 		data.propertyName = properties->get<int>(#propertyName)
@@ -141,6 +145,34 @@ NxBodyDesc PhysxConfigurationFactory::createBodyDesc(const std::string& name) th
 	NxBodyDesc retVal;
 	
 	// TODO
+
+	return retVal;
+}
+
+SurfaceExtractorDesc PhysxConfigurationFactory::createSurfaceExtractorDesc(const std::string& name) throw(PhysxConfigurationException)
+{
+	SurfaceExtractorDesc retVal;
+	boost::shared_ptr<Properties> properties = getProperties(name);
+
+	SET_DOUBLE(retVal, properties, xMin);
+	SET_DOUBLE(retVal, properties, xMax);
+	SET_DOUBLE(retVal, properties, yMin);
+	SET_DOUBLE(retVal, properties, yMax);
+	SET_DOUBLE(retVal, properties, zMin);
+	SET_DOUBLE(retVal, properties, zMax);
+	
+	SET_DOUBLE(retVal, properties, rc);
+	SET_DOUBLE(retVal, properties, isoTreshold);
+
+	SET_DOUBLE(retVal, properties, blockSize);
+	SET_DOUBLE(retVal, properties, cubeSize);
+
+	SET_INT(retVal, properties, maxParticles);
+
+	SET_INT(retVal, properties, maxTrianglesPerThread);
+	SET_INT(retVal, properties, maxVerticesPerThread);
+
+	SET_INT(retVal, properties, threads);
 
 	return retVal;
 }

@@ -98,8 +98,8 @@ void MtSurfaceExtractor::extractSurface(float* particles, int particlesCount, in
 	for (int i = 0; i < particlesCount; i++) {
 		float* particle = &particles[i * particleComponents];
 		int bx = (particle[0] - _desc.xMin) / _desc.blockSize;
-		int by = (particle[0] - _desc.yMin) / _desc.blockSize;
-		int bz = (particle[0] - _desc.zMin) / _desc.blockSize;
+		int by = (particle[1] - _desc.yMin) / _desc.blockSize;
+		int bz = (particle[2] - _desc.zMin) / _desc.blockSize;
 		if (bx < 0 || by < 0 || bz < 0 ||
 			bx >= _blocksX || by >= _blocksY || bz >= _blocksZ)
 			continue;

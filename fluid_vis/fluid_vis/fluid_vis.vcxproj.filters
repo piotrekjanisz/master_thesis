@@ -202,5 +202,8 @@
     <None Include="resources\shaders\water_surface_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="resources\config\extractor.cfg">
+      <Filter>config</Filter>
+    </None>
   </ItemGroup>
 </Project>

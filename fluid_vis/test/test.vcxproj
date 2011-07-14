@@ -91,15 +91,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FiltersTest.cpp" />
-    <ClCompile Include="MtSurfaceExtractorTest.cpp" />
-    <ClCompile Include="ParticleLookupCachePerformanceTest.cpp" />
-    <ClCompile Include="ParticleLookupCacheTest.cpp" />
+    <ClCompile Include="MtSurfaceExtractorPerformanceTest.cpp" />
     <ClCompile Include="PolygonizerTest.cpp" />
     <ClCompile Include="PropertiesTest.cpp" />
     <ClCompile Include="resources\config\PhysxConfigurationFactoryTest.cpp" />
     <ClCompile Include="runner.cpp" />
-    <ClCompile Include="SurfaceExtractorPerformanceTest.cpp" />
-    <ClCompile Include="SurfaceExtractorTest.cpp" />
     <ClCompile Include="TestUtils.cpp" />
   </ItemGroup>
   <ItemGroup>

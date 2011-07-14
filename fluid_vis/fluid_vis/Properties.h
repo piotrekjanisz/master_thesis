@@ -27,6 +27,7 @@ class Properties
 	static const boost::regex __LINE_PATTERN;
 	static const boost::regex __INT_PATTERN;
 	static const boost::regex __FLOAT_PATTERN;
+	static const boost::regex __DOUBLE_PATTERN;
 	static const boost::regex __STRING_PATTERN;
 	static const boost::regex __VEC3_PATTERN;
 

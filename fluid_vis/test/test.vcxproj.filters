@@ -30,25 +30,13 @@
     <ClCompile Include="FiltersTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleLookupCacheTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SurfaceExtractorTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PolygonizerTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SurfaceExtractorPerformanceTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleLookupCachePerformanceTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MtSurfaceExtractorTest.cpp">
+    <ClCompile Include="MtSurfaceExtractorPerformanceTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

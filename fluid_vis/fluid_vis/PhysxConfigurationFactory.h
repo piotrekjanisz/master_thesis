@@ -2,6 +2,7 @@
 
 #include "BaseException.h"
 #include "Properties.h"
+#include <surface_extraction\data_types.h>
 #include <NxPhysics.h>
 #include <map>
 #include <boost/filesystem.hpp>
@@ -32,5 +33,7 @@ public:
 	NxFluidDesc createFluidDesc(const std::string& name) throw(PhysxConfigurationException);
 	NxFluidEmitterDesc createFluidEmitterDesc(const std::string& name) throw(PhysxConfigurationException);
 	NxBodyDesc createBodyDesc(const std::string& name) throw(PhysxConfigurationException);
+
+	SurfaceExtractorDesc createSurfaceExtractorDesc(const std::string& name) throw(PhysxConfigurationException);
 };
 

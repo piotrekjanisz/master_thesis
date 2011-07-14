@@ -36,12 +36,17 @@ public:
 		return _fluidEmitter == NULL ? 0 : _fluidEmitter->getNbParticlesEmitted();
 	}
 
-	float* getPositions() 
+	float* getPositions()
+	{
+		return _posBuffer;
+	}
+
+	float* getPositionsAsync() 
 	{ 
 		memcpy(_currentPosBuffer, _posBuffer, _particleCount*4*sizeof(float));
 		_currentPartCount = _particleCount;
 		return _currentPosBuffer; 
 	}
-	int getParticlesCount() const { return _currentPartCount; }
+	int getParticlesCount() const { return _particleCount; }
 };
 

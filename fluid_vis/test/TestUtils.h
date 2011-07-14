@@ -11,6 +11,13 @@
 		std::cout << title << std::endl << "\tELAPSED: " << clock.elapsed() << "s" << std::endl; \
 	}
 
+#define MEASURE_TIME_AVG(title, ntimes, code) \
+	{ \
+		boost::timer clock; \
+		for (int i = 0; i < ntimes; i++) { code } \
+		std::cout << title << std::endl << "\tELAPSED: " << clock.elapsed() / ntimes << "s" << std::endl; \
+	}
+
 class TestUtils
 {
 public:
