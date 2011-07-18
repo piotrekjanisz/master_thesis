@@ -85,7 +85,7 @@
     <ClCompile Include="GfxObject.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
     <ClCompile Include="MyFluid.cpp" />
-    <ClCompile Include="PhysxConfigurationFactory.cpp" />
+    <ClCompile Include="ConfigurationFactory.cpp" />
     <ClCompile Include="physx_utils.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -107,7 +107,7 @@
     <ClInclude Include="GfxStaticObject.h" />
     <ClInclude Include="MyFluid.h" />
     <ClInclude Include="NonCopyable.h" />
-    <ClInclude Include="PhysxConfigurationFactory.h" />
+    <ClInclude Include="ConfigurationFactory.h" />
     <ClInclude Include="physx_utils.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="Scene.h" />

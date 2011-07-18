@@ -6,7 +6,7 @@
 #include <utils/utils.h>
 #include <surface_extraction\data_types.h>
 #include <surface_extraction\Block.h>
-#include "PhysxConfigurationFactory.h"
+#include "ConfigurationFactory.h"
 
 #include <GL/glus.h>
 #include <GL/glew.h>
@@ -49,23 +49,7 @@ bool Scene::setup()
 	}
 
 	SurfaceExtractorDesc desc;
-	/*
-	desc.xMin = -5.0;
-	desc.xMax =  5.0;
-	desc.yMin = -1.0;
-	desc.yMax =  9.0;
-	desc.zMin = -5.0;
-	desc.zMax =  5.0;
-	desc.isoTreshold = 0.2;
-	desc.blockSize = 5.0;
-	desc.cubeSize = 0.05;
-	desc.rc = 0.15;
-	desc.maxParticles = 3000;
-	desc.threads = 3;
-	desc.maxTrianglesPerThread = 500000;
-	desc.maxVerticesPerThread = 500000;
-	*/
-	PhysxConfigurationFactory configurationFactory("config");
+	ConfigurationFactory configurationFactory("config");
 	desc = configurationFactory.createSurfaceExtractorDesc("extractor");
 
 	_currentOutput = 0;

@@ -65,16 +65,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseConfigurationFactory.h" />
+    <ClInclude Include="BaseException.h" />
     <ClInclude Include="CommandLine.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Properties.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseConfigurationFactory.cpp" />
+    <ClCompile Include="BaseException.cpp" />
     <ClCompile Include="CommandLine.cpp" />
+    <ClCompile Include="Properties.cpp" />
     <ClCompile Include="utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="utils.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

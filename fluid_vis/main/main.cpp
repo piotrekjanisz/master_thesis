@@ -19,7 +19,7 @@
 #include <fluid_vis/ErrorStream.h>
 #include <fluid_vis/physx_utils.h>
 #include <fluid_vis/Properties.h>
-#include <fluid_vis/PhysxConfigurationFactory.h>
+#include <fluid_vis/ConfigurationFactory.h>
 #include <fluid_vis/MyFluid.h>
 #include <fluid_vis/debug_utils.h>
 
@@ -29,7 +29,7 @@ Scene g_scene;
 static NxPhysicsSDK* gPhysicsSDK = NULL;
 static NxScene* g_NxScene = NULL;
 static MyFluid* gFluid = NULL;
-static PhysxConfigurationFactory configurationFactory("config");
+static ConfigurationFactory configurationFactory("config");
 
 bool g_useSurfaceExtraction = true;
 
