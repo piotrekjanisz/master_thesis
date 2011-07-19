@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{Green2010}
+{\sc Simon Green}.
+\newblock
+  \href{developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.%
+pdf}{{\bf Screen Space Fluid Rendering for Games}}.
+\newblock Game Developers Conference, 2010.
+
+\bibitem{laanSainz2009}
+{\sc Miguel~Sainz Wladimir J. van~der Laan, Simon~Green}.
+\newblock {\bf Screen space fluid rendering with curvature flow}.
+\newblock {\em Proceedings of the 2009 symposium on Interactive 3D graphics and
+  games}, 2009.
+
+\bibitem{PhamVliet2005}
+{\sc Lucas J. van~Vliet Tuan Q.~Pham}.
+\newblock {\bf Separable Bilateral Filtering for Fast Video Preprocessing}.
+\newblock {\em Multimedia and Expo, 2005. ICME 2005. IEEE International
+  Conference on}, 2005.
+
+\end{thebibliography}

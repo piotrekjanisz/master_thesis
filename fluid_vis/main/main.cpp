@@ -31,7 +31,7 @@ static NxScene* g_NxScene = NULL;
 static MyFluid* gFluid = NULL;
 static ConfigurationFactory configurationFactory("config");
 
-bool g_useSurfaceExtraction = true;
+bool g_useSurfaceExtraction = false;
 
 void createFluid() 
 {	

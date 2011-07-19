@@ -366,16 +366,7 @@ void Scene::render(NxScene* physicsScene)
 			CHECK_GL_CMD(_blurQuad->render());
 		}
 	}
-	/*
-	// smooth water
-	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
-	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDistTexture, GL_TEXTURE1));
-	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0f / getHeight()));
-	CHECK_GL_CMD(_screenQuad->render());
-	*/
+
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
@@ -392,6 +383,7 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	CHECK_GL_CMD(_finalQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
+	//CHECK_GL_CMD(_finalQuad->attachTexture(_depthTexture, GL_TEXTURE0));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneDepthTexture, GL_TEXTURE1));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneTexture, GL_TEXTURE2));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_waterDepthTexture, GL_TEXTURE3));
