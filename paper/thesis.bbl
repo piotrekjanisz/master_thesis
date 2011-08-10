@@ -19,4 +19,29 @@ pdf}{{\bf Screen Space Fluid Rendering for Games}}.
 \newblock {\em Multimedia and Expo, 2005. ICME 2005. IEEE International
   Conference on}, 2005.
 
+\bibitem{Gregory2009}
+{\sc Jason Gregory}.
+\newblock {\bf Occlusion and the Depth Buffer}.
+\newblock In {\em Game Engine Architecture}, pages 442--444. A K Peters, Ltd.,
+  2009.
+
+\bibitem{Dunlop2006}
+{\sc Robert Dunlop}.
+\newblock \href{http://www.mvps.org/directx/articles/linear_z/linearz.htm}{{\bf
+  Linearized Depth using Vertex Shaders}}.
+\newblock Article on X-Zone service, 2006.
+
+\bibitem{LorensenCline1987}
+{\sc Harvey E.~Cline William E.~Lorensen}.
+\newblock {\bf Marching cubes: A high resolution 3D surface construction
+  algorithm}.
+\newblock {\em Proceedings of the 14th annual conference on Computer graphics
+  and interactive techniques, Vol. 21, No. 4.}, 1987.
+
+\bibitem{RosenbergBirdwell2008}
+{\sc Ken~Birdwell Ilya D.~Rosenberg}.
+\newblock {\bf Real-time particle isosurface extraction}.
+\newblock {\em Proceedings of the 2008 symposium on Interactive 3D graphics and
+  games}, 2008.
+
 \end{thebibliography}

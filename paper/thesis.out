@@ -8,4 +8,9 @@
 \BOOKMARK [2][]{subsection.2.1.3}{2.1.3 Thickness}{section.2.1}% 8
 \BOOKMARK [2][]{subsection.2.1.4}{2.1.4 Rendering}{section.2.1}% 9
 \BOOKMARK [1][]{section.2.2}{2.2 Isosurface extraction}{chapter.2}% 10
-\BOOKMARK [0][]{chapter*.8}{Bibliography}{}% 11
+\BOOKMARK [2][]{subsection.2.2.1}{2.2.1 Overview}{section.2.2}% 11
+\BOOKMARK [2][]{subsection.2.2.2}{2.2.2 Block subdivision}{section.2.2}% 12
+\BOOKMARK [2][]{subsection.2.2.3}{2.2.3 Block processing}{section.2.2}% 13
+\BOOKMARK [2][]{subsection.2.2.4}{2.2.4 Lookup cache}{section.2.2}% 14
+\BOOKMARK [2][]{subsection.2.2.5}{2.2.5 Multithreading}{section.2.2}% 15
+\BOOKMARK [0][]{chapter*.9}{Bibliography}{}% 16
