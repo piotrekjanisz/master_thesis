@@ -11,7 +11,7 @@
 \contentsline {section}{\numberline {2.2}Isosurface extraction}{9}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Overview}{9}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Block subdivision}{10}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Block processing}{10}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.3}Block processing}{11}{subsection.2.2.3}
 \contentsline {subsection}{\numberline {2.2.4}Lookup cache}{11}{subsection.2.2.4}
 \contentsline {subsection}{\numberline {2.2.5}Multithreading}{11}{subsection.2.2.5}
 \contentsline {chapter}{Bibliography}{13}{chapter*.10}
