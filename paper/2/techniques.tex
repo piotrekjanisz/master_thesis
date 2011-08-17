@@ -105,12 +105,20 @@ Space is divided into blocks containing cubes. Such a division aims for:
 \item Reduce memory consumption - smaller blocks contains less particles and cubes. 
 \item Allowing for parallelize algorithm in an easy way - because processing one block is an independent of processing other blocks. 
 \end{itemize}
-Blocks are expanded to contain also particles that lies outside them but may influence the field values inside block. That means the block must also contain particles lying within $R_c$ distance from it - this area is called margin and have special treatment, which will be described in next section. Expanding blocks makes parallel processing very easy as there are no dependencies between them.
+Blocks are expanded to contain also particles that lies outside them but may influence the field values inside block. That means the block must also contain particles lying within $R_c$ distance from it - this area is called margin and has special treatment, which will be described in next section. Expanding blocks makes parallel processing very easy as there are no dependencies between them.
+
+TODO imgae of block
 
 Block subdivision is a first step of the algorithm. For every particle containing blocks are computed. One particle can be contained in at most 8 blocks due to blocks overlapping. Each block has a list of particles lying within its boundary. 
 
 \subsection{Block processing} \label{sec:block_processing}
-Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next surface following marching cube algorithm is run inside block. The algorithm is named marching slices in \cite{RosenbergBirdwell2008}. Block containing $n x n x n$ blocks is divided on n slabs and n+1 slices (TODO rysunek). Division is made in parallel to XY plane. Each slab contains $n x n x 1$ blocks. Slices lies between slabs and serves as a cache. In addition neighboring slabs share slices that lies between them. 
+Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next surface following marching cube algorithm is run inside block. The algorithm is named marching slices in \cite{RosenbergBirdwell2008}. Block containing $n \times n \times n$ cubes is divided to n slabs and n+1 slices (TODO rysunek). Division is made in parallel to XY plane. Each slab contains $n \times n \times 1$ cubes and each slice contains $(n+1) \times (n+1) \times 1$ cube corners. Slices lies between slabs and serves as a cache for field values computed at corners. In addition neighboring slabs share slices that lies between them. Each slab has a list of cubes lying within it that should be visited.
+
+To speed up a marching cubes algorithm we would like to traverse only cubes that contains surface. This requires finding so called seeding cubes - initial cubes at which algorithm will start traversing block. We then choose one slab tat contains one or more seed cubes and pick up one cube. Field values at cube corners are calculated and put into slice caches, surface is polygonized and neighboring cubes that contain surface are aded to todo lists of [odpowiadajacy] slabs. 
+
+If we pick up a random slabs and cubes each time then we have to keep all cached values in slices while processing a cube. The idea of marching slices is to decrease memory used by cache by traversing cubes slice by slice and deallocate caches as soon as possible. This can be done by always picking the lowest slab with not empty todo list and finding seeding cubes in the lowest possible slabs. 
+
+
 
 \subsection{Lookup cache}\label{sec:lookupcache}
 To compute field value for a given corner all particles that lies within $r_c$ from it have to be found. This task can be accomplished by building space partitioning data structure like octtree (TODO może odnośniki). However .......... . \cite{RosenbergBirdwell2008} presented another to accomplish this task. Presented method does use only integer comparison ........ .
