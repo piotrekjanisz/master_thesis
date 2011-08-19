@@ -90,7 +90,7 @@ where $s$ is a center of particle, $D_{R_c}(p)$ is a disc with p as a center and
 \begin{equation}
 \label{eq:single_field_equation}
 f(r) = \left\{ \begin{array}{ll}
-{r \over \sqrt{2}R_c} )^4 - ( {r \over \sqrt{2}R_c} )^2 + 0.25 & \textrm{if $r < R_c$}\\
+({r \over \sqrt{2}R_c} )^4 - ( {r \over \sqrt{2}R_c} )^2 + 0.25 & \textrm{if $r < R_c$}\\
 0 & \textrm{otherwise}\\
 \end{array} \right.
 \end{equation}
@@ -112,20 +112,32 @@ TODO imgae of block
 Block subdivision is a first step of the algorithm. For every particle containing blocks are computed. One particle can be contained in at most 8 blocks due to blocks overlapping. Each block has a list of particles lying within its boundary. 
 
 \subsection{Block processing} \label{sec:block_processing}
-Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next surface following marching cube algorithm is run inside block. The algorithm is named marching slices in \cite{RosenbergBirdwell2008}. Block containing $n \times n \times n$ cubes is divided to n slabs and n+1 slices (TODO rysunek). Division is made in parallel to XY plane. Each slab contains $n \times n \times 1$ cubes and each slice contains $(n+1) \times (n+1) \times 1$ cube corners. Slices lies between slabs and serves as a cache for field values computed at corners. In addition neighboring slabs share slices that lies between them. Each slab has a list of cubes lying within it that should be visited.
+Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next surface following marching cube algorithm is run inside block. The algorithm is named marching slices in \cite{RosenbergBirdwell2008}. Block containing $n \times n \times n$ cubes is divided to n slabs and n+1 slices (TODO rysunek). Division is made in parallel to XY plane. Each slab contains $n \times n \times 1$ cubes and each slice contains $(n+1) \times (n+1) \times 1$ cube corners. Slices lies between slabs and serves as a cache for field values computed at corners. In addition neighboring slabs share slices that lies between them. Each slab has a list of cubes lying within it that should be visited - a todo list.
 
 To speed up a marching cubes algorithm we would like to traverse only cubes that contains surface. This requires finding so called seeding cubes - initial cubes at which algorithm will start traversing block. We then choose one slab tat contains one or more seed cubes and pick up one cube. Field values at cube corners are calculated and put into slice caches, surface is polygonized and neighboring cubes that contain surface are aded to todo lists of [odpowiadajacy] slabs. 
 
 If we pick up a random slabs and cubes each time then we have to keep all cached values in slices while processing a cube. The idea of marching slices is to decrease memory used by cache by traversing cubes slice by slice and deallocate caches as soon as possible. This can be done by always picking the lowest slab with not empty todo list and finding seeding cubes in the lowest possible slabs. 
 
+The optimum would be to find surfaces all local minimas - then we would have to store only cache in slices below and above current slab. However this is approach would be time consuming. \cite{RosenbergBirdwell2008} used heuristic approach with complexity O(P) where P is a number of particles. The algorihtm is as follows:
+\begin{verbatim}
+for every particle:
+        take a corner closest to particle center
+        while F(c) > treshold and |c - c_start| < 2 do
+                c = corner below c
+        if F(c) < treshold
+                add cube to it's slab todo list
+\end{verbatim}
 
+This method will not find local minimas every time as it always goes down from the centre of a particle. Figure~\ref{fig_local_minima} shows the case when algorighm (TODO ref) fails to find a local minimum. 
+
+\figuremacroW{fig_local_minima}{Finding local minima}{In this example algorithm fails to find local minimum}{0.7}
 
 \subsection{Lookup cache}\label{sec:lookupcache}
 To compute field value for a given corner all particles that lies within $r_c$ from it have to be found. This task can be accomplished by building space partitioning data structure like octtree (TODO może odnośniki). However .......... . \cite{RosenbergBirdwell2008} presented another to accomplish this task. Presented method does use only integer comparison ........ .
 
 
 \subsection{Multithreading}
-diagram
+\cite{RosenbergBirdwell2008} presented algorithm that run in one thread. However algorithm has a potential of parallelization due to block processing. Parallelization of this algorithm is even more ............ as there is a trend to include more and more cores in new CPUs. 
 
 % ---------------------------------------------------------------------------
 % ----------------------- end of thesis sub-document ------------------------
