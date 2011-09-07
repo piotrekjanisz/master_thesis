@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  18 AUG 2011 11:11
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  7 SEP 2011 11:42
 entering extended mode
 **//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/thesis.tex
 
@@ -419,7 +419,7 @@ LaTeX Info: Redefining \nameref on input line 90.
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
 \@outlinefile=\write4
-<0_frontmatter/figures/logo.png, id=67, 301.125pt x 129.48375pt>
+<0_frontmatter/figures/logo.png, id=71, 301.125pt x 129.48375pt>
 File: 0_frontmatter/figures/logo.png Graphic file (type png)
 
 <use 0_frontmatter/figures/logo.png>
@@ -472,21 +472,21 @@ s.tex [2
 
 ]
  2.
-<2/figures/screen_space.png, id=121, 630.10406pt x 465.99094pt>
+<2/figures/screen_space.png, id=126, 630.10406pt x 465.99094pt>
 File: 2/figures/screen_space.png Graphic file (type png)
 
 <use 2/figures/screen_space.png>
 Package pdftex.def Info: 2/figures/screen_space.png used on input line 16.
 (pdftex.def)             Requested size: 288.7942pt x 213.57628pt.
 
-<2/figures/spheres.png, id=132, 336.50719pt x 335.75438pt>
+<2/figures/spheres.png, id=137, 336.50719pt x 335.75438pt>
 File: 2/figures/spheres.png Graphic file (type png)
 
 <use 2/figures/spheres.png>
 Package pdftex.def Info: 2/figures/spheres.png used on input line 22.
 (pdftex.def)             Requested size: 206.28247pt x 205.82426pt.
  [3]
-<2/figures/spheres_no_smoothing.png, id=143, 481.8pt x 360.59718pt>
+<2/figures/spheres_no_smoothing.png, id=148, 481.8pt x 360.59718pt>
 File: 2/figures/spheres_no_smoothing.png Graphic file (type png)
 
 <use 2/figures/spheres_no_smoothing.png>
@@ -495,7 +495,7 @@ Package pdftex.def Info: 2/figures/spheres_no_smoothing.png used on input line
 (pdftex.def)             Requested size: 288.7942pt x 216.15088pt.
  [4 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/2/figur
 es/screen_space.png>]
-<2/figures/gaussian_filter_img.png, id=152, 339.51843pt x 191.9672pt>
+<2/figures/gaussian_filter_img.png, id=157, 339.51843pt x 191.9672pt>
 File: 2/figures/gaussian_filter_img.png Graphic file (type png)
 
 <use 2/figures/gaussian_filter_img.png>
@@ -506,14 +506,14 @@ Package pdftex.def Info: 2/figures/gaussian_filter_img.png used on input line 4
 es/spheres.png>] [6 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thes
 is/paper/2/figures/spheres_no_smoothing.png> <//cern.ch/dfs/Users/p/pjanisz/Doc
 uments/master/master_thesis/paper/2/figures/gaussian_filter_img.png>]
-<2/figures/bilateral_comp.png, id=175, 339.51843pt x 191.9672pt>
+<2/figures/bilateral_comp.png, id=180, 339.51843pt x 191.9672pt>
 File: 2/figures/bilateral_comp.png Graphic file (type png)
 
 <use 2/figures/bilateral_comp.png>
 Package pdftex.def Info: 2/figures/bilateral_comp.png used on input line 61.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
 
-<2/figures/edge_preservation.png, id=180, 339.51843pt x 191.9672pt>
+<2/figures/edge_preservation.png, id=185, 339.51843pt x 191.9672pt>
 File: 2/figures/edge_preservation.png Graphic file (type png)
 
 <use 2/figures/edge_preservation.png>
@@ -523,7 +523,7 @@ Package pdftex.def Info: 2/figures/edge_preservation.png used on input line 64.
  [7 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/2/figur
 es/bilateral_comp.png>] [8 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/mast
 er_thesis/paper/2/figures/edge_preservation.png>] [9] <2/figures/metaballs.png,
- id=209, 702.625pt x 200.75pt>
+ id=214, 702.625pt x 200.75pt>
 File: 2/figures/metaballs.png Graphic file (type png)
 
 <use 2/figures/metaballs.png>
@@ -538,7 +538,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 105.
  [10 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/2/figu
 res/metaballs.png (PNG copy)>] [11]
-<2/figures/fig_local_minima.png, id=226, 339.51843pt x 191.9672pt>
+<2/figures/fig_local_minima.png, id=231, 339.51843pt x 191.9672pt>
 File: 2/figures/fig_local_minima.png Graphic file (type png)
 
 <use 2/figures/fig_local_minima.png>
@@ -549,14 +549,23 @@ Missing character: There is no Å in font cmr10!
 Missing character: There is no ¼ in font cmr10!
 Missing character: There is no Å in font cmr10!
 Missing character: There is no › in font cmr10!
-) [12 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/2/fig
-ures/fig_local_minima.png>]
+ [12 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/2/figu
+res/fig_local_minima.png>]
+<2/figures/normal_generation.png, id=239, 339.51843pt x 191.9672pt>
+File: 2/figures/normal_generation.png Graphic file (type png)
+
+<use 2/figures/normal_generation.png>
+Package pdftex.def Info: 2/figures/normal_generation.png used on input line 147
+.
+(pdftex.def)             Requested size: 412.56496pt x 233.27986pt.
+ [13]) [14 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/
+2/figures/normal_generation.png>]
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.bbl
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.brf)
 \tf@brf=\write6
 )
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 192.
- [13
+ [15
 
 
 ]
@@ -572,18 +581,18 @@ s.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 192.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 192.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 28B8AF52A12D35326DC266C317DAE63A;1117.
+(rerunfilecheck)             Checksum: 9563A58AC73609B9FEFB727706BABECD;1195.
 Package rerunfilecheck Info: File `thesis.brf' has not changed.
-(rerunfilecheck)             Checksum: 0CD0E98B6461031FD53C318EC25A8FB5;652.
+(rerunfilecheck)             Checksum: D39B30C5E7296DD324DFD0D93A1E65D9;718.
  ) 
 Here is how much of TeX's memory you used:
- 7797 strings out of 494045
- 116934 string characters out of 3155635
- 208557 words of memory out of 3000000
- 10885 multiletter control sequences out of 15000+200000
+ 7809 strings out of 494045
+ 117195 string characters out of 3155635
+ 209687 words of memory out of 3000000
+ 10892 multiletter control sequences out of 15000+200000
  12803 words of font info for 47 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 43i,12n,47p,1061b,396s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,12n,47p,1823b,396s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmbx12.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx6.pf
 b><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/MiKTeX/fonts/type1/
@@ -596,8 +605,9 @@ blic/amsfonts/cm/cmr6.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C
 c/amsfonts/cm/cmsy8.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C
 :/MiKTeX/fonts/type1/public/amsfonts/cm/cmti7.pfb><C:/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmtt10.pfb>
-Output written on thesis.pdf (17 pages, 1247787 bytes).
+Output written on thesis.pdf (19 pages, 1255833 bytes).
 PDF statistics:
- 322 PDF objects out of 1000 (max. 8388607)
- 56 named destinations out of 1000 (max. 500000)
- 174 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 340 PDF objects out of 1000 (max. 8388607)
+ 60 named destinations out of 1000 (max. 500000)
+ 187 words of extra memory for PDF output out of 10000 (max. 10000000)
+

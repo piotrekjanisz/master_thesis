@@ -12,5 +12,6 @@
 \BOOKMARK [2][]{subsection.2.2.2}{2.2.2 Block subdivision}{section.2.2}% 12
 \BOOKMARK [2][]{subsection.2.2.3}{2.2.3 Block processing}{section.2.2}% 13
 \BOOKMARK [2][]{subsection.2.2.4}{2.2.4 Lookup cache}{section.2.2}% 14
-\BOOKMARK [2][]{subsection.2.2.5}{2.2.5 Multithreading}{section.2.2}% 15
-\BOOKMARK [0][]{chapter*.11}{Bibliography}{}% 16
+\BOOKMARK [2][]{subsection.2.2.5}{2.2.5 Normals generation}{section.2.2}% 15
+\BOOKMARK [2][]{subsection.2.2.6}{2.2.6 Multithreading}{section.2.2}% 16
+\BOOKMARK [0][]{chapter*.12}{Bibliography}{}% 17

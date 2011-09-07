@@ -13,5 +13,6 @@
 \contentsline {subsection}{\numberline {2.2.2}Block subdivision}{10}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Block processing}{11}{subsection.2.2.3}
 \contentsline {subsection}{\numberline {2.2.4}Lookup cache}{12}{subsection.2.2.4}
-\contentsline {subsection}{\numberline {2.2.5}Multithreading}{12}{subsection.2.2.5}
-\contentsline {chapter}{Bibliography}{13}{chapter*.11}
+\contentsline {subsection}{\numberline {2.2.5}Normals generation}{13}{subsection.2.2.5}
+\contentsline {subsection}{\numberline {2.2.6}Multithreading}{14}{subsection.2.2.6}
+\contentsline {chapter}{Bibliography}{15}{chapter*.12}
