@@ -3,7 +3,7 @@
 
 \chapter{Rendering techniques} % top level followed by section, subsection
 
-\graphicspath{{2/figures/}}
+\graphicspath{{techniques/figures/}}
 
 % ----------------------- contents from here ------------------------
 
@@ -154,8 +154,6 @@ Yet another approach is to compute normal for every triangle that includes given
 As mentioned before processing of block is independent of one another. The algorithm uses thread pool which size can be configured and the single task is a single block. The architecture is illustrated on figure (TODO). The single thread checks if there are still blocks to process in blocks queue, takes one and extracts surface in this block. Result of extracting surface in one block is put into results list. Thread stops when there are no more task in queue. As the main thread doesn't take part in surface extraction there is possibility of working asynchronously. Main thread can render surface extracted in previous frame while working threads are extracting surface for current frame. This increases latency but it is not visible when frame rate is high. 
 
 TODO diagram
-
-TODO mention about using on clusters
 
 % ---------------------------------------------------------------------------
 % ----------------------- end of thesis sub-document ------------------------
