@@ -5,7 +5,8 @@
 %: ----------------------- introduction file header -----------------------
 \chapter{Tools}
 
-\graphicspath{{techniques/figures/}}
+
+\graphicspath{{tools/figures/}}
 
 % ----------------------------------------------------------------------
 %: ----------------------- introduction content ----------------------- 
@@ -14,9 +15,20 @@
 This chapter will present brief introduction of tools used in building visualization system. This is no intended to be a tutorial as those information can be found on the Internet. 
 
 \section{Opengl}
+OpenGL is an API specification for interacting with graphic hardware in order to produce 2D and 3D graphic. 
 OpenGl is an API specification for creating 2D and 3D graphics using dedicated graphic hardware (although software implementation of OpenGL API exists, they are really slow). As a specification it is not bound to any language, operating system or hardware. Nowadays most of (if not all) graphic cards support some version of OpenGL API. It consists of core functionality and extensions. Core functionality are functions that have to be supported and extensions as name indicates are extra features which cane either increase performance or make programming easier.
 
 At first OpenGL provided only fixed graphic pipeline functionality - which means programmers couldn't interfere in how things were done on hardware. As hardware developed such a functionality was added and coexisted with fixed one. However fixed pipeline functionality is good for learning for professional usage it's better to have a full control over the pipeline. So with introduction of OpenGL 3.0 fixed pipeline functionality became obsolete and 
+
+TODO core profile and compatibility profile
+
+TODO reference to opengl bindings http://www.opengl.org/resources/bindings/
+
+TODO reference to opengl superbible
+
+TODO image of graphic pipeline
+
+TODO mention about OpenGL ES
 
 \section{boost}
 Boost is a set of libraries extending capabilities of C++ language. Libraries provides classes and functions for most common task and algorithms, like reqular expressions, hash maps, threading. They are also cross platform. 
@@ -37,6 +49,7 @@ The main drawback is that hardware acceleration can only be performed on Nvidia 
 
 PhysX provides fluid simulations with SPH method which is used in this project. 
 
+TODO prezentacja
 % ----------------------------------------------------------------------
 
 
