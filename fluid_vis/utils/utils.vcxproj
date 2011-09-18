@@ -68,6 +68,7 @@
     <ClInclude Include="BaseConfigurationFactory.h" />
     <ClInclude Include="BaseException.h" />
     <ClInclude Include="CommandLine.h" />
+    <ClInclude Include="mymath.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
@@ -75,6 +76,7 @@
     <ClCompile Include="BaseConfigurationFactory.cpp" />
     <ClCompile Include="BaseException.cpp" />
     <ClCompile Include="CommandLine.cpp" />
+    <ClCompile Include="mymath.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>

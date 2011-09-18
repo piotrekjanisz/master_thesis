@@ -11,12 +11,15 @@ typedef boost::shared_ptr<SliceAllocator> SliceAllocatorPtr;
 
 struct CornerCacheEntry
 {
-	CornerCacheEntry() {}
-	CornerCacheEntry(int _x, int _y, double _fieldValue, bool _cubeDone = false, int _lx = -1, int _ly = -1, int _lz = -1)
-		: x(_x), y(_y), fieldValue(_fieldValue), cubeDone(_cubeDone), lx(_lx), ly(_ly), lz(_lz) {}
-
+	CornerCacheEntry() 
+		: x(0), y(0), fieldValue(0), cubeDone(false), lx(-1), ly(-1), lz(-1) {}
+	
 	CornerCacheEntry(int _lx, int _ly, int _lz)
-		: x(0), y(0), fieldValue(-1.0), cubeDone(false), lx(_lx), ly(_ly), lz(_lz) {}
+		: x(0), y(0), fieldValue(0), cubeDone(false), lx(_lx), ly(_ly), lz(_lz) {}
+
+	CornerCacheEntry(int _x, int _y, double _fieldValue, bool _cubeDone = false, int _lx = -1, int _ly = -1, int _lz = -1)
+		: x(_x), y(_y), fieldValue(_fieldValue), cubeDone(_cubeDone), lx(_lx), ly(_ly), lz(_lz) 
+	{}
 
 	int x;
 	int y;
@@ -26,6 +29,7 @@ struct CornerCacheEntry
 	int ly;
 	int lz;
 	float spaceCoord[3];
+	float normal[3];
 };
 
 

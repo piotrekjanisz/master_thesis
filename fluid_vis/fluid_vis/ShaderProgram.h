@@ -38,6 +38,8 @@ public:
 
     int getUniformLocation(const char* name);
 
+	int getActiveUniforms();
+
 	void bindFragDataLocation(int colorNumber, const char* name_);
 
 	void setUniform1i(const char* name, int value);
@@ -48,6 +50,8 @@ public:
 private:
     void loadAux(const std::string& vertexSoruce, const std::string& fragmentSource, const std::string& geometrySource) throw(ShaderException);
     int loadShader(const std::string& source, int shaderType) throw(ShaderException);
+
+	std::string shaderTypeToString(int shaderType);
 
     int _programId;
     int _vertexProgram;

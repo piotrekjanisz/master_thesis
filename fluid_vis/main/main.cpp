@@ -31,7 +31,7 @@ static NxScene* g_NxScene = NULL;
 static MyFluid* gFluid = NULL;
 static ConfigurationFactory configurationFactory("config");
 
-bool g_useSurfaceExtraction = false;
+bool g_useSurfaceExtraction = true;
 
 void createFluid() 
 {	
@@ -136,6 +136,7 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 {
 	if (key == 102) {
 		createCubeFromEye(1.0f, 50.0f);
+		//createCubeFromEye(0.5f, 50.0f);
 	} else if (key == 100) {
 		createCubesFromEye(1.0f, 50.0f, 10);
 	} else if (key == 49) {

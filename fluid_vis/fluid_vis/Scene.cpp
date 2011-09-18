@@ -1,5 +1,3 @@
-
-
 #include "Scene.h"
 #include "debug_utils.h"
 #include "filters.h"
@@ -32,6 +30,7 @@ void Scene::reshape(int width, int height)
 	CHECK_GL_CMD(_depthTexture->resize2D(width, height));
 	CHECK_GL_CMD(_waterDepthTexture->resize2D(width, height));
 	CHECK_GL_CMD(_smoothedTexture->resize2D(width, height));
+	CHECK_GL_CMD(_smoothedTexture2->resize2D(width, height));
 
 	CHECK_GL_CMD(_sceneFrameBuffer->resize(width, height));
 	CHECK_GL_CMD(_waterFrameBuffer->resize(width, height));
@@ -68,21 +67,24 @@ bool Scene::setup()
 	_screenQuadTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
 	_depthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
 	_waterDepthTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
-	_smoothedTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
+	//_smoothedTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
+	CHECK_GL_CMD(_smoothedTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
+	CHECK_GL_CMD(_smoothedTexture2 = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	_floorTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor.tga");
 	_boxTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/box.tga");
 	CHECK_GL_CMD(_skyBoxTexture = Texture::createCubeMap(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/sk2"));
 
 	// filters
 	const int GAUSS_SIZE = 21;
-	float* gaussData = new float[GAUSS_SIZE*GAUSS_SIZE];
-	Filters::createGauss2D(GAUSS_SIZE, 1.0, 10.0, gaussData);
+	const int HEAVISIDE_SIZE = 10000;
+	float* gaussData = new float[GAUSS_SIZE*GAUSS_SIZE*1000];
+	Filters::createGauss2D(GAUSS_SIZE, 1.0, 0.5, gaussData);
 	_gaussDistTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, GAUSS_SIZE, GAUSS_SIZE, 0, gaussData);
-	Filters::createGauss1D(GAUSS_SIZE, 1.0, 10.0, gaussData);
+	Filters::createGauss1D(GAUSS_SIZE, 1, 20, gaussData);
 	_gaussDist1DBilateralTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, GAUSS_SIZE, 0, gaussData);
-	Filters::createHeavisideDistribution(0.0, 1.0, 0.1, 25, gaussData);
-	_spatialDistTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 25, 0, gaussData);
-	Filters::createGauss1D(GAUSS_SIZE, 1.0, 5.0, gaussData);
+	Filters::createHeavisideDistribution(0.0, 1.0, 0.1, HEAVISIDE_SIZE, gaussData);
+	_spatialDistTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, HEAVISIDE_SIZE, 0, gaussData);
+	Filters::createGauss1D(GAUSS_SIZE, 1.0, 10, gaussData);
 	Filters::normalize(gaussData, 1, GAUSS_SIZE);
 	_gaussDist1DTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, GAUSS_SIZE, 0, gaussData);
 	delete [] gaussData;	
@@ -102,7 +104,8 @@ bool Scene::setup()
 
 	_smoothFrameBuffer = boost::make_shared<FrameBuffer>();
 	CHECK_GL_CMD(_smoothFrameBuffer->attachRenderbuffer(GL_RGBA, GL_COLOR_ATTACHMENT0, 640, 480));
-	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_DEPTH_ATTACHMENT));
+	//CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_DEPTH_ATTACHMENT));
+	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
 
 	translate(0.0f, 1.5f, -0.5f);
 	rotateX(-0.4f);
@@ -112,12 +115,13 @@ bool Scene::setup()
 	try {
 		_shaderProgram = boost::make_shared<ShaderProgram>();
 		_shaderProgram->load("shaders/vertex.glsl", "shaders/fragment.glsl");
+		DEBUG_COUT(<< _shaderProgram->getActiveUniforms() << std::endl);
 		CHECK_GL_CMD(_projectionLocation = _shaderProgram->getUniformLocation("projectionMatrix"));
 		CHECK_GL_CMD(_modelViewLocation = _shaderProgram->getUniformLocation("modelViewMatrix"));
 		CHECK_GL_CMD(_normalMatrixLocation = _shaderProgram->getUniformLocation("normalMatrix"));
 		CHECK_GL_CMD(_shaderProgram->bindFragDataLocation(0, "fragColor"));
 		CHECK_GL_CMD(_shaderProgram->setUniform1i("tex", 0));
-
+		
 		_isoSurfaceProgram = boost::make_shared<ShaderProgram>();
 		CHECK_GL_CMD(_isoSurfaceProgram->load("shaders/normalization_vertex.glsl", "shaders/water_surface_fragment.glsl"));
 		CHECK_GL_CMD(_isoSurfaceProgram->bindFragDataLocation(0, "fragColor"));
@@ -130,6 +134,7 @@ bool Scene::setup()
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("inputImage", 0));
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("gaussianDist", 1));
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("spatialDist", 2));
+		CHECK_GL_CMD(screenQuadShader->setUniform1i("linearDepth", 3));
 		CHECK_GL_CMD(screenQuadShader->bindFragDataLocation(0, "frag_color"));
 		_screenQuad = boost::make_shared<ScreenQuad>(screenQuadShader);
 
@@ -168,6 +173,12 @@ bool Scene::setup()
 		CHECK_GL_CMD(_gaussianBlurShader->setUniform1i("gaussianDist", 1));
 		CHECK_GL_CMD(_gaussianBlurShader->bindFragDataLocation(0, "frag_color"));
 		_blurQuad = boost::make_shared<ScreenQuad>(_gaussianBlurShader);
+
+		_grayscaleTextureShader = boost::make_shared<ShaderProgram>();
+		CHECK_GL_CMD(_grayscaleTextureShader->load("shaders/screen_quad_vertex.glsl", "shaders/show_texture_grayscale_fragment.glsl"));
+		CHECK_GL_CMD(_grayscaleTextureShader->setUniform1i("texture1", 0));
+		CHECK_GL_CMD(_grayscaleTextureShader->bindFragDataLocation(0, "frag_color"));
+		_grayscaleIntermediateQuad = boost::make_shared<ScreenQuad>(_grayscaleTextureShader);
 	} catch (const BaseException& ex) {
 		cout << ex.what() << endl;
 		fgetc(stdin);
@@ -265,7 +276,9 @@ void Scene::renderIsoSurface(NxScene* physicsScene)
 			_outputs[_currentOutput].clear();
 			list<TriangleMesh> meshes;
 			_mtSurfaceExtractor->waitForResults();
-			_mtSurfaceExtractor->extractSurface(myFluid->getPositionsAsync(), myFluid->getParticlesCount(), 4, &_outputs[_currentOutput]);
+			float* positions = myFluid->getPositionsAsync();
+			int particleCount = myFluid->getParticlesCountAsync();
+			_mtSurfaceExtractor->extractSurface(positions, particleCount, 4, &_outputs[_currentOutput]);
 			_currentOutput = (_currentOutput + 1) % 2;
 			CHECK_GL_CMD(_isoSurfaceProgram->useThis());
 			CHECK_GL_CMD(glUniformMatrix4fv(_isoWaterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
@@ -322,8 +335,10 @@ void Scene::render(NxScene* physicsScene)
 	}
 
 	// render fluids into depth buffer
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterFrameBuffer->getId()));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	NxFluid** fluids = physicsScene->getFluids();
 	int nbFluids = physicsScene->getNbFluids();
 
@@ -333,12 +348,25 @@ void Scene::render(NxScene* physicsScene)
 		if (myFluid) {
 			_particleCount = myFluid->getParticlesCount();
 			_waterShader->useThis();
+
+			const int PART_COUNT = 2;
+			float particles[] = {
+				0.0f, 5.0f, 0.0f, 1.0f,
+				0.0f, 5.5f, 0.0f, 1.0f,
+			};
+			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
+			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
+			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
+			CHECK_GL_CMD(_water->updateAttribute("vertex", particles, PART_COUNT));
+			CHECK_GL_CMD(_water->render(PART_COUNT, GL_POINTS, _waterShader));
+
+			/*
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
 			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
 			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
-
+			*/
 			CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterDepthFrameBuffer->getId()));
 			CHECK_GL_CMD(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 			CHECK_GL_CMD(glEnable(GL_BLEND));
@@ -350,7 +378,7 @@ void Scene::render(NxScene* physicsScene)
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterDepthProjectionLocation, 1, GL_FALSE, _projectionMatrix));
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterDepthModelViewLocation, 1, GL_FALSE, _viewMatrix));
 			CHECK_GL_CMD(_waterDepthShader->setUniform1f("pointSize", _particleSize));
-			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterDepthShader));
+			CHECK_GL_CMD(_water->render(PART_COUNT, GL_POINTS, _waterDepthShader));
 
 			CHECK_GL_CMD(glEnable(GL_DEPTH_TEST));
 			CHECK_GL_CMD(glDisable(GL_BLEND));
@@ -360,29 +388,42 @@ void Scene::render(NxScene* physicsScene)
 			CHECK_GL_CMD(_blurQuad->attachTexture(_gaussDist1DTexture, GL_TEXTURE1));
 			CHECK_GL_CMD(_blurQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 0.0f));
 			CHECK_GL_CMD(_blurQuad->render());
-
-			CHECK_GL_CMD(glClear(GL_DEPTH_BUFFER_BIT));
+			//CHECK_GL_CMD(glClear(GL_DEPTH_BUFFER_BIT));
 			CHECK_GL_CMD(_blurQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
 			CHECK_GL_CMD(_blurQuad->render());
 		}
 	}
 
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
+	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
 	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDist1DBilateralTexture, GL_TEXTURE1));
 	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_zTexture, GL_TEXTURE3));
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 0.0f));
-	CHECK_GL_CMD(_screenQuad->render());
-	glClear(GL_DEPTH_BUFFER_BIT);
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
 	CHECK_GL_CMD(_screenQuad->render());
 
+	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture2, GL_COLOR_ATTACHMENT0));
+	glClear(GL_DEPTH_BUFFER_BIT);
+	CHECK_GL_CMD(_screenQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
+	CHECK_GL_CMD(_screenQuad->render());
+	
+	CHECK_GL_CMD(_zTexture->getData(0, GL_RED, GL_FLOAT, _debugData));
+	DebugUtils::printArray(_debugData, 5, 1);
 
 	// put water together with rest of the scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	CHECK_GL_CMD(_finalQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
+	/*
+	CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
+	CHECK_GL_CMD(_grayscaleIntermediateQuad->render());
+	*/
+	
+	CHECK_GL_CMD(_finalQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
 	//CHECK_GL_CMD(_finalQuad->attachTexture(_depthTexture, GL_TEXTURE0));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneDepthTexture, GL_TEXTURE1));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneTexture, GL_TEXTURE2));
@@ -391,10 +432,9 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
 	CHECK_GL_CMD(glUniformMatrix4fv(_inverseProjectionLocation, 1, GL_FALSE, _inverseProjectionMatrix));
 	CHECK_GL_CMD(_finalQuad->render());
-
+	
 	computeFrameRate();
 }
-
 
 void Scene::displayAdditionalStats()
 {

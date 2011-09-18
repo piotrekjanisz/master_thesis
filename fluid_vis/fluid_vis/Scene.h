@@ -24,6 +24,7 @@ class Scene : public AbstractScene
 	int _normalMatrixLocation;
 	int _colorLocation;
 	int _inverseProjectionLocation;
+	int _mvpLocation;
 
 	int _quadProjectionLocation;
 	int _quadModelViewLocation;
@@ -49,6 +50,7 @@ class Scene : public AbstractScene
 	ShaderProgramPtr _finalShader;
 	ShaderProgramPtr _skyBoxShader;
 	ShaderProgramPtr _gaussianBlurShader;
+	ShaderProgramPtr _grayscaleTextureShader;
 	
 	GfxStaticObjectPtr _box;
 	GfxStaticObjectPtr _plane;
@@ -63,6 +65,7 @@ class Scene : public AbstractScene
 	TexturePtr _waterDepthTexture;
 	TexturePtr _zTexture;
 	TexturePtr _smoothedTexture;
+	TexturePtr _smoothedTexture2;
 	TexturePtr _gaussDistTexture;
 	TexturePtr _gaussDist1DTexture;
 	TexturePtr _gaussDist1DBilateralTexture;
@@ -79,6 +82,7 @@ class Scene : public AbstractScene
 	ScreenQuadPtr _screenQuad;
 	ScreenQuadPtr _blurQuad;
 	ScreenQuadPtr _finalQuad;
+	ScreenQuadPtr _grayscaleIntermediateQuad;
 
 	MyFluid* _fluid;
 

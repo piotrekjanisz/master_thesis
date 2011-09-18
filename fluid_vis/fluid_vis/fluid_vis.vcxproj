@@ -122,15 +122,20 @@
     <None Include="resources\config\sample.cfg" />
     <None Include="resources\config\water1.cfg" />
     <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
-    <None Include="resources\shaders\draw_image_fragment.glsl" />
+    <None Include="resources\shaders\debug_fragment.glsl" />
+    <None Include="resources\shaders\debug_geometry.glsl" />
+    <None Include="resources\shaders\debug_pass_through_vertex.glsl" />
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
+    <None Include="resources\shaders\draw_image_fragment.glsl" />
     <None Include="resources\shaders\final_stage_fragment.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\gaussian_blur_fragment.glsl" />
     <None Include="resources\shaders\normalization_vertex.glsl" />
+    <None Include="resources\shaders\pass_through_geometry.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />
     <None Include="resources\shaders\separable_bilateral_gauss_fragment.glsl" />
+    <None Include="resources\shaders\show_texture_grayscale_fragment.glsl" />
     <None Include="resources\shaders\skybox_fragment.glsl" />
     <None Include="resources\shaders\skybox_vertex.glsl" />
     <None Include="resources\shaders\vertex.glsl" />
@@ -157,6 +162,13 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -75,6 +75,8 @@ public:
 	void resize1D(int newSize);
 
 	void resize2D(int width, int height);
+
+	void generateMipMaps();
 private:
 
 	void setup(int width, int height, int internalFormat, GLenum dataFormat, int border, GLenum dataType);

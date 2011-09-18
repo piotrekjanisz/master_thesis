@@ -10,7 +10,10 @@
 using namespace std;
 
 ShaderProgram::ShaderProgram()
-: _vertexProgram(0), _fragmentProgram(0), _geometryProgram(0) { }
+: _vertexProgram(0), _fragmentProgram(0), _geometryProgram(0) 
+{ 
+	_programId = glCreateProgram();
+}
 
 void ShaderProgram::load(const std::string& vertexSource, const std::string& fragmentSource) throw (ShaderException)
 {
@@ -54,15 +57,14 @@ void ShaderProgram::loadAux(const std::string& vertexSoruce, const std::string& 
         _geometryProgram = loadShader(geometrySource, GL_GEOMETRY_SHADER);
     }
 
-    _programId = glCreateProgram();
     if (_vertexProgram)
         glAttachShader(_programId, _vertexProgram);
+	
+	if (_geometryProgram)
+        glAttachShader(_programId, _geometryProgram);
 
     if (_fragmentProgram)
         glAttachShader(_programId, _fragmentProgram);
-
-    if (_geometryProgram)
-        glAttachShader(_programId, _geometryProgram);
 }
 
 
@@ -86,7 +88,7 @@ int ShaderProgram::loadShader(const std::string& sourcePath, int shaderType) thr
             glGetShaderInfoLog(retVal, logLength, &charsWritten, log);
             string logStr(log);
             delete [] log;
-			throw ShaderException(string("Error while compiling ") + sourcePath + string(": ") + logStr);
+			throw ShaderException(string("Error while compiling ") + string(shaderTypeToString(shaderType)) + string(": ") + sourcePath + string(": ") + logStr);
         }
     } else {
 		throw ShaderException(string("Error while opening file: ") + sourcePath);
@@ -120,7 +122,7 @@ int ShaderProgram::getAttribLocation(const char* name)
 {
 	int retVal = glGetAttribLocation(_programId, name);
 	if (retVal == -1) {
-		throw ShaderException(string("can't find attrib: ") + string(name));
+		throw ShaderException(string("can't find attrib: \"") + string(name) + string("\""));
 	}
 	return retVal;
 }
@@ -129,7 +131,7 @@ int ShaderProgram::getUniformLocation(const char* name)
 {
 	int retVal = glGetUniformLocation(_programId, name);
 	if (retVal == -1) {
-		throw ShaderException(string("can't find uniform: ") + string(name));
+		throw ShaderException(string("can't find uniform: \"") + string(name) + string("\""));
 	}
 	return retVal;
 }
@@ -159,4 +161,25 @@ void ShaderProgram::setUniform2f(const char* name, float v0, float v1)
 	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
 	useThis();
 	CHECK_GL_CMD(glUniform2f(location, v0, v1));
+}
+
+std::string ShaderProgram::shaderTypeToString(int shaderType)
+{
+	switch (shaderType) {
+	case GL_VERTEX_SHADER:
+		return "vertex shader";
+	case GL_GEOMETRY_SHADER:
+		return "geometry shader";
+	case GL_FRAGMENT_SHADER:
+		return "fragment shader";
+	default:
+		return "unknown shader type";
+	}
+}
+
+int ShaderProgram::getActiveUniforms()
+{
+	int retVal;
+	glGetProgramiv(_programId, GL_ACTIVE_UNIFORMS, &retVal);
+	return retVal;
 }

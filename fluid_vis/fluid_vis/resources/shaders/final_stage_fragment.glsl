@@ -55,7 +55,7 @@ void main(void)
 		vec3 reflection = normalize(reflect(vec3(-1.0, -1.0, -1.0), normal));
 		float spec = max(0.0, dot(normal, reflection));
 
-		float waterDepth = texture(waterDepthTexture, tex_coord).x;
+		float waterDepth = texture(waterDepthTexture, tex_coord).x * 5;
 		//frag_color = (1.0 - waterDepth) * texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)) + waterDepth * vec4(0.0, 0.5, 1.0, 1.0);
 		frag_color = mix(texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)), vec4(0.0, 0.5, 1.0, 1.0), waterDepth);
 		float powSpec = pow(spec, 64.0);

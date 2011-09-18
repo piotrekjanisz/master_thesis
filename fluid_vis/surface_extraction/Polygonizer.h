@@ -43,11 +43,15 @@ private:
 	void vertexInterpolate(double isoTreshold, float* p1, float* p2, double isoVal1, double isoVal2, float* result);
 
 	void addVertex(float* p1, float* p2, double isoVal1, double isoVal2);
+	void addVertex(CornerCacheEntry* c1, CornerCacheEntry* c2);
 
     double _isoTreshold;
     int _vertexComponents;
+	int _normalComponents;
     float* _vertices;
+	float* _normals;
     float* _currentVertex;
+	float* _currentNormal;
     unsigned int _currentIndex;
     unsigned int* _indices;
     int _ntriag;
@@ -68,6 +72,11 @@ public:
 	Polygonizer(void);
     Polygonizer(double isoTreshold, float* vertices, int vertexComponents, unsigned int* indices)
         : _isoTreshold(isoTreshold), _vertices(vertices), _vertexComponents(vertexComponents), _indices(indices), _currentIndex(0), _currentVertex(vertices), _ntriag(0), _nvert(0)
+    {
+    }
+
+	Polygonizer(double isoTreshold, float* vertices, int vertexComponents, float* normals, int normalComponents, unsigned int* indices)
+        : _isoTreshold(isoTreshold), _vertices(vertices), _vertexComponents(vertexComponents), _normals(normals), _normalComponents(normalComponents), _indices(indices), _currentIndex(0), _currentVertex(vertices), _currentNormal(normals), _ntriag(0), _nvert(0)
     {
     }
 	

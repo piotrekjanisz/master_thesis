@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
+#include <utils/mymath.h>
 
 using namespace std;
 
@@ -139,6 +140,50 @@ double ParticleLookupCache::getFieldValueAt2(int x, int y, int z)
 			retVal += tmp*tmp - tmp + 0.25;
 		}
 		i++;
+	}
+
+	return retVal;
+}
+
+double ParticleLookupCache::getFieldValueAndNormalAt(int x, int y, int z, float* normal)
+{
+	normal[0] = 0;
+	normal[1] = 0;
+	normal[2] = 0;
+
+	double retVal = 0.0;
+	const double FAC = 2 * _rc * _rc;
+	int rc_int = ceil(_rc / _cubeSize);
+	ListType& column = get(x, y).second;
+
+	int i = 0;
+	while (i < column.size() && column[i].midZ < z - rc_int)
+		i++;
+
+    double xx = _xMin + x * _cubeSize;
+    double yy = _yMin + y * _cubeSize;
+    double zz = _zMin + z * _cubeSize;
+	while (i < column.size() && column[i].midZ <= z + rc_int) {
+		if (column[i].minZ <= z && column[i].maxZ >= z) {
+			float r_vec[3];
+			MyMath::vec_create(r_vec, xx, yy, zz,
+				column[i].particle[X], column[i].particle[Y], column[i].particle[Z]);
+
+			double r = MyMath::vec_len_square(r_vec);
+			double tmp = r / FAC;
+			double val = tmp*tmp - tmp + 0.25;
+			retVal += val;
+
+			if (r > 0) {
+				MyMath::vec_normalize(r_vec);
+			}
+			MyMath::vec_add_scaled(normal, r_vec, val);
+		}
+		i++;
+	}
+
+	if (retVal > 0) {
+		MyMath::vec_divide(normal, retVal);
 	}
 
 	return retVal;

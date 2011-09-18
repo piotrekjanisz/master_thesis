@@ -169,3 +169,9 @@ void Texture::resize2D(int width, int height)
 	glBindTexture(_textureType, _textureId);
 	glTexImage2D(_textureType, 0, _internalFormat, width, height, _border, _dataFormat, _dataType, 0);
 }
+
+void Texture::generateMipMaps()
+{
+	glBindTexture(_textureType, _textureId);
+	glGenerateMipmap(_textureType);
+}
