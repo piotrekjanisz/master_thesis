@@ -3,7 +3,7 @@
 
 \chapter{Rendering techniques} % top level followed by section, subsection
 
-\graphicspath{{2/figures/}}
+\graphicspath{{techniques/figures/}}
 
 % ----------------------- contents from here ------------------------
 
@@ -90,7 +90,7 @@ where $s$ is a center of particle, $D_{R_c}(p)$ is a disc with p as a center and
 \begin{equation}
 \label{eq:single_field_equation}
 f(r) = \left\{ \begin{array}{ll}
-{r \over \sqrt{2}R_c} )^4 - ( {r \over \sqrt{2}R_c} )^2 + 0.25 & \textrm{if $r < R_c$}\\
+({r \over \sqrt{2}R_c} )^4 - ( {r \over \sqrt{2}R_c} )^2 + 0.25 & \textrm{if $r < R_c$}\\
 0 & \textrm{otherwise}\\
 \end{array} \right.
 \end{equation}
@@ -105,19 +105,55 @@ Space is divided into blocks containing cubes. Such a division aims for:
 \item Reduce memory consumption - smaller blocks contains less particles and cubes. 
 \item Allowing for parallelize algorithm in an easy way - because processing one block is an independent of processing other blocks. 
 \end{itemize}
-Blocks are expanded to contain also particles that lies outside them but may influence the field values inside block. That means the block must also contain particles lying within $R_c$ distance from it - this area is called margin and have special treatment, which will be described in next section. Expanding blocks makes parallel processing very easy as there are no dependencies between them.
+Blocks are expanded to contain also particles that lies outside them but may influence the field values inside block. That means the block must also contain particles lying within $R_c$ distance from it - this area is called margin and has special treatment, which will be described in next section. Expanding blocks makes parallel processing very easy as there are no dependencies between them.
+
+TODO imgae of block
 
 Block subdivision is a first step of the algorithm. For every particle containing blocks are computed. One particle can be contained in at most 8 blocks due to blocks overlapping. Each block has a list of particles lying within its boundary. 
 
 \subsection{Block processing} \label{sec:block_processing}
-Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next surface following marching cube algorithm is run inside block. The algorithm is named marching slices in \cite{RosenbergBirdwell2008}. Block containing $n x n x n$ blocks is divided on n slabs and n+1 slices (TODO rysunek). Division is made in parallel to XY plane. Each slab contains $n x n x 1$ blocks. Slices lies between slabs and serves as a cache. In addition neighboring slabs share slices that lies between them. 
+Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next surface following marching cube algorithm is run inside block. The algorithm is named marching slices in \cite{RosenbergBirdwell2008}. Block containing $n \times n \times n$ cubes is divided to n slabs and n+1 slices (TODO rysunek). Division is made in parallel to XY plane. Each slab contains $n \times n \times 1$ cubes and each slice contains $(n+1) \times (n+1) \times 1$ cube corners. Slices lies between slabs and serves as a cache for field values computed at corners. In addition neighboring slabs share slices that lies between them. Each slab has a list of cubes lying within it that should be visited - a todo list.
+
+To speed up a marching cubes algorithm we would like to traverse only cubes that contains surface. This requires finding so called seeding cubes - initial cubes at which algorithm will start traversing block. We then choose one slab tat contains one or more seed cubes and pick up one cube. Field values at cube corners are calculated and put into slice caches, surface is polygonized and neighboring cubes that contain surface are added to todo lists of [odpowiadajacy] slabs. 
+
+If we pick up a random slabs and cubes each time then we have to keep all cached values in slices while processing a cube. The idea of marching slices is to decrease memory used by cache by traversing cubes slice by slice and deallocate caches as soon as possible. This can be done by always picking the lowest slab with not empty todo list and finding seeding cubes in the lowest possible slabs. 
+
+The optimum would be to find surfaces all local minimas - then we would have to store only cache in slices below and above current slab. However this is approach would be time consuming. \cite{RosenbergBirdwell2008} used heuristic approach with complexity O(P) where P is a number of particles. The algorihtm is as follows:
+\begin{verbatim}
+for every particle:
+        take a corner closest to particle center
+        while F(c) > treshold and |c - c_start| < 2 do
+                c = corner below c
+        if F(c) < treshold
+                add cube to it's slab todo list
+\end{verbatim}
+
+This method will not find local minimas every time as it always goes down from the centre of a particle. Figure~\ref{fig_local_minima} shows the case when algorighm (TODO ref) fails to find a local minimum. 
+
+\figuremacroW{fig_local_minima}{Finding local minima}{In this example algorithm fails to find local minimum}{0.7}
 
 \subsection{Lookup cache}\label{sec:lookupcache}
-To compute field value for a given corner all particles that lies within $r_c$ from it have to be found. This task can be accomplished by building space partitioning data structure like octtree (TODO może odnośniki). However .......... . \cite{RosenbergBirdwell2008} presented another to accomplish this task. Presented method does use only integer comparison ........ .
+To compute field value for a given corner all particles that lies within $r_c$ from it have to be found. This task can be accomplished by building space partitioning data structure like octtree or kdtree (TODO może odnośniki). However costs of building spatial data structures are relatively high, and the nearest neighbor finding algorithm requires floating point computations. \cite{RosenbergBirdwell2008} presented another to accomplish this task. Presented method does use only integer comparison. The main observation is that we are looking nearest particles in discrete points. Thus obvious approach would be to create a linked list for all corners containing all particles lying within $r_c$ from it. So for every particle we would traverse all corners lying inside a sphere of radius $r_c$ and update their particles list by inserting the current one. TODO mention about. The main disadvantage of this approach is that we have to store a information for each corner, and for every corner we have to store OSOBNA list. This can be improved by using more sparse data structure. For a block we can store only one slice (so called projection slice) as a 2D array of $N+1$ by $N+1$. Element (x, y) of the array represents a column (x, y) and stores a linked list of particles that have influence in that column. TODO image. To make particle lookup procedure more efficient each list is sorted by particles z coordinate. Each element of the list contains three integer values - $min_z$, $max_z$, $mid_z$ and a pointer to particle. $min_z$ and $max_z$ specifies range of slices in which particle has influence and $mid_z$ is a slab that contains center of the particle. 
 
+Initialization of cache starts with sorting all particles by z coordinate. Then we iterate over sorted particles and each particle is inserted into all columns in which it have an influence. 
+
+Looking up particle
+
+\subsection{Normals generation}\label{sec:normals}
+In order to properly shade extracted surface normal vevtors have to be computed for every vertex. The simplest approach is to generate one normal for each triangle, perpendicular to its surface and assign it to all three triangle vertices. This requires that vertices are not shared between triangles thus it's not applicable with surface extraction method used. 
+
+Another approach is to compute normal at each vertex as a gradient (FIXME) of scalar field. (TODO wzor). As values of field are given only in corners and mostly lies between them the interpolation is required. Also this increases amount of corners at which scalar field value must be computed. Another disadvantage is that in order to speed up process of normal generation in this case normals can't be generated after extracting isosurface. This is due to clearing caches, and thus normals have to be computed in the same time vertex are added to todo list. This results in more complicated code.
+
+\figuremacroW{normal_generation}{Different approaches to normal generation}{gradient, average, weighted average based on triangle area, weighted average based on incident angle}{1.0}
+
+Yet another approach is to compute normal for every triangle that includes given vertex and use a average or weighted average as a vertex normal. Simple average can be computed effectively however it produces visible artifacts for sparse grids. This is because some triangles are long and narrow and should not have so much impact on final normal. To solve this weighted average can be used. Weights can be the area of triangle or an angle by given vertex. In my algorithm weight are the angles because with area long and narrow triangles with will still can have much impact on normal. 
 
 \subsection{Multithreading}
-diagram
+\cite{RosenbergBirdwell2008} presented algorithm that run in one thread. However algorithm has a potential of parallelization due to block processing. Parallelization of this algorithm is even more desired as nowadays CPU manufacturers increase performance by multiplying CPU cores instead of increasing clock frequency of single core. 
+
+As mentioned before processing of block is independent of one another. The algorithm uses thread pool which size can be configured and the single task is a single block. The architecture is illustrated on figure (TODO). The single thread checks if there are still blocks to process in blocks queue, takes one and extracts surface in this block. Result of extracting surface in one block is put into results list. Thread stops when there are no more task in queue. As the main thread doesn't take part in surface extraction there is possibility of working asynchronously. Main thread can render surface extracted in previous frame while working threads are extracting surface for current frame. This increases latency but it is not visible when frame rate is high. 
+
+TODO diagram
 
 % ---------------------------------------------------------------------------
 % ----------------------- end of thesis sub-document ------------------------
