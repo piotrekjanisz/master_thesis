@@ -100,11 +100,16 @@ class Scene : public AbstractScene
 	std::list<TriangleMesh> _outputs[2];
 	int _currentOutput;
 
+	double _bilateralTreshold;
+
 public:
 	Scene();
 
 	virtual bool setup();
 	virtual void render();
+
+	void changeBilateralTreshold(double change);
+
 	void render(NxScene* physicsScene);
 	void renderIsoSurface(NxScene* physicsScene);
 

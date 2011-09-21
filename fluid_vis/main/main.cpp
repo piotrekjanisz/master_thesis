@@ -31,7 +31,7 @@ static NxScene* g_NxScene = NULL;
 static MyFluid* gFluid = NULL;
 static ConfigurationFactory configurationFactory("config");
 
-bool g_useSurfaceExtraction = true;
+bool g_useSurfaceExtraction = false;
 
 void createFluid() 
 {	
@@ -143,6 +143,10 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 		g_scene.incParticleSize(-1.0f);
 	} else if (key == 50) {
 		g_scene.incParticleSize(1.0f);
+	} else if (key == 51) {
+		g_scene.changeBilateralTreshold(-0.0005);
+	} else if (key == 52) {
+		g_scene.changeBilateralTreshold(0.0005);
 	}
 	cout << key << endl;
 }
