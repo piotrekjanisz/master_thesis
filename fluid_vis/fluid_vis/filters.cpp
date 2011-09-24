@@ -31,6 +31,21 @@ void Filters::createGauss1D(int size, double step, double sigma, float* data)
 	}
 }
 
+int Filters::createGauss1DArray(int maxWidth, double valAtEdge, float* data)
+{
+	int retVal = 0;
+	float* currentData = data;
+	for (int width = maxWidth; width >= 3; width -= 2) {
+		retVal++;
+		int a = width / 2;
+		double sigma = sqrt((-a*a)/(2*log(valAtEdge)));
+		createGauss1D(width, 1.0, sigma, currentData);
+
+		currentData += maxWidth;
+	}
+	return retVal;
+}	
+
 void Filters::normalize(float* data, int rows, int cols)
 {
 	double sum = 0.0;

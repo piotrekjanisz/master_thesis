@@ -12,18 +12,26 @@ struct Shape
 	unsigned int* indices;
 	float* vertices;
 	float* normals;
+	float* tangents;
+	float* bitangents;
 	float* texCoords;
+
 	unsigned int indicesCount;
 	unsigned int verticesCount;
 	PrimitiveType primitiveType;
 
 	Shape(float* _vertices, unsigned int _verticesCount, float* _normals, unsigned int* _indices, unsigned int _indicesCount, float* _texCoords = 0, PrimitiveType _primitiveType = TRIANGLES) 
-		:vertices(_vertices), verticesCount(_verticesCount), normals(_normals), indices(_indices), indicesCount(_indicesCount), texCoords(_texCoords), primitiveType(_primitiveType)
+		:vertices(_vertices), verticesCount(_verticesCount), normals(_normals), tangents(0), bitangents(0), indices(_indices), indicesCount(_indicesCount), texCoords(_texCoords), primitiveType(_primitiveType)
+	{
+	}
+
+	Shape(float* _vertices, unsigned int _verticesCount, float* _normals, float* _tangents, float* _bitangents, unsigned int* _indices, unsigned int _indicesCount, float* _texCoords = 0, PrimitiveType _primitiveType = TRIANGLES)
+		:vertices(_vertices), verticesCount(_verticesCount), normals(_normals), tangents(_tangents), bitangents(_bitangents), indices(_indices), indicesCount(_indicesCount), texCoords(_texCoords), primitiveType(_primitiveType)
 	{
 	}
 
 	Shape(unsigned int _verticesCount, unsigned int _indicesCount)
-		: verticesCount(_verticesCount), indicesCount(_indicesCount), vertices(0), normals(0), texCoords(0), indices(0), primitiveType(TRIANGLES)
+		: verticesCount(_verticesCount), indicesCount(_indicesCount), vertices(0), normals(0), tangents(0), bitangents(0), texCoords(0), indices(0), primitiveType(TRIANGLES)
 	{
 		vertices = new float[verticesCount * 4];
 		normals = new float[verticesCount * 3];
@@ -37,6 +45,12 @@ struct Shape
 		}
 		if (normals) {
 			delete [] normals;
+		}
+		if (tangents) {
+			delete [] tangents;
+		}
+		if (bitangents) {
+			delete [] bitangents;
 		}
 		if (indices) {
 			delete [] indices;

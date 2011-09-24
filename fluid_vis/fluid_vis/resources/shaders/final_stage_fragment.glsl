@@ -10,6 +10,7 @@ uniform samplerCube cubeMap;
 
 uniform vec2 coordStep;
 uniform mat4 inverseProjection;
+uniform vec4 lightDirection;
 
 out vec4 frag_color;
 
@@ -52,7 +53,7 @@ void main(void)
 		vec3 eye = unproject(tex_coord, texture(depthTexture, tex_coord).x, inverseProjection);
 		float reflectance = 0.02 + (1.0 - 0.02) * pow(1 - dot(normal, eye), 5.0);
 
-		vec3 reflection = normalize(reflect(vec3(-1.0, -1.0, -1.0), normal));
+		vec3 reflection = normalize(reflect(lightDirection.xyz, normal));
 		float spec = max(0.0, dot(normal, reflection));
 
 		float waterDepth = texture(waterDepthTexture, tex_coord).x;

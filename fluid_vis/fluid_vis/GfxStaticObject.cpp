@@ -70,6 +70,12 @@ void GfxStaticObject::createFromShape(const ShapePtr& shape) throw(GfxException)
 	if (shape->normals != 0) {
 		addAttribute("normal", shape->normals, shape->verticesCount, 3);
 	}	
+	if (shape->tangents != 0) {
+		addAttribute("tangent", shape->tangents, shape->verticesCount, 3);
+	}
+	if (shape->bitangents != 0) {
+		addAttribute("bitangent", shape->bitangents, shape->verticesCount, 3);
+	}
 	if (shape->texCoords != 0) {
 		addAttribute("tex_coord", shape->texCoords, shape->verticesCount, 2);
 	}

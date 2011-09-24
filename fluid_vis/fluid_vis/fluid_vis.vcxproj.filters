@@ -208,5 +208,11 @@
     <None Include="resources\shaders\show_texture_grayscale_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="resources\shaders\normal_map_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\normal_map_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

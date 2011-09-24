@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -18,24 +19,6 @@ ShaderProgram::ShaderProgram()
 void ShaderProgram::load(const std::string& vertexSource, const std::string& fragmentSource) throw (ShaderException)
 {
     loadAux(vertexSource, fragmentSource, "");
-    glLinkProgram(_programId);
-
-    int linked;
-    glGetProgramiv(_programId, GL_LINK_STATUS, &linked);
-
-    if (!linked) {
-        int logLength;
-        glGetProgramiv(_programId, GL_INFO_LOG_LENGTH, &logLength);
-
-        char* log = new char[logLength];
-        string logStr(log);
-        delete[] log;
-
-        int charsWritten;
-        glGetProgramInfoLog(_programId, logLength, &charsWritten, log);
-
-		throw ShaderException(string("error while linking shader: \n") + logStr);
-    }
 }
 
 void ShaderProgram::load(const std::string& vertexSource, const std::string& fragmentSource, const std::string& geometrySource) throw (ShaderException)
@@ -65,6 +48,55 @@ void ShaderProgram::loadAux(const std::string& vertexSoruce, const std::string& 
 
     if (_fragmentProgram)
         glAttachShader(_programId, _fragmentProgram);
+
+	
+	glLinkProgram(_programId);
+
+    int linked;
+    glGetProgramiv(_programId, GL_LINK_STATUS, &linked);
+
+    if (!linked) {
+        int logLength;
+        glGetProgramiv(_programId, GL_INFO_LOG_LENGTH, &logLength);
+
+        char* log = new char[logLength];
+        string logStr(log);
+        delete[] log;
+
+        int charsWritten;
+        glGetProgramInfoLog(_programId, logLength, &charsWritten, log);
+
+		throw ShaderException(string("error while linking shader: \n") + logStr);
+    }
+
+	parseParameters();
+}
+
+
+void ShaderProgram::parseParameters()
+{
+	int count;
+	const int NAME_BUFFER_SIZE = 256;
+	char nameBuffer[NAME_BUFFER_SIZE];
+	int nameLen;
+
+	count = getActiveUniforms();
+	for (int i = 0; i < count; i++) {
+		ShaderParameter uniform;
+		uniform.index = i;
+		glGetActiveUniform(getId(), i, NAME_BUFFER_SIZE, &nameLen,  &(uniform.size), &(uniform.type), nameBuffer);
+		uniform.name = std::string(nameBuffer);
+		_uniforms[uniform.name] = uniform;
+	}
+
+	count = getActiveAttributes();
+	for (int i = 0; i < count; i++) {
+		ShaderParameter attribute;
+		attribute.index = i;
+		glGetActiveAttrib(getId(), i, NAME_BUFFER_SIZE, &nameLen, &(attribute.size), &(attribute.type), nameBuffer);
+		attribute.name = std::string(nameBuffer);
+		_attributes[attribute.name] = attribute;
+	}
 }
 
 
@@ -163,6 +195,32 @@ void ShaderProgram::setUniform2f(const char* name, float v0, float v1)
 	CHECK_GL_CMD(glUniform2f(location, v0, v1));
 }
 
+void ShaderProgram::setUniform3f(const char* name, float* data)
+{
+	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
+	useThis();
+	CHECK_GL_CMD(glUniform3fv(location, 1, data));
+}
+
+void ShaderProgram::setUniform4f(const char* name, float* data)
+{
+	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
+	useThis();
+	CHECK_GL_CMD(glUniform4fv(location, 1, data));
+}
+
+void ShaderProgram::setUniformMat4f(const char* name, float* data)
+{
+	useThis();
+	glUniformMatrix4fv(_uniforms.at(name).index, 1, GL_FALSE, data);
+}
+
+void ShaderProgram::setUniformMat3f(const char* name, float* data)
+{
+	useThis();
+	glUniformMatrix3fv(_uniforms.at(name).index, 1, GL_FALSE, data);
+}
+
 std::string ShaderProgram::shaderTypeToString(int shaderType)
 {
 	switch (shaderType) {
@@ -180,6 +238,25 @@ std::string ShaderProgram::shaderTypeToString(int shaderType)
 int ShaderProgram::getActiveUniforms()
 {
 	int retVal;
-	glGetProgramiv(_programId, GL_ACTIVE_UNIFORMS, &retVal);
+	glGetProgramiv(getId(), GL_ACTIVE_UNIFORMS, &retVal);
 	return retVal;
+}
+
+int ShaderProgram::getActiveAttributes()
+{
+	int retVal;
+	glGetProgramiv(getId(), GL_ACTIVE_ATTRIBUTES, &retVal);
+	return retVal;
+}
+
+void ShaderProgram::printParameters()
+{
+	std::cout << "UNIFORMS: " << std::endl;
+	for (map<string, ShaderParameter>::iterator it = _uniforms.begin(); it != _uniforms.end(); ++it) {
+		std::cout << "\t" << it->first << std::endl;
+	}
+	std::cout << "ATTRIBUTES: " << std::endl;
+	for (map<string, ShaderParameter>::iterator it = _attributes.begin(); it != _attributes.end(); ++it) {
+		std::cout << "\t" << it->first << std::endl;
+	}
 }

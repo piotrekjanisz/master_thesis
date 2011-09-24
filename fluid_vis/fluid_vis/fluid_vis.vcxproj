@@ -128,6 +128,8 @@
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\gaussian_blur_fragment.glsl" />
     <None Include="resources\shaders\normalization_vertex.glsl" />
+    <None Include="resources\shaders\normal_map_fragment.glsl" />
+    <None Include="resources\shaders\normal_map_vertex.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />
     <None Include="resources\shaders\separable_bilateral_gauss_fragment.glsl" />

@@ -94,4 +94,24 @@ BOOST_AUTO_TEST_CASE(createHeaviside)
 	}
 }
 
+BOOST_AUTO_TEST_CASE(createGauss1DArray_properRetVal)
+{
+	const int MAX_SIZE = 21;
+	int retVal = Filters::createGauss1DArray(MAX_SIZE, 0.2, data);
+	BOOST_CHECK_EQUAL(retVal, (MAX_SIZE - 3) / 2 + 1);
+}
+
+BOOST_AUTO_TEST_CASE(createGauss1DArray_properValuesAtEdgesAndInTheMiddle)
+{
+	const int MAX_SIZE = 21;
+	int size = Filters::createGauss1DArray(MAX_SIZE, 0.2, data);
+	int s = MAX_SIZE;
+	for (int i = size; i < size; i++) {
+		BOOST_CHECK_CLOSE_FRACTION(data[MAX_SIZE*i], 0.2, TestUtils::FLOAT_PRECISION);
+		BOOST_CHECK_CLOSE_FRACTION(data[MAX_SIZE*i + s - 1], 0.2, TestUtils::FLOAT_PRECISION);
+		BOOST_CHECK_CLOSE_FRACTION(data[MAX_SIZE*i + s/2 -1], 1.0, TestUtils::FLOAT_PRECISION);
+		s -= 2;
+	}
+}
+
 BOOST_AUTO_TEST_SUITE_END();

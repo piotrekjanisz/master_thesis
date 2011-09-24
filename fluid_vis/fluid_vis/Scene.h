@@ -43,6 +43,7 @@ class Scene : public AbstractScene
 	int _isoWaterNormalLocation;
 
 	ShaderProgramPtr _shaderProgram;
+	ShaderProgramPtr _normalMapShader;
 	ShaderProgramPtr _isoSurfaceProgram;
 	ShaderProgramPtr _waterShader;
 	ShaderProgramPtr _waterDepthShader;
@@ -73,6 +74,7 @@ class Scene : public AbstractScene
 
 	TexturePtr _boxTexture;
 	TexturePtr _floorTexture;
+	TexturePtr _floorNormalMapTexture;
 	TexturePtr _skyBoxTexture;
 
 	FrameBufferPtr _sceneFrameBuffer;
@@ -101,6 +103,16 @@ class Scene : public AbstractScene
 	int _currentOutput;
 
 	double _bilateralTreshold;
+	int _bilateralGaussSize;
+	double _bilateralGaussSigma;
+	int _additionalBlurPhases;
+
+	double _depthGaussSigma;
+	int _depthGaussSize;
+
+	float _particleDepth;
+
+	vmml::vec4f _lightDirection;
 
 public:
 	Scene();
@@ -109,6 +121,12 @@ public:
 	virtual void render();
 
 	void changeBilateralTreshold(double change);
+	void changeGauss(int sizeChange, double sigmaChange);
+	void changeDepthGauss(int sizeChange, double sigmaChange);
+	void changeAdditionalBlurPhases(int change);
+	void changeParticleDepth(float change);
+
+	void rotateLightDir(float xrot, float yrot);
 
 	void render(NxScene* physicsScene);
 	void renderIsoSurface(NxScene* physicsScene);
@@ -119,6 +137,11 @@ public:
 
 	void incParticleSize(float val) {
 		_particleSize = max(_particleSize + val, 10.0f);
+	}
+
+	vmml::vec4f getLightInEyeSpace()
+	{
+		return _viewMatrix * _lightDirection;
 	}
 };
 

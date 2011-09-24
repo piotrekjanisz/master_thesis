@@ -30,13 +30,14 @@ protected:
 	vmml::mat4f _projectionMatrix;
 	vmml::mat4f _inverseProjectionMatrix;
 	vmml::mat4f _viewMatrix;
+	vmml::mat4f _modelViewProjectionMatrix;
 	
 	void setProjectionMatrix(float fov, float aspect, float zNear, float zFar);
 	void setProjectionMatrix(float aspect) { setProjectionMatrix(_fov, aspect, _zNear, _zFar); }
 
 	void setOrthographicProjectionMatrix(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax);
 
-	void setupViewMatrix();
+	void setupMatrixes();
 	
 	vmml::mat3f getNormalMatrix(const vmml::mat4f& modelView);
 
