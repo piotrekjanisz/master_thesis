@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  15 SEP 2011 16:33
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  4 OCT 2011 21:37
 entering extended mode
 **//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/thesis.tex
 
@@ -359,19 +359,6 @@ Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 \Gin@req@height=\dimen124
 \Gin@req@width=\dimen125
 ))
-(C:\MiKTeX\tex\latex\oberdiek\epstopdf.sty
-Package: epstopdf 2010/02/09 v2.5 Conversion with epstopdf on the fly (HO)
-
-(C:\MiKTeX\tex\latex\oberdiek\epstopdf-base.sty
-Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
-
-(C:\MiKTeX\tex\latex\oberdiek\grfext.sty
-Package: grfext 2010/08/19 v1.1 Managing graphics extensions (HO)
-)
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.jpg,.jpeg,.pdf,.gif,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
-))
 \@input{Latex/Macros/MacroFile1.aux}
 
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\Latex/Macro
@@ -385,20 +372,20 @@ n/introduction.aux)
 .aux)
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
 techniques.aux))
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
  (C:\MiKTeX\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count113
@@ -417,8 +404,8 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box53
-Package backref Info: ** backref set up for natbib ** on input line 91.
-Package hyperref Info: Link coloring OFF on input line 91.
+Package backref Info: ** backref set up for natbib ** on input line 88.
+Package hyperref Info: Link coloring OFF on input line 88.
  (C:\MiKTeX\tex\latex\hyperref\nameref.sty
 Package: nameref 2010/04/30 v2.40 Cross-referencing by name of section
 
@@ -427,19 +414,18 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count119
 )
-LaTeX Info: Redefining \ref on input line 91.
-LaTeX Info: Redefining \pageref on input line 91.
-LaTeX Info: Redefining \nameref on input line 91.
+LaTeX Info: Redefining \ref on input line 88.
+LaTeX Info: Redefining \pageref on input line 88.
+LaTeX Info: Redefining \nameref on input line 88.
 
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
 \@outlinefile=\write4
-<0_frontmatter/figures/logo.png, id=95, 301.125pt x 129.48375pt>
+<0_frontmatter/figures/logo.png, id=107, 301.125pt x 129.48375pt>
 File: 0_frontmatter/figures/logo.png Graphic file (type png)
 
 <use 0_frontmatter/figures/logo.png>
-Package pdftex.def Info: 0_frontmatter/figures/logo.png used on input line 102.
-
+Package pdftex.def Info: 0_frontmatter/figures/logo.png used on input line 99.
 (pdftex.def)             Requested size: 113.81102pt x 48.93958pt.
  [1
 
@@ -463,20 +449,19 @@ File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 LaTeX Font Info:    Try loading font information for U+msb on input line 3.
  (C:\MiKTeX\tex\latex\amsfonts\umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-))
-\tf@toc=\write5
-
+)
 [3
 \FN@pp@footnotehinttrue 
 
 
-] [4
-
-]
+])
+\tf@toc=\write5
+ [4]
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\introductio
 n/introduction.tex
  1.
 ) [1
+
 
 
 ]
@@ -487,46 +472,170 @@ n/introduction.tex
 
 ]
  2.
-Package epstopdf Info: Source file: <tools/figures/largepotato.eps>
-(epstopdf)                    date: 2011-08-11 09:25:25
-(epstopdf)                    size: 140234 bytes
-(epstopdf)             Output file: <tools/figures/largepotato-eps-converted-to
-.pdf>
-(epstopdf)             Command: <epstopdf --outfile=tools/figures/largepotato-e
-ps-converted-to.pdf tools/figures/largepotato.eps>
-(epstopdf)             \includegraphics on input line 23.
-runsystem(epstopdf --outfile=tools/figures/largepotato-eps-converted-to.pdf too
-ls/figures/largepotato.eps)...executed (allowed).
+[3] <tools/figures/opengl_pipeline.jpg, id=180, 689.57625pt x 486.31688pt>
+File: tools/figures/opengl_pipeline.jpg Graphic file (type jpg)
 
-Package epstopdf Info: Result file: <tools/figures/largepotato-eps-converted-to
-.pdf>.
+<use tools/figures/opengl_pipeline.jpg>
+Package pdftex.def Info: tools/figures/opengl_pipeline.jpg used on input line 3
+1.
+(pdftex.def)             Requested size: 412.56496pt x 290.96127pt.
+ [4] [5 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/too
+ls/figures/opengl_pipeline.jpg>]
+[6]) [7]
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
+techniques.tex [8
 
-! Package pdftex.def Error: File `tools/figures/largepotato-eps-converted-to.pd
-f' not found.
 
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.23 \includegraphics{largepotato.eps}
-                                      
-? 
-! Emergency stop.
- ...                                              
-                                                  
-l.23 \includegraphics{largepotato.eps}
-                                      
-Using draft setting for this image.
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
 
- 
+]
+ 3.
+<techniques/figures/screen_space.png, id=215, 630.10406pt x 465.99094pt>
+File: techniques/figures/screen_space.png Graphic file (type png)
+
+<use techniques/figures/screen_space.png>
+Package pdftex.def Info: techniques/figures/screen_space.png used on input line
+ 16.
+(pdftex.def)             Requested size: 288.7942pt x 213.57628pt.
+
+<techniques/figures/spheres.png, id=226, 336.50719pt x 335.75438pt>
+File: techniques/figures/spheres.png Graphic file (type png)
+
+<use techniques/figures/spheres.png>
+Package pdftex.def Info: techniques/figures/spheres.png used on input line 22.
+(pdftex.def)             Requested size: 206.28247pt x 205.82426pt.
+ [9]
+<techniques/figures/spheres_no_smoothing.png, id=237, 481.8pt x 360.59718pt>
+File: techniques/figures/spheres_no_smoothing.png Graphic file (type png)
+
+<use techniques/figures/spheres_no_smoothing.png>
+Package pdftex.def Info: techniques/figures/spheres_no_smoothing.png used on in
+put line 39.
+(pdftex.def)             Requested size: 288.7942pt x 216.15088pt.
+ [10 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/screen_space.png>]
+<techniques/figures/gaussian_filter_img.png, id=246, 339.51843pt x 191.9672pt>
+File: techniques/figures/gaussian_filter_img.png Graphic file (type png)
+
+<use techniques/figures/gaussian_filter_img.png>
+Package pdftex.def Info: techniques/figures/gaussian_filter_img.png used on inp
+ut line 43.
+(pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
+ [11 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/spheres.png>]
+[12 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
+ues/figures/spheres_no_smoothing.png> <//cern.ch/dfs/Users/p/pjanisz/Documents/
+master/master_thesis/paper/techniques/figures/gaussian_filter_img.png>]
+<techniques/figures/bilateral_comp.png, id=267, 339.51843pt x 191.9672pt>
+File: techniques/figures/bilateral_comp.png Graphic file (type png)
+
+<use techniques/figures/bilateral_comp.png>
+Package pdftex.def Info: techniques/figures/bilateral_comp.png used on input li
+ne 61.
+(pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
+
+<techniques/figures/edge_preservation.png, id=272, 339.51843pt x 191.9672pt>
+File: techniques/figures/edge_preservation.png Graphic file (type png)
+
+<use techniques/figures/edge_preservation.png>
+Package pdftex.def Info: techniques/figures/edge_preservation.png used on input
+ line 64.
+(pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
+ [13 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/bilateral_comp.png>] [14 <//cern.ch/dfs/Users/p/pjanisz/Documents/
+master/master_thesis/paper/techniques/figures/edge_preservation.png>] [15]
+<techniques/figures/metaballs.png, id=300, 702.625pt x 200.75pt>
+File: techniques/figures/metaballs.png Graphic file (type png)
+
+<use techniques/figures/metaballs.png>
+Package pdftex.def Info: techniques/figures/metaballs.png used on input line 10
+0.
+(pdftex.def)             Requested size: 412.56496pt x 117.87784pt.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 105.
+
+ (C:\MiKTeX\tex\latex\base\omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 105.
+
+[16 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
+ues/figures/metaballs.png (PNG copy)>] [17]
+<techniques/figures/fig_local_minima.png, id=317, 339.51843pt x 191.9672pt>
+File: techniques/figures/fig_local_minima.png Graphic file (type png)
+
+<use techniques/figures/fig_local_minima.png>
+Package pdftex.def Info: techniques/figures/fig_local_minima.png used on input 
+line 133.
+(pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
+Missing character: There is no Å in font cmr10!
+Missing character: There is no ¼ in font cmr10!
+Missing character: There is no Å in font cmr10!
+Missing character: There is no › in font cmr10!
+ [18 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/fig_local_minima.png>] <techniques/figures/normal_generation.png, 
+id=325, 339.51843pt x 191.9672pt>
+File: techniques/figures/normal_generation.png Graphic file (type png)
+
+<use techniques/figures/normal_generation.png>
+Package pdftex.def Info: techniques/figures/normal_generation.png used on input
+ line 147.
+(pdftex.def)             Requested size: 412.56496pt x 233.27986pt.
+ [19] [20 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
+echniques/figures/normal_generation.png>]) [21]
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.bbl
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.brf)
+\tf@brf=\write6
+[22
+
+
+]
+Missing character: There is no â in font cmti7!
+Missing character: There is no € in font cmti7!
+Missing character: There is no “ in font cmti7!
+)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 192.
+ [23]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 192.
+
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.aux
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\0_frontmatt
+er/abstract.aux)
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\introductio
+n/introduction.aux)
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\tools/tools
+.aux)
+(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
+techniques.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 192.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 192.
+Package rerunfilecheck Info: File `thesis.out' has not changed.
+(rerunfilecheck)             Checksum: 4422C5CC8E5AE2A4DD0129F9313E6002;1758.
+Package rerunfilecheck Info: File `thesis.brf' has not changed.
+(rerunfilecheck)             Checksum: B0B8DEE054210BB226AEBD5F67C0E000;1170.
+ ) 
 Here is how much of TeX's memory you used:
- 7777 strings out of 494045
- 115814 string characters out of 3155635
- 212240 words of memory out of 3000000
- 10901 multiletter control sequences out of 15000+200000
- 11058 words of font info for 41 fonts, out of 3000000 for 9000
+ 7890 strings out of 494045
+ 119329 string characters out of 3155635
+ 211271 words of memory out of 3000000
+ 10936 multiletter control sequences out of 15000+200000
+ 13616 words of font info for 51 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 43i,11n,45p,667b,379s stack positions out of 5000i,500n,10000p,200000b,50000s
-!  ==> Fatal error occurred, no output PDF file produced!
+ 43i,12n,48p,1832b,453s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmbx12.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx6.pf
+b><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmex10.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmmi8.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pf
+b><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/MiKTeX/fonts/type1/pu
+blic/amsfonts/cm/cmr6.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C
+:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/MiKTeX/fonts/type1/publi
+c/amsfonts/cm/cmsy8.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C
+:/MiKTeX/fonts/type1/public/amsfonts/cm/cmti7.pfb><C:/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmtt10.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on thesis.pdf (27 pages, 1357259 bytes).
+PDF statistics:
+ 452 PDF objects out of 1000 (max. 8388607)
+ 82 named destinations out of 1000 (max. 500000)
+ 264 words of extra memory for PDF output out of 10000 (max. 10000000)
+

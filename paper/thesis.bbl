@@ -1,4 +1,30 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{OglBindings}
+{\bf OpenGL Language Bindings}.
+\newblock \url{http://www.opengl.org/wiki/Language_bindings}, 2011.
+
+\bibitem{GPUGems3}
+{\sc Hubert Nguyen}, editor.
+\newblock {\em GPU Gems 3}.
+\newblock Addison-Wesley Professional, 2007.
+
+\bibitem{OpenGLSuperbible}
+{\sc Richard S.~Wright et~al.}
+\newblock {\em OpenGL SuperBible: Comprehensive Tutorial and Reference (5th
+  Edition)}.
+\newblock Addison-Wesley Professional, 2010.
+
+\bibitem{Gregory2009}
+{\sc Jason Gregory}.
+\newblock {\em Game Engine Architecture}.
+\newblock A K Peters, Ltd., 2009.
+
+\bibitem{3DCourseSIGGraph2007}
+{\sc Christopher~DeCoro Natalya~Tatarchuk, Jeremy~Shopf}.
+\newblock {\em Advanced Real-Time Rendering in 3D Graphics and Games Course –
+  SIGGRAPH 2007}, chapter~9.
+\newblock SIGGRAPH, 2007.
 
 \bibitem{Green2010}
 {\sc Simon Green}.
@@ -19,17 +45,12 @@
 \newblock {\em Multimedia and Expo, 2005. ICME 2005. IEEE International
   Conference on}, 2005.
 
-\bibitem{Gregory2009}
-{\sc Jason Gregory}.
-\newblock {\bf Occlusion and the Depth Buffer}.
-\newblock In {\em Game Engine Architecture}, pages 442--444. A K Peters, Ltd.,
-  2009.
-
 \bibitem{Dunlop2006}
 {\sc Robert Dunlop}.
 \newblock \href{http://www.mvps.org/directx/articles/linear_z/linearz.htm}{{\bf
   Linearized Depth using Vertex Shaders}}.
-\newblock Article on X-Zone service, 2006.
+\newblock \url{http://www.mvps.org/directx/articles/linear_z/linearz.htm"},
+  2006.
 
 \bibitem{LorensenCline1987}
 {\sc Harvey E.~Cline William E.~Lorensen}.

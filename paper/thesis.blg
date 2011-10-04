@@ -5,3 +5,5 @@ A level-1 auxiliary file: tools/tools.aux
 A level-1 auxiliary file: techniques/techniques.aux
 The style file: Latex/Classes/PhDbiblio-url2.bst
 Database file #1: 9_backmatter/references.bib
+Warning--to sort, need author or key in OglBindings
+(There was 1 warning)
