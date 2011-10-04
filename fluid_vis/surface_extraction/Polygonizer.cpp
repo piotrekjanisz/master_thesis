@@ -1,4 +1,5 @@
 #include "Polygonizer.h"
+#include "utils/mymath.h"
 #include <cmath>
 #include <cstring>
 
@@ -360,6 +361,29 @@ void Polygonizer::addVertex(float* p1, float* p2, double isoVal1, double isoVal2
     _currentVertex += _vertexComponents;
 }
 
+void Polygonizer::addVertex(CornerCacheEntry* c1, CornerCacheEntry* c2)
+{
+	const double TRESHOLD = 0.00001;
+
+	if (abs(_isoTreshold - c1->fieldValue) < TRESHOLD) {
+		memcpy(_currentVertex, c1->spaceCoord, 3*sizeof(float));
+	} else if (abs(_isoTreshold - c2->fieldValue) < TRESHOLD) {
+		memcpy(_currentVertex, c2->spaceCoord, 3*sizeof(float));
+	} else if (abs(c1->fieldValue - c2->fieldValue) < TRESHOLD) {
+		memcpy(_currentVertex, c1->spaceCoord, 3*sizeof(float));
+	} else {
+		double mu = (_isoTreshold - c1->fieldValue) / (c2->fieldValue - c1->fieldValue);
+	    _currentVertex[0] = c1->spaceCoord[0] + mu * (c2->spaceCoord[0] - c1->spaceCoord[0]);
+		_currentVertex[1] = c1->spaceCoord[1] + mu * (c2->spaceCoord[1] - c1->spaceCoord[1]);
+		_currentVertex[2] = c1->spaceCoord[2] + mu * (c2->spaceCoord[2] - c1->spaceCoord[2]);
+
+		_currentNormal[0] = c1->normal[0] + mu * (c2->normal[0] - c1->normal[0]);
+		_currentNormal[1] = c1->normal[1] + mu * (c2->normal[1] - c1->normal[1]);
+		_currentNormal[2] = c1->normal[2] + mu * (c2->normal[2] - c1->normal[2]);
+	}	
+    _currentVertex += _vertexComponents;
+	_currentNormal += _normalComponents;
+}
 
 void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 {
@@ -383,7 +407,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 1) {
 		if (corners[0]->lx == -1) {
-			addVertex(corners[0]->spaceCoord, corners[1]->spaceCoord, corners[0]->fieldValue, corners[1]->fieldValue);
+			//addVertex(corners[0]->spaceCoord, corners[1]->spaceCoord, corners[0]->fieldValue, corners[1]->fieldValue);
+			addVertex(corners[0], corners[1]);
 			corners[0]->lx = _currentIndex++;
 		}
 		vertexIndex[0] = corners[0]->lx;
@@ -391,7 +416,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 2) {
 		if (corners[1]->ly == -1) {
-			addVertex(corners[1]->spaceCoord, corners[2]->spaceCoord, corners[1]->fieldValue, corners[2]->fieldValue);
+			//addVertex(corners[1]->spaceCoord, corners[2]->spaceCoord, corners[1]->fieldValue, corners[2]->fieldValue);
+			addVertex(corners[1], corners[2]);
 			corners[1]->ly = _currentIndex++;
 		}
 		vertexIndex[1] = corners[1]->ly;
@@ -399,7 +425,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 4) {
 		if (corners[3]->lx == -1) {
-			addVertex(corners[2]->spaceCoord, corners[3]->spaceCoord, corners[2]->fieldValue, corners[3]->fieldValue);
+			//addVertex(corners[2]->spaceCoord, corners[3]->spaceCoord, corners[2]->fieldValue, corners[3]->fieldValue);
+			addVertex(corners[2], corners[3]);
 			corners[3]->lx = _currentIndex++;
 		}
 		vertexIndex[2] = corners[3]->lx;
@@ -407,7 +434,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
     
 	if (edges & 8) {
 		if (corners[0]->ly == -1) {
-			addVertex(corners[3]->spaceCoord, corners[0]->spaceCoord, corners[3]->fieldValue, corners[0]->fieldValue);
+			//addVertex(corners[3]->spaceCoord, corners[0]->spaceCoord, corners[3]->fieldValue, corners[0]->fieldValue);
+			addVertex(corners[3], corners[0]);
 			corners[0]->ly = _currentIndex++;
 		}
 		vertexIndex[3] = corners[0]->ly;
@@ -415,7 +443,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 16) {
 		if (corners[4]->lx == -1) {
-			addVertex(corners[4]->spaceCoord, corners[5]->spaceCoord, corners[4]->fieldValue, corners[5]->fieldValue);
+			//addVertex(corners[4]->spaceCoord, corners[5]->spaceCoord, corners[4]->fieldValue, corners[5]->fieldValue);
+			addVertex(corners[4], corners[5]);
 			corners[4]->lx = _currentIndex++;
 		}
 		vertexIndex[4] = corners[4]->lx;
@@ -423,7 +452,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 32) {
 		if (corners[5]->ly == -1) {
-			addVertex(corners[5]->spaceCoord, corners[6]->spaceCoord, corners[5]->fieldValue, corners[6]->fieldValue);
+			//addVertex(corners[5]->spaceCoord, corners[6]->spaceCoord, corners[5]->fieldValue, corners[6]->fieldValue);
+			addVertex(corners[5], corners[6]);
 			corners[5]->ly = _currentIndex++;
 		}
 		vertexIndex[5] = corners[5]->ly;
@@ -431,7 +461,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 64) {
 		if (corners[7]->lx == -1) {
-			addVertex(corners[6]->spaceCoord, corners[7]->spaceCoord, corners[6]->fieldValue, corners[7]->fieldValue);
+			//addVertex(corners[6]->spaceCoord, corners[7]->spaceCoord, corners[6]->fieldValue, corners[7]->fieldValue);
+			addVertex(corners[6], corners[7]);
 			corners[7]->lx = _currentIndex++;
 		}
 		vertexIndex[6] = corners[7]->lx;
@@ -439,7 +470,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 128) {
 		if (corners[4]->ly == -1) {
-			addVertex(corners[7]->spaceCoord, corners[4]->spaceCoord, corners[7]->fieldValue, corners[4]->fieldValue);
+			//addVertex(corners[7]->spaceCoord, corners[4]->spaceCoord, corners[7]->fieldValue, corners[4]->fieldValue);
+			addVertex(corners[7], corners[4]);
 			corners[4]->ly = _currentIndex++;
 		}
 		vertexIndex[7] = corners[4]->ly;
@@ -447,7 +479,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 256) {
 		if (corners[0]->lz == -1) {
-			addVertex(corners[0]->spaceCoord, corners[4]->spaceCoord, corners[0]->fieldValue, corners[4]->fieldValue);
+			//addVertex(corners[0]->spaceCoord, corners[4]->spaceCoord, corners[0]->fieldValue, corners[4]->fieldValue);
+			addVertex(corners[0], corners[4]);
 			corners[0]->lz = _currentIndex++;
 		}
 		vertexIndex[8] = corners[0]->lz;
@@ -455,7 +488,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 512) {
 		if (corners[1]->lz == -1) {
-			addVertex(corners[1]->spaceCoord, corners[5]->spaceCoord, corners[1]->fieldValue, corners[5]->fieldValue);
+			//addVertex(corners[1]->spaceCoord, corners[5]->spaceCoord, corners[1]->fieldValue, corners[5]->fieldValue);
+			addVertex(corners[1], corners[5]);
 			corners[1]->lz = _currentIndex++;
 		}
 		vertexIndex[9] = corners[1]->lz;
@@ -463,7 +497,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 1024) {
 		if (corners[2]->lz == -1) {
-			addVertex(corners[2]->spaceCoord, corners[6]->spaceCoord, corners[2]->fieldValue, corners[6]->fieldValue);
+			//addVertex(corners[2]->spaceCoord, corners[6]->spaceCoord, corners[2]->fieldValue, corners[6]->fieldValue);
+			addVertex(corners[2], corners[6]);
 			corners[2]->lz = _currentIndex++;
 		}
 		vertexIndex[10] = corners[2]->lz;
@@ -471,7 +506,8 @@ void Polygonizer::polygonize(CornerCacheEntry** corners, int& cubesToDo)
 
 	if (edges & 2048) {
 		if (corners[3]->lz == -1) {
-			addVertex(corners[3]->spaceCoord, corners[7]->spaceCoord, corners[3]->fieldValue, corners[7]->fieldValue);
+			//addVertex(corners[3]->spaceCoord, corners[7]->spaceCoord, corners[3]->fieldValue, corners[7]->fieldValue);
+			addVertex(corners[3], corners[7]);
 			corners[3]->lz = _currentIndex++;
 		}
 		vertexIndex[11] = corners[3]->lz;

@@ -30,6 +30,9 @@
     <ClInclude Include="Properties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mymath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Properties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mymath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -47,6 +47,17 @@ public:
 		_currentPartCount = _particleCount;
 		return _currentPosBuffer; 
 	}
+
+	float* getDummyPositions()
+	{
+		float pos[4] = {0.0f, 3.0f, 0.0f, 0.0f};
+		_currentPartCount = 1;
+		memcpy(_currentPosBuffer, pos, _currentPartCount * 4 * sizeof(float));
+		return _currentPosBuffer;
+	}
+
 	int getParticlesCount() const { return _particleCount; }
+
+	int getParticlesCountAsync() const { return _currentPartCount; }
 };
 

@@ -56,6 +56,8 @@ private:	// functions
 	// computes normal vectors that needs to be normalized
 	void computeNormals(float* vertices, unsigned int* indices, int nvert, int ntriag, float* normals);
 
+	void computeNormalsAngleWeight(float* vertices, unsigned int* indices, int nvert, int ntriag, float* normals);
+
 private: // fields
 	int _xSize;
 	int _ySize;

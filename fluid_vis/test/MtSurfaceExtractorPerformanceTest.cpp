@@ -54,7 +54,7 @@ struct MtSurfaceExtractorPerformanceTestFixture
 
 BOOST_FIXTURE_TEST_SUITE(MtSurfaceExtractorPerformanceTest, MtSurfaceExtractorPerformanceTestFixture);
 
-BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_1000p_200x200x200)
+BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_1000p_200x200x200_2x2x2)
 {
 	std::cout << "--- 1000 particles, 200x200x200 cubes, 2x2x2 blocks ---" << std::endl;
 	testPerformance(1, 1000, "1 thread");
@@ -64,9 +64,31 @@ BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_1000p_200x200x200)
 	testPerformance(5, 1000, "5 thread");
 }
 
-BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_3000p_200x200x200)
+BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_3000p_200x200x200_2x2x2)
 {
 	std::cout << "--- 3000 particles, 200x200x200 cubes, 2x2x2 blocks ---" << std::endl;
+	testPerformance(1, 3000, "1 thread");
+	testPerformance(2, 3000, "2 thread");
+	testPerformance(3, 3000, "3 thread");
+	testPerformance(4, 3000, "4 thread");
+	testPerformance(5, 3000, "5 thread");
+}
+
+BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_1000p_200x200x200_4x4x4)
+{
+	desc.blockSize = 2.5;
+	std::cout << "--- 1000 particles, 200x200x200 cubes, 4x4x4 blocks ---" << std::endl;
+	testPerformance(1, 1000, "1 thread");
+	testPerformance(2, 1000, "2 thread");
+	testPerformance(3, 1000, "3 thread");
+	testPerformance(4, 1000, "4 thread");
+	testPerformance(5, 1000, "5 thread");
+}
+
+BOOST_AUTO_TEST_CASE(extractSurfacePerformanceTest_3000p_200x200x200_4x4x4)
+{
+	desc.blockSize = 2.5;
+	std::cout << "--- 3000 particles, 200x200x200 cubes, 4x4x4 blocks ---" << std::endl;
 	testPerformance(1, 3000, "1 thread");
 	testPerformance(2, 3000, "2 thread");
 	testPerformance(3, 3000, "3 thread");

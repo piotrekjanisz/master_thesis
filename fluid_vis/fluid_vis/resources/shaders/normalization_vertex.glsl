@@ -13,6 +13,6 @@ void main(void)
 {
 	vec4 v = modelViewMatrix * vertex;
 	fEye = -normalize(v.xyz);
-	fNormal = normalMatrix * normal;
+	fNormal = normalMatrix * normalize(normal);
 	gl_Position = projectionMatrix * v;
 }

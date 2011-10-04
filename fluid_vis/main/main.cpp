@@ -121,7 +121,6 @@ GLUSboolean update(GLUSfloat time)
 	else 
 		g_scene.render(g_NxScene);
 	
-
 	g_NxScene->flushStream();
 	g_NxScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 	
@@ -134,16 +133,54 @@ GLUSvoid terminate(GLUSvoid)
 
 void keyFunc(GLUSboolean pressed, GLUSuint key)
 {
-	if (key == 102) {
+	const GLUSuint KEY_F = 102;
+	const GLUSuint KEY_1 = 49;
+	const GLUSuint KEY_2 = 50;
+	const GLUSuint KEY_3 = 51;
+	const GLUSuint KEY_4 = 52;
+	const GLUSuint KEY_5 = 53;
+	const GLUSuint KEY_6 = 54;
+	const GLUSuint KEY_7 = 55;
+	const GLUSuint KEY_8 = 56;
+
+	if (key == KEY_F) {
 		createCubeFromEye(1.0f, 50.0f);
+		//createCubeFromEye(0.5f, 50.0f);
 	} else if (key == 100) {
 		createCubesFromEye(1.0f, 50.0f, 10);
-	} else if (key == 49) {
+	} else if (key == KEY_1) {
 		g_scene.incParticleSize(-1.0f);
-	} else if (key == 50) {
+	} else if (key == KEY_2) {
 		g_scene.incParticleSize(1.0f);
+	} else if (key == KEY_3) {
+		g_scene.changeBilateralTreshold(-0.0005);
+	} else if (key == KEY_4) {
+		g_scene.changeBilateralTreshold(0.0005);
+	} else if (key == KEY_5) {
+		g_scene.changeGauss(0, -0.5);
+	} else if (key == KEY_6) {
+		g_scene.changeGauss(0,  0.5);
+	} else if (key == KEY_7) {
+		g_scene.changeGauss(-1, 0.0);
+	} else if (key == KEY_8) {
+		g_scene.changeGauss( 1, 0.0);
+	} else if (key == '-') {
+		g_scene.changeAdditionalBlurPhases(-1);
+	} else if (key == '+') {
+		g_scene.changeAdditionalBlurPhases(1);
+	} else if (key == '[') {
+		g_scene.changeDepthGauss(-1, 0);
+	} else if (key == ']') {
+		g_scene.changeDepthGauss(1, 0);
+	} else if (key == 'o') {
+		g_scene.changeDepthGauss(0, -0.5);
+	} else if (key == 'p') {
+		g_scene.changeDepthGauss(0, 0.5);
+	} else if (key == 'k') {
+		g_scene.changeParticleDepth(-0.001);
+	} else if (key == 'l') {
+		g_scene.changeParticleDepth(0.001);
 	}
-	cout << key << endl;
 }
 
 bool initNx()
@@ -215,6 +252,7 @@ void mouseMoveFunc(unsigned int buttons, unsigned int xPos, unsigned int yPos)
 		} else if (buttons == 2) {	// middle button
 		} else if (buttons == 4) {  // right button
 			g_scene.translate(deltaX * TRANS_FACTOR, deltaY * TRANS_FACTOR, 0.0f);
+			//g_scene.rotateLightDir(deltaY * ROT_FACTOR, deltaX * ROT_FACTOR);
 		}
 		g_XPos = xPos;
 		g_YPos = yPos;

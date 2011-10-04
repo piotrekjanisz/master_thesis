@@ -1,8 +1,14 @@
 #version 150
 
+/**
+ *	OUTPUT:
+ *	 fragColor     - linear depth
+ *   gl_FragDepth  - regular depth (non-linear)
+ */
+
+
 flat in vec3 eyeSpacePos;
 uniform mat4 projectionMatrix;
-//out vec4 fragColor;
 out float fragColor;
 
 const float coef1 = 0.5f;
@@ -26,5 +32,5 @@ void main(void)
 	// clipSpacePos.z / clipSpacePos.w is in [-1, 1] convert it to [0,1]
 	float depth = (clipSpacePos.z / clipSpacePos.w)*coef1 + coef2; 
 	gl_FragDepth = depth;
-	fragColor = clipSpacePos.w / 100.0;
+	fragColor = (clipSpacePos.z + 1.0) / 100.0;
 }

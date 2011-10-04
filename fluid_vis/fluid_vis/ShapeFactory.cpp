@@ -20,6 +20,8 @@ ShapePtr ShapeFactory::createPlane(float halfExtent, float texCoorMult)
 	const unsigned int TEX_COORDS_COUNT = 5;
 	float* vertices = new float[VERTICES_COUNT * 4];
 	float* normals = new float[VERTICES_COUNT * 3];
+	float* tangents = new float[VERTICES_COUNT * 3];
+	float* bitangents = new float[VERTICES_COUNT * 3];
 	float* tex_coords = new float[TEX_COORDS_COUNT * 2];
 	unsigned int* indices = new unsigned int[INDICES_COUNT];
 
@@ -45,6 +47,20 @@ ShapePtr ShapeFactory::createPlane(float halfExtent, float texCoorMult)
 	normals[i++] = 0.0f; normals[i++] = 1.0f; normals[i++] = 0.0f;
 	normals[i++] = 0.0f; normals[i++] = 1.0f; normals[i++] = 0.0f;
 	normals[i++] = 0.0f; normals[i++] = 1.0f; normals[i++] = 0.0f;
+
+	i = 0;
+	tangents[i++] = 1.0f; tangents[i++] = 0.0f; tangents[i++] = 0.0f;
+	tangents[i++] = 1.0f; tangents[i++] = 0.0f; tangents[i++] = 0.0f;
+	tangents[i++] = 1.0f; tangents[i++] = 0.0f; tangents[i++] = 0.0f;
+	tangents[i++] = 1.0f; tangents[i++] = 0.0f; tangents[i++] = 0.0f;
+	tangents[i++] = 1.0f; tangents[i++] = 0.0f; tangents[i++] = 0.0f;
+
+	i = 0; 
+	bitangents[i++] = 0.0f; bitangents[i++] = 0.0f; bitangents[i++] = -1.0f;
+	bitangents[i++] = 0.0f; bitangents[i++] = 0.0f; bitangents[i++] = -1.0f;
+	bitangents[i++] = 0.0f; bitangents[i++] = 0.0f; bitangents[i++] = -1.0f;
+	bitangents[i++] = 0.0f; bitangents[i++] = 0.0f; bitangents[i++] = -1.0f;
+	bitangents[i++] = 0.0f; bitangents[i++] = 0.0f; bitangents[i++] = -1.0f;
 
 	i = 0;
 	indices[i++] = 4; indices[i++] = 1; indices[i++] = 0;

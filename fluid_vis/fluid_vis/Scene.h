@@ -24,6 +24,7 @@ class Scene : public AbstractScene
 	int _normalMatrixLocation;
 	int _colorLocation;
 	int _inverseProjectionLocation;
+	int _mvpLocation;
 
 	int _quadProjectionLocation;
 	int _quadModelViewLocation;
@@ -42,6 +43,7 @@ class Scene : public AbstractScene
 	int _isoWaterNormalLocation;
 
 	ShaderProgramPtr _shaderProgram;
+	ShaderProgramPtr _normalMapShader;
 	ShaderProgramPtr _isoSurfaceProgram;
 	ShaderProgramPtr _waterShader;
 	ShaderProgramPtr _waterDepthShader;
@@ -49,6 +51,7 @@ class Scene : public AbstractScene
 	ShaderProgramPtr _finalShader;
 	ShaderProgramPtr _skyBoxShader;
 	ShaderProgramPtr _gaussianBlurShader;
+	ShaderProgramPtr _grayscaleTextureShader;
 	
 	GfxStaticObjectPtr _box;
 	GfxStaticObjectPtr _plane;
@@ -63,6 +66,7 @@ class Scene : public AbstractScene
 	TexturePtr _waterDepthTexture;
 	TexturePtr _zTexture;
 	TexturePtr _smoothedTexture;
+	TexturePtr _smoothedTexture2;
 	TexturePtr _gaussDistTexture;
 	TexturePtr _gaussDist1DTexture;
 	TexturePtr _gaussDist1DBilateralTexture;
@@ -70,6 +74,7 @@ class Scene : public AbstractScene
 
 	TexturePtr _boxTexture;
 	TexturePtr _floorTexture;
+	TexturePtr _floorNormalMapTexture;
 	TexturePtr _skyBoxTexture;
 
 	FrameBufferPtr _sceneFrameBuffer;
@@ -79,6 +84,7 @@ class Scene : public AbstractScene
 	ScreenQuadPtr _screenQuad;
 	ScreenQuadPtr _blurQuad;
 	ScreenQuadPtr _finalQuad;
+	ScreenQuadPtr _grayscaleIntermediateQuad;
 
 	MyFluid* _fluid;
 
@@ -96,11 +102,32 @@ class Scene : public AbstractScene
 	std::list<TriangleMesh> _outputs[2];
 	int _currentOutput;
 
+	double _bilateralTreshold;
+	int _bilateralGaussSize;
+	double _bilateralGaussSigma;
+	int _additionalBlurPhases;
+
+	double _depthGaussSigma;
+	int _depthGaussSize;
+
+	float _particleDepth;
+
+	vmml::vec4f _lightDirection;
+
 public:
 	Scene();
 
 	virtual bool setup();
 	virtual void render();
+
+	void changeBilateralTreshold(double change);
+	void changeGauss(int sizeChange, double sigmaChange);
+	void changeDepthGauss(int sizeChange, double sigmaChange);
+	void changeAdditionalBlurPhases(int change);
+	void changeParticleDepth(float change);
+
+	void rotateLightDir(float xrot, float yrot);
+
 	void render(NxScene* physicsScene);
 	void renderIsoSurface(NxScene* physicsScene);
 
@@ -110,6 +137,11 @@ public:
 
 	void incParticleSize(float val) {
 		_particleSize = max(_particleSize + val, 10.0f);
+	}
+
+	vmml::vec4f getLightInEyeSpace()
+	{
+		return _viewMatrix * _lightDirection;
 	}
 };
 

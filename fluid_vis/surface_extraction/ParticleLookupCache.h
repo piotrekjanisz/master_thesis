@@ -47,6 +47,8 @@ public:
 	double getFieldValueAt(int x, int y, int z);
 
 	double getFieldValueAt2(int x, int y, int z);
+
+	double getFieldValueAndNormalAt(int x, int y, int z, float* normal);
 };
 
 

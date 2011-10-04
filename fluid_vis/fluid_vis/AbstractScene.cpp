@@ -86,9 +86,10 @@ vmml::mat3f AbstractScene::getNormalMatrix(const vmml::mat4f& modelView)
 	return retVal;
 }
 
-void AbstractScene::setupViewMatrix()
+void AbstractScene::setupMatrixes()
 {
 	_viewMatrix = _cameraFrame.getTransformation();
+	_modelViewProjectionMatrix =  _projectionMatrix * _viewMatrix;
 }
 
 void AbstractScene::rotateX(float val)

@@ -92,9 +92,9 @@
   <ItemGroup>
     <ClCompile Include="FiltersTest.cpp" />
     <ClCompile Include="MtSurfaceExtractorPerformanceTest.cpp" />
+    <ClCompile Include="MymathTest.cpp" />
     <ClCompile Include="PolygonizerTest.cpp" />
     <ClCompile Include="PropertiesTest.cpp" />
-    <ClCompile Include="resources\config\PhysxConfigurationFactoryTest.cpp" />
     <ClCompile Include="runner.cpp" />
     <ClCompile Include="TestUtils.cpp" />
   </ItemGroup>

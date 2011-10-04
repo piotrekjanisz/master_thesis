@@ -23,13 +23,13 @@ void main(void)
 
 	light = normalize(vec3(5.0, 5.0, 5.0));
 
-	normal = normalize(fNormal);
+	normal = fNormal;
 	eye = normalize(fEye);
 
 	diffuseIntensity = clamp(max(dot(normal, light), 0.0), 0.0, 1.0);
 	
 	reflection = normalize(reflect(-light, normal));
-	specularItensity = pow(clamp(max(dot(reflection, eye), 0.0), 0.0, 1.0), 20.0 );
+	specularItensity = pow(clamp(max(dot(reflection, eye), 0.0), 0.0, 1.0), 5.0 );
 
 	fragColor = vec4(0.0, 0.0, 0.0, 1.0) + vec4(0.1, 0.1, 0.1, 1.0) + vec4(1.0, 0.0, 0.0, 1.0)*diffuseIntensity + vec4(1.0, 0.9, 0.9, 1.0)*specularItensity;
 }

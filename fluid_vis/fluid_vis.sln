@@ -6,6 +6,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "main", "main\main.vcxproj", "{7A724B5F-06EA-420A-8AF9-1B84FECAA5B4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{574ED6DA-E8F7-40FD-8E50-7099139D3FA0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E0F30D9C-4CB9-407D-ACD0-3C88EFBE4147} = {E0F30D9C-4CB9-407D-ACD0-3C88EFBE4147}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "surface_extraction", "surface_extraction\surface_extraction.vcxproj", "{E19E4D8F-B6AC-49DC-B50A-6BF91ABBF91B}"
 EndProject
