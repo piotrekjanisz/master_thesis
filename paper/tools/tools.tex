@@ -39,9 +39,31 @@ Input to the vertex shader program is a single vertex (vertices are processed in
 This stage takes entire primitives (triangles, lines, points) as an input. The geometry shader can produce new primitives, discard existing or change their type. Thus it is capable of changing amount of data in pipeline, which is unique in contrast to vertex and fragment shaders (fragment shaders can only discard fragments). There are many examples of using geometry shader - from simple as rendering six faces of a cube map \cite{Gregory2009}, drawing vertices normals \cite[pages~434-437]{OpenGLSuperbible} to more advanced as shadow volume extrusion \cite[section~10.3.3.1]{Gregory2009}, isosurface extraction \cite{3DCourseSIGGraph2007} and dynamic tessellation. 
 
 \subsection{Fragment Shader}
-This stage operates on fragments. One fragment is usually one pixel on the screen, except cases when multisampling or supersamplings are used - then one several fragments may contribute to one pixel. The fragment shader job is to process pixels by computing per pixel lighting or applying textures. Input to this stage are per-fragment attributes passed from vertex or geometry shaders, uniform attributes which are passed before rendering and which have the same value for all fragments and textures. As vertex and geometry shaders operates on vertices per-fragment attributes passed to fragment shader have to be interpolated. There are two types of interpolation flat and smooth. Flat means that all fragments in the primitive has the same value of attribute. Smooth means that values are interpolated between edges of primitive. 
+This stage operates on fragments. One fragment is usually one pixel on the screen, except cases when multisampling or supersamplings are used - then one several fragments may contribute to one pixel. The fragment shader job is to process pixels by computing per pixel lighting or applying textures. Input to this stage are per-fragment attributes passed from vertex or geometry shaders, uniform attributes which are passed before rendering and which have the same value for all fragments and textures. As vertex and geometry shaders operates on vertices, per-fragment attributes passed to fragment shader have to be interpolated. There are two types of interpolation flat and smooth. Flat means that all fragments in the primitive has the same value of attribute. Smooth means that values are interpolated between edges of primitive. 
 
-As it operates on pixel level it is perfect for post processing effects (the one added on rendered scene) like blurring, bloom, different sort of filtering. In my project I make heavy use of fragment shaders. 
+As it operates at pixel level it is perfect for post processing effects (the one added on rendered scene) like blurring, bloom, different sort of filtering. In my project I make heavy use of fragment shaders. 
+
+\subsection{Perspective projection and homogeneous space}
+Perspective projection transforms points form view space into homogeneous clip space. 
+
+\myFigureMacroW{perspective_projection}{A perspective view volume (frustum)}{1.0}
+
+\myFigureMacroW{homogenous_space}{The canonical view volume in homogeneous clip space}{0.7}
+
+\begin{equation}
+\label{eq:projection_matrix}
+M_{V \to H } = 
+\begin{bmatrix}
+\frac{2n}{w} & 0            & 0                & 0                \\ 
+0            & \frac{2h}{n} &                  & 0                 \\ 
+0            & 0            & -\frac{f+n}{f-n} & -\frac{2fn}{f-n} \\ 
+0            & 0            & -1               & 0
+\end{bmatrix}
+\end{equation}
+
+\subsection{Depth buffer}
+
+\myFigureMacroW{z_buffer_dist}{Function of z buffer value for n = 1 and f = 100}{1.0}
 
 \section{boost}
 Boost is a set of libraries extending capabilities of C++ language. Libraries provides classes and functions for most common task and algorithms, like reqular expressions, hash maps, threading. They are also cross platform. 

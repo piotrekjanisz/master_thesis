@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  4 OCT 2011 21:37
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  5 OCT 2011 21:46
 entering extended mode
 **//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/thesis.tex
 
@@ -362,7 +362,64 @@ Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 \@input{Latex/Macros/MacroFile1.aux}
 
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\Latex/Macro
-s/MacroFile1.tex)
+s/MacroFile1.tex) (C:\MiKTeX\tex\latex\ams\math\amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip58
+
+For additional information on amsmath, use the `?' option.
+(C:\MiKTeX\tex\latex\ams\math\amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(C:\MiKTeX\tex\latex\ams\math\amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks17
+\ex@=\dimen126
+))
+(C:\MiKTeX\tex\latex\ams\math\amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen127
+)
+(C:\MiKTeX\tex\latex\ams\math\amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count113
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count114
+\leftroot@=\count115
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count116
+\DOTSCASE@=\count117
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box52
+\strutbox@=\box53
+\big@size=\dimen128
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count118
+\c@MaxMatrixCols=\count119
+\dotsspace@=\muskip11
+\c@parentequation=\count120
+\dspbrk@lvl=\count121
+\tag@help=\toks18
+\row@=\count122
+\column@=\count123
+\maxfields@=\count124
+\andhelp@=\toks19
+\eqnshift@=\dimen129
+\alignsep@=\dimen130
+\tagshift@=\dimen131
+\tagwidth@=\dimen132
+\totwidth@=\dimen133
+\lineht@=\dimen134
+\@envbody=\toks20
+\multlinegap=\skip59
+\multlinetaggap=\skip60
+\mathdisplay@stack=\toks21
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.aux
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\0_frontmatt
 er/abstract.aux)
@@ -372,60 +429,61 @@ n/introduction.aux)
 .aux)
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
 techniques.aux))
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 88.
-LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
  (C:\MiKTeX\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count113
-\scratchdimen=\dimen126
-\scratchbox=\box52
-\nofMPsegments=\count114
-\nofMParguments=\count115
-\everyMPshowfont=\toks17
-\MPscratchCnt=\count116
-\MPscratchDim=\dimen127
-\MPnumerator=\count117
-\makeMPintoPDFobject=\count118
-\everyMPtoPDFconversion=\toks18
+\scratchcounter=\count125
+\scratchdimen=\dimen135
+\scratchbox=\box54
+\nofMPsegments=\count126
+\nofMParguments=\count127
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count128
+\MPscratchDim=\dimen136
+\MPnumerator=\count129
+\makeMPintoPDFobject=\count130
+\everyMPtoPDFconversion=\toks23
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\AtBeginShipoutBox=\box53
-Package backref Info: ** backref set up for natbib ** on input line 88.
-Package hyperref Info: Link coloring OFF on input line 88.
+\AtBeginShipoutBox=\box55
+Package backref Info: ** backref set up for natbib ** on input line 89.
+Package hyperref Info: Link coloring OFF on input line 89.
  (C:\MiKTeX\tex\latex\hyperref\nameref.sty
 Package: nameref 2010/04/30 v2.40 Cross-referencing by name of section
 
 (C:\MiKTeX\tex\generic\oberdiek\gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count119
+\c@section@level=\count131
 )
-LaTeX Info: Redefining \ref on input line 88.
-LaTeX Info: Redefining \pageref on input line 88.
-LaTeX Info: Redefining \nameref on input line 88.
+LaTeX Info: Redefining \ref on input line 89.
+LaTeX Info: Redefining \pageref on input line 89.
+LaTeX Info: Redefining \nameref on input line 89.
 
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
 \@outlinefile=\write4
-<0_frontmatter/figures/logo.png, id=107, 301.125pt x 129.48375pt>
+<0_frontmatter/figures/logo.png, id=115, 301.125pt x 129.48375pt>
 File: 0_frontmatter/figures/logo.png Graphic file (type png)
 
 <use 0_frontmatter/figures/logo.png>
-Package pdftex.def Info: 0_frontmatter/figures/logo.png used on input line 99.
+Package pdftex.def Info: 0_frontmatter/figures/logo.png used on input line 100.
+
 (pdftex.def)             Requested size: 113.81102pt x 48.93958pt.
  [1
 
@@ -472,7 +530,7 @@ n/introduction.tex
 
 ]
  2.
-[3] <tools/figures/opengl_pipeline.jpg, id=180, 689.57625pt x 486.31688pt>
+[3] <tools/figures/opengl_pipeline.jpg, id=190, 689.57625pt x 486.31688pt>
 File: tools/figures/opengl_pipeline.jpg Graphic file (type jpg)
 
 <use tools/figures/opengl_pipeline.jpg>
@@ -481,15 +539,42 @@ Package pdftex.def Info: tools/figures/opengl_pipeline.jpg used on input line 3
 (pdftex.def)             Requested size: 412.56496pt x 290.96127pt.
  [4] [5 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/too
 ls/figures/opengl_pipeline.jpg>]
-[6]) [7]
+<tools/figures/perspective_projection.png, id=210, 527.0892pt x 410.7345pt>
+File: tools/figures/perspective_projection.png Graphic file (type png)
+
+<use tools/figures/perspective_projection.png>
+Package pdftex.def Info: tools/figures/perspective_projection.png used on input
+ line 49.
+(pdftex.def)             Requested size: 412.56496pt x 321.506pt.
+
+<tools/figures/homogenous_space.png, id=211, 248.127pt x 285.2256pt>
+File: tools/figures/homogenous_space.png Graphic file (type png)
+
+<use tools/figures/homogenous_space.png>
+Package pdftex.def Info: tools/figures/homogenous_space.png used on input line 
+51.
+(pdftex.def)             Requested size: 288.7942pt x 331.97171pt.
+
+<tools/figures/z_buffer_dist.png, id=212, 1027.84pt x 770.88pt>
+File: tools/figures/z_buffer_dist.png Graphic file (type png)
+
+<use tools/figures/z_buffer_dist.png>
+Package pdftex.def Info: tools/figures/z_buffer_dist.png used on input line 66.
+
+(pdftex.def)             Requested size: 412.56496pt x 309.42871pt.
+ [6] [7 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/too
+ls/figures/perspective_projection.png>]
+[8 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/fi
+gures/homogenous_space.png>] [9 <//cern.ch/dfs/Users/p/pjanisz/Documents/master
+/master_thesis/paper/tools/figures/z_buffer_dist.png>] [10]) [11]
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
-techniques.tex [8
+techniques.tex [12
 
 
 
 ]
  3.
-<techniques/figures/screen_space.png, id=215, 630.10406pt x 465.99094pt>
+<techniques/figures/screen_space.png, id=254, 630.10406pt x 465.99094pt>
 File: techniques/figures/screen_space.png Graphic file (type png)
 
 <use techniques/figures/screen_space.png>
@@ -497,35 +582,35 @@ Package pdftex.def Info: techniques/figures/screen_space.png used on input line
  16.
 (pdftex.def)             Requested size: 288.7942pt x 213.57628pt.
 
-<techniques/figures/spheres.png, id=226, 336.50719pt x 335.75438pt>
+<techniques/figures/spheres.png, id=265, 336.50719pt x 335.75438pt>
 File: techniques/figures/spheres.png Graphic file (type png)
 
 <use techniques/figures/spheres.png>
 Package pdftex.def Info: techniques/figures/spheres.png used on input line 22.
 (pdftex.def)             Requested size: 206.28247pt x 205.82426pt.
- [9]
-<techniques/figures/spheres_no_smoothing.png, id=237, 481.8pt x 360.59718pt>
+ [13]
+<techniques/figures/spheres_no_smoothing.png, id=275, 481.8pt x 360.59718pt>
 File: techniques/figures/spheres_no_smoothing.png Graphic file (type png)
 
 <use techniques/figures/spheres_no_smoothing.png>
 Package pdftex.def Info: techniques/figures/spheres_no_smoothing.png used on in
 put line 39.
 (pdftex.def)             Requested size: 288.7942pt x 216.15088pt.
- [10 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ [14 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/screen_space.png>]
-<techniques/figures/gaussian_filter_img.png, id=246, 339.51843pt x 191.9672pt>
+<techniques/figures/gaussian_filter_img.png, id=284, 339.51843pt x 191.9672pt>
 File: techniques/figures/gaussian_filter_img.png Graphic file (type png)
 
 <use techniques/figures/gaussian_filter_img.png>
 Package pdftex.def Info: techniques/figures/gaussian_filter_img.png used on inp
 ut line 43.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [11 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ [15 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/spheres.png>]
-[12 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
+[16 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
 ues/figures/spheres_no_smoothing.png> <//cern.ch/dfs/Users/p/pjanisz/Documents/
 master/master_thesis/paper/techniques/figures/gaussian_filter_img.png>]
-<techniques/figures/bilateral_comp.png, id=267, 339.51843pt x 191.9672pt>
+<techniques/figures/bilateral_comp.png, id=303, 339.51843pt x 191.9672pt>
 File: techniques/figures/bilateral_comp.png Graphic file (type png)
 
 <use techniques/figures/bilateral_comp.png>
@@ -533,17 +618,22 @@ Package pdftex.def Info: techniques/figures/bilateral_comp.png used on input li
 ne 61.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
 
-<techniques/figures/edge_preservation.png, id=272, 339.51843pt x 191.9672pt>
+<techniques/figures/edge_preservation.png, id=308, 339.51843pt x 191.9672pt>
 File: techniques/figures/edge_preservation.png Graphic file (type png)
 
 <use techniques/figures/edge_preservation.png>
 Package pdftex.def Info: techniques/figures/edge_preservation.png used on input
  line 64.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [13 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/bilateral_comp.png>] [14 <//cern.ch/dfs/Users/p/pjanisz/Documents/
-master/master_thesis/paper/techniques/figures/edge_preservation.png>] [15]
-<techniques/figures/metaballs.png, id=300, 702.625pt x 200.75pt>
+ [17 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/bilateral_comp.png>] [18 <//cern.ch/dfs/Users/p/pjanisz/Documents/
+master/master_thesis/paper/techniques/figures/edge_preservation.png>] [19]
+
+Package amsmath Warning: Foreign command \over;
+(amsmath)                \frac or \genfrac should be used instead
+(amsmath)                 on input line 93.
+
+<techniques/figures/metaballs.png, id=334, 702.625pt x 200.75pt>
 File: techniques/figures/metaballs.png Graphic file (type png)
 
 <use techniques/figures/metaballs.png>
@@ -558,9 +648,9 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 105.
 
-[16 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
-ues/figures/metaballs.png (PNG copy)>] [17]
-<techniques/figures/fig_local_minima.png, id=317, 339.51843pt x 191.9672pt>
+[20 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
+ues/figures/metaballs.png (PNG copy)>] [21]
+<techniques/figures/fig_local_minima.png, id=352, 339.51843pt x 191.9672pt>
 File: techniques/figures/fig_local_minima.png Graphic file (type png)
 
 <use techniques/figures/fig_local_minima.png>
@@ -571,21 +661,21 @@ Missing character: There is no Å in font cmr10!
 Missing character: There is no ¼ in font cmr10!
 Missing character: There is no Å in font cmr10!
 Missing character: There is no › in font cmr10!
- [18 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ [22 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/fig_local_minima.png>] <techniques/figures/normal_generation.png, 
-id=325, 339.51843pt x 191.9672pt>
+id=360, 339.51843pt x 191.9672pt>
 File: techniques/figures/normal_generation.png Graphic file (type png)
 
 <use techniques/figures/normal_generation.png>
 Package pdftex.def Info: techniques/figures/normal_generation.png used on input
  line 147.
 (pdftex.def)             Requested size: 412.56496pt x 233.27986pt.
- [19] [20 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
-echniques/figures/normal_generation.png>]) [21]
+ [23] [24 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
+echniques/figures/normal_generation.png>]) [25]
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.bbl
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.brf)
 \tf@brf=\write6
-[22
+[26
 
 
 ]
@@ -593,9 +683,9 @@ Missing character: There is no â in font cmti7!
 Missing character: There is no € in font cmti7!
 Missing character: There is no “ in font cmti7!
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 192.
- [23]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 192.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 193.
+ [27]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 193.
 
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.aux
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\0_frontmatt
@@ -606,21 +696,21 @@ n/introduction.aux)
 .aux)
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
 techniques.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 192.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 192.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 193.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 193.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 4422C5CC8E5AE2A4DD0129F9313E6002;1758.
+(rerunfilecheck)             Checksum: 2C56D5BBCBAE8F6500B669CA0DA4ADD3;1934.
 Package rerunfilecheck Info: File `thesis.brf' has not changed.
-(rerunfilecheck)             Checksum: B0B8DEE054210BB226AEBD5F67C0E000;1170.
+(rerunfilecheck)             Checksum: 2693769F770D4896419950A446C656B4;1174.
  ) 
 Here is how much of TeX's memory you used:
- 7890 strings out of 494045
- 119329 string characters out of 3155635
- 211271 words of memory out of 3000000
- 10936 multiletter control sequences out of 15000+200000
+ 8487 strings out of 494045
+ 126240 string characters out of 3155635
+ 223069 words of memory out of 3000000
+ 11504 multiletter control sequences out of 15000+200000
  13616 words of font info for 51 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 43i,12n,48p,1832b,453s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,12n,48p,1832b,458s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmbx12.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx6.pf
 b><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/MiKTeX/fonts/type1/
@@ -633,9 +723,9 @@ blic/amsfonts/cm/cmr6.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C
 c/amsfonts/cm/cmsy8.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C
 :/MiKTeX/fonts/type1/public/amsfonts/cm/cmti7.pfb><C:/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmtt10.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on thesis.pdf (27 pages, 1357259 bytes).
+Output written on thesis.pdf (31 pages, 1568860 bytes).
 PDF statistics:
- 452 PDF objects out of 1000 (max. 8388607)
- 82 named destinations out of 1000 (max. 500000)
- 264 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 489 PDF objects out of 1000 (max. 8388607)
+ 92 named destinations out of 1000 (max. 500000)
+ 295 words of extra memory for PDF output out of 10000 (max. 10000000)
 
