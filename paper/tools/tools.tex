@@ -21,7 +21,7 @@ OpenGL bindings exists for many languages including C/C++, Java, Python, Ruby an
 
 Since introduction of version 3.2 specification has been divided into core profile and compatibility profile. Core profile is smaller and contains only modern style API introducted with version 3.0. Compatibility profile implements all legacy functionality prior to OpenGL 3.0 including fixed pipeline. 
 
-Fixed function pipeline is built-in to hardware and there is no control over how operations are performed on GPU. That means operations like vertex transformation, algorithms for shading surfaces are already implemented and can't be changed. The behavior may only be changed by choosing one of predefined methods or changing available parameters. Pros are that it's faster and less error prone to build application. Programmers only choose existing technique and specify geometry primitives. On the other hand when new algorithm is invented there is no possibility to use it. There are also no possibilities to optimize existing techniques for the particular application. 
+Fixed function pipeline is built-in to hardware and there is no control over how operations are performed on GPU. That means operations like vertex transformation, algorithms for shading surfaces are already implemented and can't be changed. The behavior may only be changed by choosing one of predefined methods or changing available parameters. Pros are that it's faster and less error prone to build an application. Programmers only have to choose existing technique and specify geometry primitives. On the other hand when new algorithm is invented there is no possibility to use it. There are also no possibilities to optimize existing techniques for the particular application. 
 That is why programmable pipeline was introduced in modern GPUs. Rendering stages can be customized by writing programs called shaders. At first those programs were very specific and allowed little customization. Over time more and more capabilities were added to shaders and now their usage goes beyond graphic rendering \cite[Part~VI]{GPUGems3}. Currently programmers have full control over how primitives are rendered on the screen.
 
 Apart from core and legacy profiles there are extensions. This is a mechanism for including vendor specific functions implemented only on some GPUs that can make use of some new hardware features. 
@@ -44,12 +44,10 @@ This stage operates on fragments. One fragment is usually one pixel on the scree
 As it operates at pixel level it is perfect for post processing effects (the one added on rendered scene) like blurring, bloom, different sort of filtering. In my project I make heavy use of fragment shaders. 
 
 \subsection{Perspective projection and homogeneous space}
-Perspective projection transforms points form view space into homogeneous clip space. 
-
-\myFigureMacroW{perspective_projection}{A perspective view volume (frustum)}{1.0}
-
-\myFigureMacroW{homogenous_space}{The canonical view volume in homogeneous clip space}{0.7}
-
+Perspective projection mimics the kind of image produced by a typical camera by providing effect known as perspective foreshortening. With this effect the farther objects lies from camera the smaller it appears on the screen. 
+Perspective projection transforms points form view space into homogeneous clip space. In OpenGL view space uses right handed coordinate system (figure~\ref{perspective_projection}) and homogeneous space uses left handed coordinate system (figure~\ref{homogenous_space}). 
+The region that is visible from camera is called the view volume or view frustum (figure~\ref{perspective_projection}). It is defined by six  planes - near plane, far plane and four side planes. Only objects inside view volume appears on the screen after rendering. Objects are projected on near plane which part that lies inside four side planes is a virtual screen.
+Virtual screen left, right, bottom and top edges lies at $x=l, x=r, y=b, and y=t$. It's z coordinate is equal to -n. Those parameters are used to computed projection matrix $M_{V \to H }$ (equation~\ref{eq:projection_matrix}) ($V \to H$ means transformation from view space into homogeneous space):
 \begin{equation}
 \label{eq:projection_matrix}
 M_{V \to H } = 
@@ -60,10 +58,49 @@ M_{V \to H } =
 0            & 0            & -1               & 0
 \end{bmatrix}
 \end{equation}
+where $w=r-l$ and $h=t-b$.
+
+\myFigureMacroW{perspective_projection}{A perspective view volume (frustum)}{1.0}
+
+\myFigureMacroW{homogenous_space}{The canonical view volume in homogeneous clip space}{0.7}
+
+
 
 \subsection{Depth buffer}
+Dept buffer is used to determine which fragments occlude other fragments - thus which should be drawn on the screen. This is done by comparing value of z component of fragment from homogeneous space. 
+After multiplying point from view space $p_V = [x, y, z, 1]$  by $M_{V \to H}$ we get point $p_H$:
+\begin{equation}
+\label{eg:projection_transformation}
+p_H =
+\begin{bmatrix}
+\frac{2n}{w} & 0            & 0                & 0                \\ 
+0            & \frac{2h}{n} &                  & 0                 \\ 
+0            & 0            & -\frac{f+n}{f-n} & -\frac{2fn}{f-n} \\ 
+0            & 0            & -1               & 0
+\end{bmatrix}
+*[x, y, z, 1]^T
+\end{equation}
+thus we get:
+\begin{equation}
+\label{eg:after_perspective_projection}
+p_H = [\frac{2n}{w}x, \frac{2n}{h}y, -\frac{f+n}{f-n}z - \frac{2fn}{f-n}, -z]
+\end{equation}
+To transform $p_H$ into 3D space we need to divide x, y and z components by $\omega$ which is equal to $-z$. That gives us:
+\begin{equation}
+\label{eg:after_perspective_projection}
+p_H = [-\frac{2nx}{wz},-\frac{2ny}{hz}, \frac{f+n}{f-n} + \frac{2fn}{z(f-n)}]
+\end{equation}
+After transformation z component of points inside view frustum varies from [-1, 1]. This has to be transform to [0, 1], thus value of depth buffer d(z) is following:
+\begin{equation}
+\label{eq:depth_value}
+d(z) = \frac{\frac{f+n}{f-n} + \frac{2fn}{z(f-n)} + 1}{2}
+\end{equation}
+Equation~\ref{eq:depht_value} shows that value of depth buffer is a nonlinear function of z component of the point. Figure~\ref{z_buffer_dist} shows how this function changes with changing near plane distance from the viewer. It can be also seen that precision if not evenly distributed and it decreases with the distance from near plane. 
 
-\myFigureMacroW{z_buffer_dist}{Function of z buffer value for n = 1 and f = 100}{1.0}
+\myFigureMacroW{z_buffer_dist}{Value of z buffer as a function of distance from near plane for different values of n. $f-n$ is kept constant at 100}{1.0}
+TODO add more lines
+
+\subsection{Framebuffer Object}
 
 \section{boost}
 Boost is a set of libraries extending capabilities of C++ language. Libraries provides classes and functions for most common task and algorithms, like reqular expressions, hash maps, threading. They are also cross platform. 
