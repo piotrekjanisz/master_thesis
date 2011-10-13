@@ -26,6 +26,12 @@
   SIGGRAPH 2007}, chapter~9.
 \newblock SIGGRAPH, 2007.
 
+\bibitem{RedBook}
+{\sc Dave Shreiner}.
+\newblock {\em OpenGL Programming Guide: The Official Guide to Learning OpenGL,
+  Versions 3.0 and 3.1 (7th Edition)}.
+\newblock Addison-Wesley Professional, 2009.
+
 \bibitem{Green2010}
 {\sc Simon Green}.
 \newblock

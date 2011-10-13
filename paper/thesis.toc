@@ -2,29 +2,32 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Motivation}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}State of the art}{1}{section.1.2}
-\contentsline {chapter}{\numberline {2}Tools}{3}{chapter.2}
-\contentsline {section}{\numberline {2.1}Opengl}{3}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}Vertex Shader}{4}{subsection.2.1.1}
-\contentsline {subsection}{\numberline {2.1.2}Geometry Shader}{6}{subsection.2.1.2}
-\contentsline {subsection}{\numberline {2.1.3}Fragment Shader}{6}{subsection.2.1.3}
-\contentsline {subsection}{\numberline {2.1.4}Perspective projection and homogeneous space}{6}{subsection.2.1.4}
-\contentsline {subsection}{\numberline {2.1.5}Depth buffer}{9}{subsection.2.1.5}
-\contentsline {subsection}{\numberline {2.1.6}Framebuffer Object}{9}{subsection.2.1.6}
-\contentsline {section}{\numberline {2.2}boost}{9}{section.2.2}
-\contentsline {section}{\numberline {2.3}PhysX}{11}{section.2.3}
-\contentsline {chapter}{\numberline {3}Rendering techniques}{13}{chapter.3}
-\contentsline {section}{\numberline {3.1}Screen space}{13}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Surface depth}{14}{subsection.3.1.1}
-\contentsline {subsection}{\numberline {3.1.2}Smoothing}{15}{subsection.3.1.2}
-\contentsline {subsubsection}{\numberline {3.1.2.1}Gaussian smoothing}{15}{subsubsection.3.1.2.1}
-\contentsline {subsubsection}{\numberline {3.1.2.2}Curvature flow smoothing}{18}{subsubsection.3.1.2.2}
-\contentsline {subsection}{\numberline {3.1.3}Thickness}{19}{subsection.3.1.3}
-\contentsline {subsection}{\numberline {3.1.4}Rendering}{19}{subsection.3.1.4}
-\contentsline {section}{\numberline {3.2}Isosurface extraction}{19}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Overview}{19}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Block subdivision}{20}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Block processing}{21}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Lookup cache}{22}{subsection.3.2.4}
-\contentsline {subsection}{\numberline {3.2.5}Normals generation}{23}{subsection.3.2.5}
-\contentsline {subsection}{\numberline {3.2.6}Multithreading}{24}{subsection.3.2.6}
-\contentsline {chapter}{Bibliography}{27}{chapter*.16}
+\contentsline {chapter}{\numberline {2}SPH}{3}{chapter.2}
+\contentsline {chapter}{\numberline {3}Tools}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}Opengl}{5}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Vertex Shader}{6}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Geometry Shader}{8}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Fragment Shader}{8}{subsection.3.1.3}
+\contentsline {subsection}{\numberline {3.1.4}Perspective projection and homogeneous space}{8}{subsection.3.1.4}
+\contentsline {subsection}{\numberline {3.1.5}Depth buffer}{11}{subsection.3.1.5}
+\contentsline {subsection}{\numberline {3.1.6}Framebuffer Object}{11}{subsection.3.1.6}
+\contentsline {section}{\numberline {3.2}boost}{13}{section.3.2}
+\contentsline {section}{\numberline {3.3}PhysX}{14}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Rigid bodies}{15}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Fluids}{15}{subsection.3.3.2}
+\contentsline {chapter}{\numberline {4}Rendering techniques}{17}{chapter.4}
+\contentsline {section}{\numberline {4.1}Screen space}{17}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Surface depth}{18}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Smoothing}{19}{subsection.4.1.2}
+\contentsline {subsubsection}{\numberline {4.1.2.1}Gaussian smoothing}{19}{subsubsection.4.1.2.1}
+\contentsline {subsubsection}{\numberline {4.1.2.2}Curvature flow smoothing}{22}{subsubsection.4.1.2.2}
+\contentsline {subsection}{\numberline {4.1.3}Thickness}{23}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Rendering}{23}{subsection.4.1.4}
+\contentsline {section}{\numberline {4.2}Isosurface extraction}{23}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Overview}{23}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Block subdivision}{24}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Block processing}{25}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Lookup cache}{26}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Normals generation}{27}{subsection.4.2.5}
+\contentsline {subsection}{\numberline {4.2.6}Multithreading}{28}{subsection.4.2.6}
+\contentsline {chapter}{Bibliography}{31}{chapter*.17}

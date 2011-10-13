@@ -95,12 +95,15 @@ After transformation z component of points inside view frustum varies from [-1, 
 \label{eq:depth_value}
 d(z) = \frac{\frac{f+n}{f-n} + \frac{2fn}{z(f-n)} + 1}{2}
 \end{equation}
-Equation~\ref{eq:depht_value} shows that value of depth buffer is a nonlinear function of z component of the point. Figure~\ref{z_buffer_dist} shows how this function changes with changing near plane distance from the viewer. It can be also seen that precision if not evenly distributed and it decreases with the distance from near plane. 
+Equation~\ref{eq:depth_value} shows that value of depth buffer is a nonlinear function of z component of the point. Figure~\ref{z_buffer_dist} shows how this value changes with changing near plane distance from the viewer. It can also be seen that precision if not evenly distributed and it decreases with the distance from near plane. 
 
 \myFigureMacroW{z_buffer_dist}{Value of z buffer as a function of distance from near plane for different values of n. $f-n$ is kept constant at 100}{1.0}
-TODO add more lines
 
 \subsection{Framebuffer Object}
+Normally after performing drawing operations output is directed to framebuffers provided by windowing system. From those buffers data can be displayed on the computer screen. However, sometimes it's not desired for data to be displayed on the screen but to be used as an input to the rendering pipeline again. This technique is called off screen rendering. It can be achieved by copying data from default framebuffers to textures and than used as an input to the pipeline again but this requires additional copy operation that should be avoided. Framebuffer objects are mechanism for dealing with situation when data shouldn't be send directly to the display. Frame buffer objects are containers that can hold other object that have memory storage and can be rendered to \cite[chapter~8]{OpenGLSuperbible}. Two kinds of objects that can be rendered to are renderbuffer objects and textures. Rendering to textures is particularly useful as data doesn't have to be copied to be used as an input to the pipeline. This allows to efficiently implementing rendering techniques that requires multiple phases.
+Unlike default framebuffer object, the one created by user is not limited in size to the size of rendering window. This can be used to speedup some computionally expensive processing by rendering with lower resolution into texture and than applying this texture to the original window with linear filtering. 
+
+Details about framebuffer objects, their creation and attaching storage to then can be found in \cite[chapter~8]{OpenGLSuperbible} and \cite[chapter~10]{RedBook}.
 
 \section{boost}
 Boost is a set of libraries extending capabilities of C++ language. Libraries provides classes and functions for most common task and algorithms, like reqular expressions, hash maps, threading. They are also cross platform. 
@@ -115,15 +118,20 @@ TODO reference to documentation or main page
 
 \section{PhysX}
 
-PhysX is a framework for performing physical simulations in real time. It's designed to be used in computer games and optimized for performance. It provides most necessary models required in games: rigid bodies, soft bodies, cloths, fluids and joints. What is more it allows simulations to be performed on GPU which is much faster especially when large amounts of object acts in simulations.
+PhysX is a framework for performing physical simulations in real time. It's designed to be used in computer games and is optimized for performance. It provides most necessary models required in games: rigid bodies, soft bodies, cloths, fluids and joints. What is more it allows simulations to be performed on GPU which is much faster especially when large amounts of object acts in a simulations.
 
 The main drawback is that hardware acceleration can only be performed on Nvidia GPUs. 
 
+PhysX works in asynchronous way - that means simulation step is computed either on GPU or CPU thread and other CPU cores can perform some other work in the meantime - for example render scene using data from previous step. The asynchronous workflow of PhysX is presented in figure~\ref{physx_workflow}.
+
+\myFigureMacroW{physx_workflow}{Diagram of PhysX SDK workflow}{0.7}
+
+My project uses two PhysX features - rigid body and water simulations and thus those will be described in more details. 
+\subsection{Rigid bodies}
+
+\subsection{Fluids}
+
 PhysX provides fluid simulations with SPH method which is used in this project. 
-
-TODO PhysX architecture diagram.
-
-TODO diagram of PhysX SDK Workflow
 
 TODO more details about fluids in PhysX - simulation methods, emiters, drains, limitations (64K particles per fluid)
 
