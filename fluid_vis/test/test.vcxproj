@@ -40,12 +40,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>D:\libs_n_includes\include;D:\libs_n_includes\include\physx2_8\Cooking;D:\libs_n_includes\include;$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>D:\libs_n_includes\boost_1_47\lib;D:\libs_n_includes\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <ReferencePath>$(SolutionDir);$(ReferencePath)</ReferencePath>
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>D:\libs_n_includes\include;D:\libs_n_includes\include;$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>D:\libs_n_includes\boost_1_47\lib;D:\libs_n_includes\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

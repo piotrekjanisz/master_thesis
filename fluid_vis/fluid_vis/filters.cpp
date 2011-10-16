@@ -72,3 +72,18 @@ void Filters::createHeavisideDistribution(double first, double last, double cuto
 		val += step;
 	}
 }
+
+int Filters::createGauss1DArrayAsc(int maxWidth, double valAtEdge, float* data)
+{
+	int retVal = 0;
+	float* currentData = data + maxWidth;
+	data[0] = 1.0;
+	for (int width = 3; width <= maxWidth; width += 2) {
+		retVal++;
+		int a = width / 2;
+		double sigma = (-a*a)/(2*log(valAtEdge));
+		createGauss1D(width, 1.0, sigma, currentData);
+		currentData += maxWidth;
+	}
+	return retVal + 1;
+}

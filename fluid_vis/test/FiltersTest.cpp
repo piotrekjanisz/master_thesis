@@ -13,6 +13,7 @@ struct FiltersTestFixture
 		: data(NULL)
 	{
 		data = new float[MAX_DATA_SIZE];
+		memset(data, 0, MAX_DATA_SIZE*sizeof(float));
 	}
 
 	~FiltersTestFixture()
@@ -112,6 +113,54 @@ BOOST_AUTO_TEST_CASE(createGauss1DArray_properValuesAtEdgesAndInTheMiddle)
 		BOOST_CHECK_CLOSE_FRACTION(data[MAX_SIZE*i + s/2 -1], 1.0, TestUtils::FLOAT_PRECISION);
 		s -= 2;
 	}
+}
+
+BOOST_AUTO_TEST_CASE(createGauss1DArrayAsc_properRetVal)
+{
+	const int MAX_WIDTH = 21;
+	int number_of_filters_returned = Filters::createGauss1DArrayAsc(MAX_WIDTH, 0.2, data);
+	int number_of_filters_required = (MAX_WIDTH - 1) / 2 + 1;
+	BOOST_CHECK_EQUAL(number_of_filters_returned, number_of_filters_required);
+}
+
+BOOST_AUTO_TEST_CASE(createGauss1DArrayAsc_properValuesAtEdges)
+{
+	const int MAX_WIDTH = 21;
+	const double VALUE_AT_EDGE = 0.2;
+	int numOfFilters = Filters::createGauss1DArrayAsc(MAX_WIDTH, VALUE_AT_EDGE, data);
+	for (int i = 1; i < numOfFilters; i++) {
+		float* currentData = &data[i * MAX_WIDTH];
+		double VAL_AT_LEFT_EDGE = currentData[0];
+		double VAL_AT_RIGHT_EDGE = currentData[2*i];
+		BOOST_CHECK_CLOSE_FRACTION(VAL_AT_LEFT_EDGE, VALUE_AT_EDGE, TestUtils::FLOAT_PRECISION);
+		BOOST_CHECK_CLOSE_FRACTION(VAL_AT_RIGHT_EDGE, VALUE_AT_EDGE, TestUtils::FLOAT_PRECISION);
+	}
+}
+
+BOOST_AUTO_TEST_CASE(createGauss1DArrayAsc_zeroBehindEdges)
+{
+	const int MAX_WIDTH = 21;
+	const double VALUE_AT_EDGE = 0.2;
+	int numOfFilters = Filters::createGauss1DArrayAsc(MAX_WIDTH, VALUE_AT_EDGE, data);
+	for (int i = 1; i < numOfFilters-1; i++) {
+		float* currentData = &data[i * MAX_WIDTH];
+		double VAL_BEHIND_RIGHT_EDGE = currentData[2*i + 1];
+		BOOST_CHECK_CLOSE_FRACTION(VAL_BEHIND_RIGHT_EDGE, 0.0, TestUtils::FLOAT_PRECISION);
+	}
+}
+
+BOOST_AUTO_TEST_CASE(createGauss1DArrayAsc_propertValuesInTheMiddle)
+{
+	const int MAX_WIDTH = 21;
+	const double VALUE_AT_EDGE = 0.2;
+	int numOfFilters = Filters::createGauss1DArrayAsc(MAX_WIDTH, VALUE_AT_EDGE, data);
+	for (int i = 0; i < numOfFilters; i++) {
+		float* currentData = &data[i * MAX_WIDTH];
+		double VAL_IN_THE_MIDDLE = currentData[i];
+		BOOST_CHECK_CLOSE_FRACTION(VAL_IN_THE_MIDDLE, 1.0, TestUtils::FLOAT_PRECISION);
+	}
+
+	TestUtils::printArray(data, MAX_WIDTH, numOfFilters);
 }
 
 BOOST_AUTO_TEST_SUITE_END();

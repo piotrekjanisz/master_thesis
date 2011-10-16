@@ -37,10 +37,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>D:\libs_n_includes\include\physx2_8\PhysXLoader;D:\libs_n_includes\include\physx2_8\Physics;D:\libs_n_includes\include\physx2_8\NxCharacter;D:\libs_n_includes\include\physx2_8\Foundation;D:\libs_n_includes\include\physx2_8\Cooking;D:\libs_n_includes\include;$(SolutionDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>D:\libs_n_includes\include\physx2_8\PhysXLoader;D:\libs_n_includes\include\physx2_8\Physics;D:\libs_n_includes\include\physx2_8\NxCharacter;D:\libs_n_includes\include\physx2_8\Foundation;D:\libs_n_includes\include\physx2_8\Cooking;D:\libs_n_includes\include;$(SolutionDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

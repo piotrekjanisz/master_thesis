@@ -3,9 +3,9 @@
 #pragma comment(lib, "GLUS.lib")
 
 #ifdef DEBUG_BUILD
-#pragma comment(lib, "boost_regex-vc100-mt-gd-1_46_1")
+#pragma comment(lib, "boost_regex-vc100-mt-gd-1_47")
 #else
-#pragma comment(lib, "boost_regex-vc100-mt-1_46_1")
+#pragma comment(lib, "boost_regex-vc100-mt-1_47")
 #endif
 
 
@@ -45,7 +45,7 @@ void createFluid()
 
 		float data[] = {
 			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f, 
+			0.0f, 0.0f, 1.0f, 0.3f, 
 			1.0f, 1.0f, 0.0f, 0.0f, 
 			0.0f, 0.0f, 0.0f, 1.0f
 		};
