@@ -30,7 +30,7 @@ void main(void)
 	vec4 pixelPos = vec4(eyeSpacePos + 0.1f * normal.xyz, 1.0f);
 	vec4 clipSpacePos = projectionMatrix * pixelPos;
 	// clipSpacePos.z / clipSpacePos.w is in [-1, 1] convert it to [0,1]
-	float depth = (clipSpacePos.z / clipSpacePos.w)*coef1 + coef2; 
+	float depth = (clipSpacePos.z / clipSpacePos.w)*0.5 + 0.5; 
 	gl_FragDepth = depth;
 	fragColor = (clipSpacePos.z + 1.0) / 100.0;
 }

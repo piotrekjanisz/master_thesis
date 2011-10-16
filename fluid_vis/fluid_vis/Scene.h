@@ -52,6 +52,8 @@ class Scene : public AbstractScene
 	ShaderProgramPtr _skyBoxShader;
 	ShaderProgramPtr _gaussianBlurShader;
 	ShaderProgramPtr _grayscaleTextureShader;
+
+	ShaderProgramPtr _bilateralGaussSmoothShader;
 	
 	GfxStaticObjectPtr _box;
 	GfxStaticObjectPtr _plane;
@@ -71,6 +73,7 @@ class Scene : public AbstractScene
 	TexturePtr _gaussDist1DTexture;
 	TexturePtr _gaussDist1DBilateralTexture;
 	TexturePtr _spatialDistTexture;
+	TexturePtr _gaussDistributionsArrayTexture;
 
 	TexturePtr _boxTexture;
 	TexturePtr _floorTexture;
@@ -112,6 +115,9 @@ class Scene : public AbstractScene
 
 	float _particleDepth;
 
+	float _filterSizeMult;
+	int _maxFilter;
+
 	vmml::vec4f _lightDirection;
 
 public:
@@ -125,6 +131,7 @@ public:
 	void changeDepthGauss(int sizeChange, double sigmaChange);
 	void changeAdditionalBlurPhases(int change);
 	void changeParticleDepth(float change);
+	void changeFilterSizeMult(float change);
 
 	void rotateLightDir(float xrot, float yrot);
 

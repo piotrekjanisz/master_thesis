@@ -63,6 +63,7 @@ public:
 	static TexturePtr createTexture2DFromImage(GLenum filteringMode, GLenum wrappingMode, const std::string& tgaPath);
 	static TexturePtr create1DDepthTexture(GLenum filteringMode, GLenum wrappingMode, int size, int border, float* data);
 	static TexturePtr create2DTexture(GLenum filteringMode, GLenum wrappingMode, int width, int height, int internalFormat, GLenum format, int border = 0, float* data = 0);
+	static TexturePtr create1DDepthTextureArray(GLenum filteringMode, GLenum wrappingMode, int width, int height, float* data = 0);
 
 	/**
 	 * pathPrefix - method will try to load images from following files:

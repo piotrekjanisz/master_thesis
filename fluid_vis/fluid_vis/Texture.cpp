@@ -126,6 +126,14 @@ TexturePtr Texture::create1DDepthTexture(GLenum filteringMode, GLenum wrappingMo
 	return retVal;
 }
 
+TexturePtr Texture::create1DDepthTextureArray(GLenum filteringMode, GLenum wrappingMode, int width, int height, float* data)
+{
+	TexturePtr retVal = boost::make_shared<Texture>(GL_TEXTURE_1D_ARRAY);
+	retVal->setParameters(filteringMode, wrappingMode);
+	retVal->load2DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, data);
+	return retVal;
+}
+
 TexturePtr Texture::createCubeMap(GLenum filteringMode, GLenum wrappingMode, const std::string& pathPrefix)
 {
 	TexturePtr retVal = boost::make_shared<Texture>(GL_TEXTURE_CUBE_MAP);

@@ -180,6 +180,10 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 		g_scene.changeParticleDepth(-0.001);
 	} else if (key == 'l') {
 		g_scene.changeParticleDepth(0.001);
+	} else if (key == 'm') {
+		g_scene.changeFilterSizeMult(-0.05);
+	} else if (key == 'n') {
+		g_scene.changeFilterSizeMult(0.05);
 	}
 }
 

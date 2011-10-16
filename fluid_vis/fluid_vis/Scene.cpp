@@ -16,13 +16,14 @@ using namespace std;
 
 Scene::Scene()
 	: _particleSize(100.0f), 
-	_bilateralTreshold(0.003), 
+	_bilateralTreshold(0.002), 
 	_bilateralGaussSigma(10.0), 
 	_bilateralGaussSize(21), 
 	_depthGaussSize(21),
 	_depthGaussSigma(40.0),
 	_additionalBlurPhases(0),
 	_particleDepth(0.05f),
+	_filterSizeMult(0.5f),
 	_lightDirection(-1.0, -1.0, -1.0, 0.0)
 {
 	// don't put any opengl command here!!!
@@ -95,6 +96,12 @@ void Scene::changeParticleDepth(float change)
 	DEBUG_PRINT_VAR(_particleDepth);
 }
 
+void Scene::changeFilterSizeMult(float change)
+{
+	_filterSizeMult = Utils::clamp(_filterSizeMult + change, 0.3f, 0.8f);
+	DEBUG_PRINT_VAR(_filterSizeMult);
+}
+
 void Scene::rotateLightDir(float xrot, float yrot)
 {
 	vmml::vec3f lightDirection(_lightDirection.x(), _lightDirection.y(), _lightDirection.z());
@@ -156,6 +163,10 @@ bool Scene::setup()
 	//Filters::normalize(gaussData, 1, _bilateralGaussSize);
 	_gaussDist1DBilateralTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, _bilateralGaussSize, 0, gaussData);
 	
+	int filtersNum = Filters::createGauss1DArrayAsc(50, 0.2, _debugData);
+	_maxFilter = filtersNum - 1;
+	CHECK_GL_CMD(_gaussDistributionsArrayTexture = Texture::create1DDepthTextureArray(GL_LINEAR, GL_CLAMP_TO_EDGE, 50, filtersNum, _debugData));
+
 	// texture with bilateral treshold
 	Filters::createHeavisideDistribution(0.0, 1.0, _bilateralTreshold, HEAVISIDE_SIZE, gaussData);
 	_spatialDistTexture = Texture::create1DDepthTexture(GL_NEAREST, GL_CLAMP_TO_EDGE, HEAVISIDE_SIZE, 0, gaussData);
@@ -164,6 +175,8 @@ bool Scene::setup()
 	Filters::createGauss1D(_depthGaussSize, 1.0, _depthGaussSigma, _debugData);
 	Filters::normalize(_debugData, 1, _depthGaussSize);
 	_gaussDist1DTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, _depthGaussSize, 0, _debugData);
+
+	
 	delete [] gaussData;	
 	
 	// framebuffers
@@ -213,7 +226,17 @@ bool Scene::setup()
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("spatialDist", 2));
 		CHECK_GL_CMD(screenQuadShader->setUniform1i("linearDepth", 3));
 		CHECK_GL_CMD(screenQuadShader->bindFragDataLocation(0, "frag_color"));
-		_screenQuad = boost::make_shared<ScreenQuad>(screenQuadShader);
+		//_screenQuad = boost::make_shared<ScreenQuad>(screenQuadShader);
+
+		_bilateralGaussSmoothShader = boost::make_shared<ShaderProgram>();
+		CHECK_GL_CMD(screenQuadShader->bindFragDataLocation(0, "frag_color"));
+		CHECK_GL_CMD(_bilateralGaussSmoothShader->load("shaders/screen_quad_vertex.glsl", "shaders/separable_bilateral_gauss_pointsize_fragment.glsl"));
+		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("inputImage", 0));
+		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("gaussianDist", 1));
+		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("spatialDist", 2));
+		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("linearDepth", 3));
+		_screenQuad = boost::make_shared<ScreenQuad>(_bilateralGaussSmoothShader);
+
 
 		_finalShader = boost::make_shared<ShaderProgram>();
 		CHECK_GL_CMD(_finalShader->load("shaders/screen_quad_vertex.glsl", "shaders/final_stage_fragment.glsl"));
@@ -496,11 +519,15 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
-	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDist1DBilateralTexture, GL_TEXTURE1));
+	//CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDist1DBilateralTexture, GL_TEXTURE1));
+	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDistributionsArrayTexture, GL_TEXTURE1));
 	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
 	CHECK_GL_CMD(_screenQuad->attachTexture(_zTexture, GL_TEXTURE3));
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 0.0f));
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1i("maxPointSize", _particleSize));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("filterSizeMult", _filterSizeMult));
+	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1i("maxFilter", _maxFilter));
 	CHECK_GL_CMD(_screenQuad->render());
 
 	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture2, GL_COLOR_ATTACHMENT0));
@@ -509,24 +536,6 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
 	CHECK_GL_CMD(_screenQuad->render());
-
-	// additional blur phases
-	for (int i = 0; i < _additionalBlurPhases; i++)
-	{
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
-		CHECK_GL_CMD(_screenQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
-		CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
-		CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
-		CHECK_GL_CMD(_screenQuad->render());
-
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture2, GL_COLOR_ATTACHMENT0));
-		CHECK_GL_CMD(_screenQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
-		CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getHeight(), 0.0f));
-		CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
-		CHECK_GL_CMD(_screenQuad->render());
-	}
 
 	// put water together with rest of the scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));

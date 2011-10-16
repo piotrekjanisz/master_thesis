@@ -12,9 +12,7 @@ void main(void)
 	vec4 v = modelViewMatrix * vertex;
 	eyeSpacePos = v.xyz;
 
-	float len = length(v);
-
-	gl_PointSize = pointSize / len;
+	gl_PointSize = pointSize / abs(eyeSpacePos.z);
 
 	gl_Position = projectionMatrix * v;
 }
