@@ -217,5 +217,8 @@
     <None Include="resources\shaders\separable_bilateral_gauss_pointsize_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="resources\shaders\edge_detection_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

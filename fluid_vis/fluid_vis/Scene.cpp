@@ -40,6 +40,7 @@ void Scene::reshape(int width, int height)
 	CHECK_GL_CMD(_waterDepthTexture->resize2D(width, height));
 	CHECK_GL_CMD(_smoothedTexture->resize2D(width, height));
 	CHECK_GL_CMD(_smoothedTexture2->resize2D(width, height));
+	CHECK_GL_CMD(_edgeTexture->resize2D(width, height));
 
 	CHECK_GL_CMD(_sceneFrameBuffer->resize(width, height));
 	CHECK_GL_CMD(_waterFrameBuffer->resize(width, height));
@@ -117,44 +118,29 @@ void Scene::rotateLightDir(float xrot, float yrot)
 int _ntriag = 0;
 int _nvert = 0;
 
-bool Scene::setup()
+
+bool Scene::setupTextures()
 {
-	if (!AbstractScene::setup()) {
-		return false;
-	}
-
-	SurfaceExtractorDesc desc;
-	ConfigurationFactory configurationFactory("config");
-	desc = configurationFactory.createSurfaceExtractorDesc("extractor");
-
-	_currentOutput = 0;
-
-	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(desc);
-	_mtSurfaceExtractor = boost::make_shared<MtSurfaceExtractor>(desc);
-	_block = boost::make_shared<Block>(3000, desc.xMin, desc.xMax, desc.yMin, desc.yMax, desc.zMin, desc.zMax, desc.rc, desc.cubeSize);
-
-	_debugData = new float[640*480*4];
-
-	// Textures
-	_sceneTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
-	_sceneDepthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
-	//_zTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, 0);
+	CHECK_GL_CMD(_sceneTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
+	CHECK_GL_CMD(_sceneDepthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
 	CHECK_GL_CMD(_zTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
-	_screenQuadTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
-	_depthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
-	_waterDepthTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
-	//_smoothedTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480);
+	CHECK_GL_CMD(_screenQuadTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
+	CHECK_GL_CMD(_depthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
+	CHECK_GL_CMD(_waterDepthTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
 	CHECK_GL_CMD(_smoothedTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_smoothedTexture2 = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
+	CHECK_GL_CMD(_edgeTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_floorTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor2.tga"));
 	CHECK_GL_CMD(_floorNormalMapTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor2_normalmap.tga"));
-	_boxTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/box.tga");
+	CHECK_GL_CMD(_boxTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/box.tga"));
 	CHECK_GL_CMD(_skyBoxTexture = Texture::createCubeMap(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/sk3"));
 
 	// filters
 	const int GAUSS_SIZE = 21;
 	const int HEAVISIDE_SIZE = 5000;
-	float* gaussData = new float[GAUSS_SIZE*GAUSS_SIZE*1000];
+	float* gaussData = 0;
+	Utils::ArrayHandle<float> handle(gaussData = new float[64000]);
+	
 	Filters::createGauss2D(GAUSS_SIZE, 1.0, 0.5, gaussData);
 	_gaussDistTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, GAUSS_SIZE, GAUSS_SIZE, 0, gaussData);
 	
@@ -163,23 +149,25 @@ bool Scene::setup()
 	//Filters::normalize(gaussData, 1, _bilateralGaussSize);
 	_gaussDist1DBilateralTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, _bilateralGaussSize, 0, gaussData);
 	
-	int filtersNum = Filters::createGauss1DArrayAsc(50, 0.2, _debugData);
+	int filtersNum = Filters::createGauss1DArrayAsc(50, 0.2, gaussData);
 	_maxFilter = filtersNum - 1;
-	CHECK_GL_CMD(_gaussDistributionsArrayTexture = Texture::create1DDepthTextureArray(GL_LINEAR, GL_CLAMP_TO_EDGE, 50, filtersNum, _debugData));
+	CHECK_GL_CMD(_gaussDistributionsArrayTexture = Texture::create1DDepthTextureArray(GL_LINEAR, GL_CLAMP_TO_EDGE, 50, filtersNum, gaussData));
 
 	// texture with bilateral treshold
 	Filters::createHeavisideDistribution(0.0, 1.0, _bilateralTreshold, HEAVISIDE_SIZE, gaussData);
 	_spatialDistTexture = Texture::create1DDepthTexture(GL_NEAREST, GL_CLAMP_TO_EDGE, HEAVISIDE_SIZE, 0, gaussData);
 	
 	// gauss for smoothing water depth
-	Filters::createGauss1D(_depthGaussSize, 1.0, _depthGaussSigma, _debugData);
-	Filters::normalize(_debugData, 1, _depthGaussSize);
-	_gaussDist1DTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, _depthGaussSize, 0, _debugData);
+	Filters::createGauss1D(_depthGaussSize, 1.0, _depthGaussSigma, gaussData);
+	Filters::normalize(gaussData, 1, _depthGaussSize);
+	_gaussDist1DTexture = Texture::create1DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, _depthGaussSize, 0, gaussData);
 
-	
-	delete [] gaussData;	
-	
-	// framebuffers
+	return true;
+}
+
+
+bool Scene::setupFramebuffers()
+{
 	_sceneFrameBuffer = boost::make_shared<FrameBuffer>();
 	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneTexture, GL_COLOR_ATTACHMENT0));
 	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneDepthTexture, GL_DEPTH_ATTACHMENT));
@@ -194,12 +182,12 @@ bool Scene::setup()
 	_smoothFrameBuffer = boost::make_shared<FrameBuffer>();
 	CHECK_GL_CMD(_smoothFrameBuffer->attachRenderbuffer(GL_RGBA, GL_COLOR_ATTACHMENT0, 640, 480));
 	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
+	return true;
+}
 
-	translate(0.0f, 1.5f, -0.5f);
-	rotateX(-0.4f);
 
-	translate(0.0f, 0.0f, -5.0f);
-
+bool Scene::setupShaders()
+{
 	try {
 		_shaderProgram = boost::make_shared<ShaderProgram>();
 		_shaderProgram->load("shaders/vertex.glsl", "shaders/fragment.glsl");
@@ -237,6 +225,11 @@ bool Scene::setup()
 		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("linearDepth", 3));
 		_screenQuad = boost::make_shared<ScreenQuad>(_bilateralGaussSmoothShader);
 
+		_edgeDetectionShader = boost::make_shared<ShaderProgram>();
+		CHECK_GL_CMD(_edgeDetectionShader->bindFragDataLocation(0, "frag_color"));
+		CHECK_GL_CMD(_edgeDetectionShader->load("shaders/screen_quad_vertex.glsl", "shaders/edge_detection_fragment.glsl"));
+		CHECK_GL_CMD(_edgeDetectionShader->setUniform1f("treshold", 0.015f));
+		_edgeQuad = boost::make_shared<ScreenQuad>(_edgeDetectionShader);
 
 		_finalShader = boost::make_shared<ShaderProgram>();
 		CHECK_GL_CMD(_finalShader->load("shaders/screen_quad_vertex.glsl", "shaders/final_stage_fragment.glsl"));
@@ -284,8 +277,12 @@ bool Scene::setup()
 		fgetc(stdin);
 		return false;
 	}
-	CHECK_GL_CMD(_shaderProgram->useThis());
+	return true;
+}
 
+
+bool Scene::setupObjects()
+{
 	_water = boost::make_shared<GfxObject>();
 	CHECK_GL_CMD(_water->addAttribute("vertex", 0, 70000, 4, GfxObject::DYNAMIC_ATTR));
 	CHECK_GL_CMD(_water->addShader(_waterShader));
@@ -311,6 +308,45 @@ bool Scene::setup()
 		fgetc(stdin);
 		return false;
 	}
+
+	return true;
+}
+
+
+bool Scene::setup()
+{
+	if (!AbstractScene::setup()) {
+		return false;
+	}
+
+	SurfaceExtractorDesc desc;
+	ConfigurationFactory configurationFactory("config");
+	desc = configurationFactory.createSurfaceExtractorDesc("extractor");
+
+	_currentOutput = 0;
+
+	_surfaceExtractor = boost::make_shared<SurfaceExtractor>(desc);
+	_mtSurfaceExtractor = boost::make_shared<MtSurfaceExtractor>(desc);
+	_block = boost::make_shared<Block>(3000, desc.xMin, desc.xMax, desc.yMin, desc.yMax, desc.zMin, desc.zMax, desc.rc, desc.cubeSize);
+
+	_debugData = new float[640*480*4];
+	
+	translate(0.0f, 1.5f, -0.5f);
+	rotateX(-0.4f);
+
+	translate(0.0f, 0.0f, -5.0f);
+
+	if (! setupTextures())
+		return false;
+
+	if (! setupFramebuffers())
+		return false;
+	
+	if (! setupShaders())
+		return false;
+
+	if (! setupObjects())
+		return false;
 
 	return true;
 }
@@ -537,6 +573,17 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
 	CHECK_GL_CMD(_screenQuad->render());
 
+
+	/*
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
+	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_edgeTexture, GL_COLOR_ATTACHMENT0));
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	CHECK_GL_CMD(_edgeQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0 / getHeight()));
+	CHECK_GL_CMD(_edgeQuad->attachTexture(_zTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_edgeQuad->render());
+	*/
+
+
 	// put water together with rest of the scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -555,7 +602,7 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
 	CHECK_GL_CMD(glUniformMatrix4fv(_inverseProjectionLocation, 1, GL_FALSE, _inverseProjectionMatrix));
 	CHECK_GL_CMD(_finalQuad->render());
-	
+
 	computeFrameRate();
 }
 

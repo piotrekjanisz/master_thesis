@@ -19,6 +19,7 @@
 
 class Scene : public AbstractScene
 {	
+private: // fields
 	int _projectionLocation;
 	int _modelViewLocation;
 	int _normalMatrixLocation;
@@ -54,6 +55,7 @@ class Scene : public AbstractScene
 	ShaderProgramPtr _grayscaleTextureShader;
 
 	ShaderProgramPtr _bilateralGaussSmoothShader;
+	ShaderProgramPtr _edgeDetectionShader;
 	
 	GfxStaticObjectPtr _box;
 	GfxStaticObjectPtr _plane;
@@ -74,6 +76,7 @@ class Scene : public AbstractScene
 	TexturePtr _gaussDist1DBilateralTexture;
 	TexturePtr _spatialDistTexture;
 	TexturePtr _gaussDistributionsArrayTexture;
+	TexturePtr _edgeTexture;
 
 	TexturePtr _boxTexture;
 	TexturePtr _floorTexture;
@@ -88,6 +91,7 @@ class Scene : public AbstractScene
 	ScreenQuadPtr _blurQuad;
 	ScreenQuadPtr _finalQuad;
 	ScreenQuadPtr _grayscaleIntermediateQuad;
+	ScreenQuadPtr _edgeQuad;
 
 	MyFluid* _fluid;
 
@@ -119,6 +123,12 @@ class Scene : public AbstractScene
 	int _maxFilter;
 
 	vmml::vec4f _lightDirection;
+
+private: // methods
+	bool setupTextures();
+	bool setupFramebuffers();
+	bool setupShaders();
+	bool setupObjects();
 
 public:
 	Scene();

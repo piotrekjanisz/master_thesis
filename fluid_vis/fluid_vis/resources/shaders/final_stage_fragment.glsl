@@ -58,7 +58,7 @@ void main(void)
 
 		float waterDepth = texture(waterDepthTexture, tex_coord).x;
 		//frag_color = (1.0 - waterDepth) * texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)) + waterDepth * vec4(0.0, 0.5, 1.0, 1.0);
-		frag_color = mix(texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)), vec4(0.0, 0.5, 1.0, 1.0), waterDepth);
+		frag_color = mix(texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)), vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0), waterDepth);
 		float powSpec = pow(spec, 64.0);
 		frag_color.rgb += vec3(powSpec, powSpec, powSpec);
 	} else {
