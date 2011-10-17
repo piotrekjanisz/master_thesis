@@ -55,6 +55,7 @@ private: // fields
 	ShaderProgramPtr _grayscaleTextureShader;
 
 	ShaderProgramPtr _bilateralGaussSmoothShader;
+	ShaderProgramPtr _curvatureFlowShader;
 	ShaderProgramPtr _edgeDetectionShader;
 	
 	GfxStaticObjectPtr _box;

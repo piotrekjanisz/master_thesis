@@ -217,13 +217,19 @@ bool Scene::setupShaders()
 		//_screenQuad = boost::make_shared<ScreenQuad>(screenQuadShader);
 
 		_bilateralGaussSmoothShader = boost::make_shared<ShaderProgram>();
-		CHECK_GL_CMD(screenQuadShader->bindFragDataLocation(0, "frag_color"));
+		CHECK_GL_CMD(_bilateralGaussSmoothShader->bindFragDataLocation(0, "frag_color"));
 		CHECK_GL_CMD(_bilateralGaussSmoothShader->load("shaders/screen_quad_vertex.glsl", "shaders/separable_bilateral_gauss_pointsize_fragment.glsl"));
 		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("inputImage", 0));
 		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("gaussianDist", 1));
 		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("spatialDist", 2));
 		CHECK_GL_CMD(_bilateralGaussSmoothShader->setUniform1i("linearDepth", 3));
 		_screenQuad = boost::make_shared<ScreenQuad>(_bilateralGaussSmoothShader);
+
+		_curvatureFlowShader = boost::make_shared<ShaderProgram>();
+		CHECK_GL_CMD(_curvatureFlowShader->bindFragDataLocation(0, "frag_color"));
+		CHECK_GL_CMD(_curvatureFlowShader->load("shaders/screen_quad_vertex.glsl", "shaders/curvature_flow_fragment.glsl"));
+		CHECK_GL_CMD(_curvatureFlowShader->setUniform1i("depthTexture", 0));
+		CHECK_GL_CMD(_curvatureFlowShader->setUniform1i("edgeTexture", 1));
 
 		_edgeDetectionShader = boost::make_shared<ShaderProgram>();
 		CHECK_GL_CMD(_edgeDetectionShader->bindFragDataLocation(0, "frag_color"));

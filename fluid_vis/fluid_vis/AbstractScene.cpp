@@ -9,7 +9,7 @@ bool AbstractScene::setup()
 	_xRotation = _yRotation = 0.0f;
 	_zNear = 1.0f;
 	_zFar = 100.0f;
-	_fov = 40.0f;
+	_fov = 80.0f;
 	_aspect = 1.3333f;
 
 	setProjectionMatrix(_aspect);
@@ -28,7 +28,7 @@ void AbstractScene::setProjectionMatrix(float fov, float aspect, float zNear, fl
 	_zNear = zNear;
 	_zFar = zFar;
 
-	float xymax = zNear * tan(fov * PI / 360.f);
+	float xymax = zNear * tan(fov * PI / 720.0f);
 	float ymin = -xymax;
 	float xmin = -xymax;
 

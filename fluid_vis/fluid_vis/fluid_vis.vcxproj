@@ -122,6 +122,7 @@
     <None Include="resources\config\sample.cfg" />
     <None Include="resources\config\water1.cfg" />
     <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
+    <None Include="resources\shaders\curvature_flow_fragment.glsl" />
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
     <None Include="resources\shaders\draw_image_fragment.glsl" />
     <None Include="resources\shaders\edge_detection_fragment.glsl" />
