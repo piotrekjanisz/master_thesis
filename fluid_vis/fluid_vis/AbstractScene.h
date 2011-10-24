@@ -60,6 +60,9 @@ public:
 	float getZNear() const { return _zNear; }
 	float getZFar() const { return _zFar; }
 
+	float getCtgFovX() const;
+	float getCtgFovY() const;
+
 	int getWidth() const { return _width; }
 	int getHeight() const { return _height; }
 

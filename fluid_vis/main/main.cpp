@@ -33,24 +33,84 @@ static ConfigurationFactory configurationFactory("config");
 
 bool g_useSurfaceExtraction = false;
 
+bool g_gpuAccelerationPossible = false;
+
+bool g_useGPUAcceleration = true;
+
 void createFluid() 
 {	
 	try {
 		NxFluidDesc fluidDesc = configurationFactory.createFluidDesc("water1");
-		fluidDesc.flags &= ~NX_FF_HARDWARE;
-		//fluidDesc.flags |= NX_FF_HARDWARE;
+		if (g_gpuAccelerationPossible && g_useGPUAcceleration) {
+			fluidDesc.flags |= NX_FF_HARDWARE;
+		} else {
+			fluidDesc.flags &= ~NX_FF_HARDWARE;
+		}
+
 		gFluid = new MyFluid(g_NxScene, fluidDesc, NxVec3(1.0f, 0.0f, 0.0f), 100.0f);
 
 		NxFluidEmitterDesc emitterDesc = configurationFactory.createFluidEmitterDesc("emitter1");
 
 		float data[] = {
-			1.0f, 0.0f, 0.0f, 0.0f,
+			1.0f, 0.0f, 0.0f, 0.3f,
 			0.0f, 0.0f, 1.0f, 0.3f, 
 			1.0f, 1.0f, 0.0f, 0.0f, 
 			0.0f, 0.0f, 0.0f, 1.0f
 		};
 		emitterDesc.relPose.setRowMajor44(data);
-
+		
+		float data2[] = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.3f, 
+			1.0f, 1.0f, 0.0f, 0.0f, 
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+		emitterDesc.relPose.setRowMajor44(data2);
+		gFluid->createEmitter(emitterDesc);
+		
+		float data3[] = {
+			1.0f, 0.0f, 0.0f, -0.3f,
+			0.0f, 0.0f, 1.0f, 0.3f, 
+			1.0f, 1.0f, 0.0f, 0.0f, 
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+		emitterDesc.relPose.setRowMajor44(data3);
+		gFluid->createEmitter(emitterDesc);
+		
+		float data4[] = {
+			1.0f, 0.0f, 0.0f, 0.3f,
+			0.0f, 0.0f, 1.0f, 0.3f, 
+			1.0f, 1.0f, 0.0f, -0.3f, 
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+		emitterDesc.relPose.setRowMajor44(data4);
+		gFluid->createEmitter(emitterDesc);
+		
+		float data5[] = {
+			1.0f, 0.0f, 0.0f, 0.3f,
+			0.0f, 0.0f, 1.0f, 0.3f, 
+			1.0f, 1.0f, 0.0f, 0.3f, 
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+		emitterDesc.relPose.setRowMajor44(data5);
+		gFluid->createEmitter(emitterDesc);
+		
+		float data6[] = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.3f, 
+			1.0f, 1.0f, 0.0f, 0.3f, 
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+		emitterDesc.relPose.setRowMajor44(data6);
+		gFluid->createEmitter(emitterDesc);
+		
+		float data7[] = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.3f, 
+			1.0f, 1.0f, 0.0f, -0.3f, 
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+		emitterDesc.relPose.setRowMajor44(data7);
 		gFluid->createEmitter(emitterDesc);
 	} catch (std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
@@ -149,12 +209,14 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 	} else if (key == 100) {
 		createCubesFromEye(1.0f, 50.0f, 10);
 	} else if (key == KEY_1) {
-		g_scene.incParticleSize(-1.0f);
+		g_scene.changeParticleSize(-1.0f);
 	} else if (key == KEY_2) {
-		g_scene.incParticleSize(1.0f);
+		g_scene.changeParticleSize(1.0f);
 	} else if (key == KEY_3) {
+		g_scene.changeEdgeTreshold(-1.0f);
 		g_scene.changeBilateralTreshold(-0.0005);
 	} else if (key == KEY_4) {
+		g_scene.changeEdgeTreshold(1.0f);
 		g_scene.changeBilateralTreshold(0.0005);
 	} else if (key == KEY_5) {
 		g_scene.changeGauss(0, -0.5);
@@ -184,16 +246,31 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 		g_scene.changeFilterSizeMult(-0.05);
 	} else if (key == 'n') {
 		g_scene.changeFilterSizeMult(0.05);
+	} else if (key == '<') {
+		g_scene.changeTimeStep(-1.0f);
+	} else if (key == '>') {
+		g_scene.changeTimeStep(1.0f);
 	}
 }
 
 bool initNx()
 {
 	NxSDKCreateError error;
-	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, NULL, new ErrorStream(), NxPhysicsSDKDesc(), &error);
+	NxPhysicsSDKDesc desc;
+	desc.flags &= ~NX_SDKF_NO_HARDWARE;
+	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, NULL, new ErrorStream(), desc, &error);
 	if (gPhysicsSDK == NULL) {
 		cout << "Physics SDK creation failed: " << PhysXUtils::getErrorString(error) << endl;
 		return false;
+	}
+
+	NxHWVersion hwCheck = gPhysicsSDK->getHWVersion();
+	if (hwCheck == NX_HW_VERSION_NONE) {
+		std::cout << "WARN: No PhysX hardware found. Fluid simulated on CPU" << std::endl;
+		g_gpuAccelerationPossible = false;
+	} else {
+		std::cout << "INFO: PhysX hardware acceleration possible. Fluid simulated on GPU" << std::endl;
+		g_gpuAccelerationPossible = true;
 	}
 
 	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.2f); // 0.2 is the best I've tried

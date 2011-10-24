@@ -15,7 +15,7 @@
 using namespace std;
 
 Scene::Scene()
-	: _particleSize(100.0f), 
+	: _particleSize(150.0f), 
 	_bilateralTreshold(0.002), 
 	_bilateralGaussSigma(10.0), 
 	_bilateralGaussSize(21), 
@@ -24,7 +24,11 @@ Scene::Scene()
 	_additionalBlurPhases(0),
 	_particleDepth(0.05f),
 	_filterSizeMult(0.5f),
-	_lightDirection(-1.0, -1.0, -1.0, 0.0)
+	_lightDirection(-1.0, -1.0, -1.0, 0.0),
+	_timeStep(-0.00000001f),
+	_timeStepChange(0.0000000005f),
+	_edgeTreshold(0.01f),
+	_edgeTresholdChange(0.001f)
 {
 	// don't put any opengl command here!!!
 }
@@ -87,7 +91,7 @@ void Scene::changeDepthGauss(int sizeChange, double sigmaChange)
 
 void Scene::changeAdditionalBlurPhases(int change)
 {
-	_additionalBlurPhases = Utils::clamp<int>(_additionalBlurPhases + change, 0, 10);
+	_additionalBlurPhases = Utils::clamp<int>(_additionalBlurPhases + change, 0, 1000);
 	DEBUG_PRINT_VAR(_additionalBlurPhases);
 }
 
@@ -101,6 +105,24 @@ void Scene::changeFilterSizeMult(float change)
 {
 	_filterSizeMult = Utils::clamp(_filterSizeMult + change, 0.3f, 0.8f);
 	DEBUG_PRINT_VAR(_filterSizeMult);
+}
+
+void Scene::changeParticleSize(float change)
+{
+	_particleSize = Utils::clamp(_particleSize + change, 1.0f, 200.0f);
+	DEBUG_PRINT_VAR(_particleSize);
+}
+
+void Scene::changeTimeStep(float change)
+{
+	_timeStep += change * _timeStepChange;
+	DEBUG_PRINT_VAR(_timeStep);
+}
+
+void Scene::changeEdgeTreshold(float change)
+{
+	_edgeTreshold = Utils::clamp(_edgeTreshold + change * _edgeTresholdChange, 0.0f, 10.0f);
+	DEBUG_PRINT_VAR(_edgeTreshold);
 }
 
 void Scene::rotateLightDir(float xrot, float yrot)
@@ -230,20 +252,22 @@ bool Scene::setupShaders()
 		CHECK_GL_CMD(_curvatureFlowShader->load("shaders/screen_quad_vertex.glsl", "shaders/curvature_flow_fragment.glsl"));
 		CHECK_GL_CMD(_curvatureFlowShader->setUniform1i("depthTexture", 0));
 		CHECK_GL_CMD(_curvatureFlowShader->setUniform1i("edgeTexture", 1));
+		_curvatureFlowQuad = boost::make_shared<ScreenQuad>(_curvatureFlowShader);
 
 		_edgeDetectionShader = boost::make_shared<ShaderProgram>();
 		CHECK_GL_CMD(_edgeDetectionShader->bindFragDataLocation(0, "frag_color"));
 		CHECK_GL_CMD(_edgeDetectionShader->load("shaders/screen_quad_vertex.glsl", "shaders/edge_detection_fragment.glsl"));
-		CHECK_GL_CMD(_edgeDetectionShader->setUniform1f("treshold", 0.015f));
+		CHECK_GL_CMD(_edgeDetectionShader->setUniform1f("treshold", 0.01f));
 		_edgeQuad = boost::make_shared<ScreenQuad>(_edgeDetectionShader);
 
 		_finalShader = boost::make_shared<ShaderProgram>();
-		CHECK_GL_CMD(_finalShader->load("shaders/screen_quad_vertex.glsl", "shaders/final_stage_fragment.glsl"));
+		CHECK_GL_CMD(_finalShader->load("shaders/screen_quad_vertex.glsl", "shaders/final_stage_fragment2.glsl"));
 		CHECK_GL_CMD(_finalShader->setUniform1i("depthTexture", 0));
 		CHECK_GL_CMD(_finalShader->setUniform1i("sceneDepthTexture", 1));
 		CHECK_GL_CMD(_finalShader->setUniform1i("sceneTexture", 2));
 		CHECK_GL_CMD(_finalShader->setUniform1i("waterDepthTexture", 3));
-		CHECK_GL_CMD(_inverseProjectionLocation = _finalShader->getUniformLocation("inverseProjection"));
+		CHECK_GL_CMD(_finalShader->setUniform1i("wTexture", 4));
+		//CHECK_GL_CMD(_inverseProjectionLocation = _finalShader->getUniformLocation("inverseProjection"));
 		CHECK_GL_CMD(_finalShader->bindFragDataLocation(0, "frag_color"));
 		_finalQuad = boost::make_shared<ScreenQuad>(_finalShader);
 
@@ -525,7 +549,6 @@ void Scene::render(NxScene* physicsScene)
 			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
 			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
-			
 
 			CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterDepthFrameBuffer->getId()));
 			CHECK_GL_CMD(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -556,10 +579,12 @@ void Scene::render(NxScene* physicsScene)
 		}
 	}
 
+	/*
 	// blur phase
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
 	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
 	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
 	//CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDist1DBilateralTexture, GL_TEXTURE1));
 	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDistributionsArrayTexture, GL_TEXTURE1));
@@ -578,35 +603,87 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
 	CHECK_GL_CMD(_screenQuad->render());
+	*/
 
-
-	/*
+	
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
 	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_edgeTexture, GL_COLOR_ATTACHMENT0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	CHECK_GL_CMD(_edgeQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0 / getHeight()));
+	CHECK_GL_CMD(_edgeQuad->getShaderProgram()->setUniform1f("treshold", _edgeTreshold));
 	CHECK_GL_CMD(_edgeQuad->attachTexture(_zTexture, GL_TEXTURE0));
 	CHECK_GL_CMD(_edgeQuad->render());
-	*/
+	
+	float Cx = 2.0 / getCtgFovX();
+	float Cy = 2.0 / getCtgFovY();
+	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
+	// FIXME something wrong with output or texture
+	CHECK_GL_CMD(_curvatureFlowQuad->attachTexture(_zTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_curvatureFlowQuad->attachTexture(_edgeTexture, GL_TEXTURE1));
+	CHECK_GL_CMD(_curvatureFlowQuad->getShaderProgram()->setUniform1f("Cx", Cx));
+	CHECK_GL_CMD(_curvatureFlowQuad->getShaderProgram()->setUniform1f("Cy", Cy));
+	CHECK_GL_CMD(_curvatureFlowQuad->getShaderProgram()->setUniform1f("Cx_square", Cx*Cx));
+	CHECK_GL_CMD(_curvatureFlowQuad->getShaderProgram()->setUniform1f("Cy_square", Cy*Cy));
+	CHECK_GL_CMD(_curvatureFlowQuad->getShaderProgram()->setUniform2f("coordStep", 1.0 / getWidth(), 1.0 / getHeight()));
+	CHECK_GL_CMD(_curvatureFlowQuad->getShaderProgram()->setUniform2f("coordStepInv", getWidth(), getHeight()));
+	CHECK_GL_CMD(_curvatureFlowQuad->getShaderProgram()->setUniform1f("timeStep", _timeStep));
+	CHECK_GL_CMD(_curvatureFlowQuad->render());
 
+	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture2, GL_COLOR_ATTACHMENT0));
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	CHECK_GL_CMD(_curvatureFlowQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_curvatureFlowQuad->render());
+
+	for (int i = 0; i <	_additionalBlurPhases; i++)
+	{
+		/*
+		CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
+		CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_edgeTexture, GL_COLOR_ATTACHMENT0));
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		CHECK_GL_CMD(_edgeQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0 / getHeight()));
+		CHECK_GL_CMD(_edgeQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
+		CHECK_GL_CMD(_edgeQuad->render());
+		*/
+
+		CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		CHECK_GL_CMD(_curvatureFlowQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
+		CHECK_GL_CMD(_curvatureFlowQuad->render());
+
+		CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture2, GL_COLOR_ATTACHMENT0));
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		CHECK_GL_CMD(_curvatureFlowQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
+		CHECK_GL_CMD(_curvatureFlowQuad->render());
+	}
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	
 	// put water together with rest of the scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
 	/*
-	CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
+	CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_edgeTexture, GL_TEXTURE0));
 	CHECK_GL_CMD(_grayscaleIntermediateQuad->render());
 	*/
 	
-	CHECK_GL_CMD(_finalQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
+	CHECK_GL_CMD(_finalQuad->attachTexture(_depthTexture, GL_TEXTURE0));
 	//CHECK_GL_CMD(_finalQuad->attachTexture(_depthTexture, GL_TEXTURE0));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneDepthTexture, GL_TEXTURE1));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_sceneTexture, GL_TEXTURE2));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_waterDepthTexture, GL_TEXTURE3));
+	CHECK_GL_CMD(_finalQuad->attachTexture(_smoothedTexture2, GL_TEXTURE4));
+
+	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_x", getCtgFovX()));
+	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_y", getCtgFovY()));
+	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("far", getZFar()));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform4f("lightDirection", lightDirectionEyeSpace));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0f / getHeight()));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
-	CHECK_GL_CMD(glUniformMatrix4fv(_inverseProjectionLocation, 1, GL_FALSE, _inverseProjectionMatrix));
+	//CHECK_GL_CMD(glUniformMatrix4fv(_inverseProjectionLocation, 1, GL_FALSE, _inverseProjectionMatrix));
 	CHECK_GL_CMD(_finalQuad->render());
 
 	computeFrameRate();

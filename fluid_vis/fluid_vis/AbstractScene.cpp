@@ -21,6 +21,32 @@ bool AbstractScene::setup()
 	return true;
 }
 
+float AbstractScene::getCtgFovX() const
+{
+	float xymax = _zNear * tan(_fov * PI / 720.0f);
+	float xmin = -xymax;
+
+	float width = xymax - xmin;
+
+	float w = 2 * _zNear / width;
+	w = w / _aspect;
+
+	return w;
+}
+
+float AbstractScene::getCtgFovY() const
+{
+	float xymax = _zNear * tan(_fov * PI / 720.0f);
+	float ymin = -xymax;
+
+	float height = xymax - ymin;
+
+	float h = 2 * _zNear / height;
+
+	return h;
+}
+
+
 void AbstractScene::setProjectionMatrix(float fov, float aspect, float zNear, float zFar)
 {
 	_fov = fov;

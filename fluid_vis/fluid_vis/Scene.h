@@ -93,6 +93,7 @@ private: // fields
 	ScreenQuadPtr _finalQuad;
 	ScreenQuadPtr _grayscaleIntermediateQuad;
 	ScreenQuadPtr _edgeQuad;
+	ScreenQuadPtr _curvatureFlowQuad;
 
 	MyFluid* _fluid;
 
@@ -123,6 +124,12 @@ private: // fields
 	float _filterSizeMult;
 	int _maxFilter;
 
+	float _timeStep;
+	float _timeStepChange;
+
+	float _edgeTreshold;
+	float _edgeTresholdChange;
+
 	vmml::vec4f _lightDirection;
 
 private: // methods
@@ -143,6 +150,9 @@ public:
 	void changeAdditionalBlurPhases(int change);
 	void changeParticleDepth(float change);
 	void changeFilterSizeMult(float change);
+	void changeParticleSize(float change);
+	void changeTimeStep(float change);
+	void changeEdgeTreshold(float change);
 
 	void rotateLightDir(float xrot, float yrot);
 

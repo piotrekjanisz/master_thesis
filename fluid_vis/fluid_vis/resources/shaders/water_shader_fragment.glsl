@@ -32,5 +32,7 @@ void main(void)
 	// clipSpacePos.z / clipSpacePos.w is in [-1, 1] convert it to [0,1]
 	float depth = (clipSpacePos.z / clipSpacePos.w)*0.5 + 0.5; 
 	gl_FragDepth = depth;
-	fragColor = (clipSpacePos.z + 1.0) / 100.0;
+	//fragColor = (clipSpacePos.z + 1.0) / 100.0;
+	fragColor = (clipSpacePos.w) / 100.0;
+
 }

@@ -38,6 +38,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>D:\libs_n_includes\include\physx2_8\PhysXLoader;D:\libs_n_includes\include\physx2_8\Physics;D:\libs_n_includes\include\physx2_8\NxCharacter;D:\libs_n_includes\include\physx2_8\Foundation;D:\libs_n_includes\include\physx2_8\Cooking;D:\libs_n_includes\include;$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>D:\libs_n_includes\lib;D:\libs_n_includes\boost_1_47\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>D:\libs_n_includes\include\physx2_8\PhysXLoader;D:\libs_n_includes\include\physx2_8\Physics;D:\libs_n_includes\include\physx2_8\NxCharacter;D:\libs_n_includes\include\physx2_8\Foundation;D:\libs_n_includes\include\physx2_8\Cooking;D:\libs_n_includes\include;$(SolutionDir);$(IncludePath)</IncludePath>
@@ -122,11 +123,13 @@
     <None Include="resources\config\sample.cfg" />
     <None Include="resources\config\water1.cfg" />
     <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
+    <None Include="resources\shaders\curvature_flow2.glsl" />
     <None Include="resources\shaders\curvature_flow_fragment.glsl" />
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
     <None Include="resources\shaders\draw_image_fragment.glsl" />
     <None Include="resources\shaders\edge_detection_fragment.glsl" />
     <None Include="resources\shaders\final_stage_fragment.glsl" />
+    <None Include="resources\shaders\final_stage_fragment2.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\gaussian_blur_fragment.glsl" />
     <None Include="resources\shaders\normalization_vertex.glsl" />
@@ -134,6 +137,7 @@
     <None Include="resources\shaders\normal_map_vertex.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />
+    <None Include="resources\shaders\semi_implicit_curvature_flow_fragment.glsl" />
     <None Include="resources\shaders\separable_bilateral_gauss_fragment.glsl" />
     <None Include="resources\shaders\separable_bilateral_gauss_pointsize_fragment.glsl" />
     <None Include="resources\shaders\show_texture_grayscale_fragment.glsl" />
