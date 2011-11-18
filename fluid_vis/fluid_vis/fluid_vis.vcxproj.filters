@@ -19,6 +19,9 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{439c16e4-64bb-43a4-8609-a5377346e7f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\debug">
+      <UniqueIdentifier>{bde57675-0235-4c47-86f0-b310a2981f75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractScene.cpp">
@@ -73,6 +76,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ConfigurationFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -135,6 +141,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConfigurationFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -205,9 +214,6 @@
     <None Include="resources\shaders\water_surface_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="resources\shaders\show_texture_grayscale_fragment.glsl">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="resources\shaders\normal_map_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
@@ -231,6 +237,27 @@
     </None>
     <None Include="resources\shaders\semi_implicit_curvature_flow_fragment.glsl">
       <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\phong_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\phong_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\light_source_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\light_source_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\debug_light_vertex.glsl">
+      <Filter>shaders\debug</Filter>
+    </None>
+    <None Include="resources\shaders\show_texture_grayscale_fragment.glsl">
+      <Filter>shaders\debug</Filter>
+    </None>
+    <None Include="resources\shaders\debug_geometry.glsl">
+      <Filter>shaders\debug</Filter>
     </None>
   </ItemGroup>
 </Project>

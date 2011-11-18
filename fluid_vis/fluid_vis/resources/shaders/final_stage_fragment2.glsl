@@ -56,16 +56,18 @@ void main(void)
 		
 		vec3 normal = normalize(cross(ddx, ddy));
 
-		float reflectance = 0.02 + (1.0 - 0.02) * pow(1 - dot(normal, v_eye), 5.0);
+		vec3 eye = vec3 (0.0, 0.0, 1.0);
+		vec3 halfVector = normalize(eye - normalize(lightDirection.xyz));
 
-		vec3 reflection = normalize(reflect(lightDirection.xyz, normal));
-		float spec = max(0.0, dot(normal, reflection));
+		float fSpec = pow(max(dot(normal, halfVector), 0), 64);
 
 		float waterDepth = texture(waterDepthTexture, tex_coord).x;
-		//frag_color = (1.0 - waterDepth) * texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)) + waterDepth * vec4(0.0, 0.5, 1.0, 1.0);
-		frag_color = mix(texture(sceneTexture, tex_coord + 0.5 * waterDepth * vec2(normal.x, -normal.y)), vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0), waterDepth);
-		float powSpec = pow(spec, 64.0);
-		frag_color.rgb += vec3(powSpec, powSpec, powSpec);
+		
+		frag_color = mix(texture(sceneTexture, tex_coord + 0.1 * waterDepth * vec2(normal.x, -normal.y)), vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0), waterDepth);
+		
+		frag_color.rgb += vec3(fSpec, fSpec, fSpec);
+
+		//frag_color = vec4(normal, 1.0);
 	} else {
 		frag_color = texture(sceneTexture, tex_coord);
 	}

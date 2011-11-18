@@ -1,4 +1,5 @@
 #include "ShapeFactory.h"
+#include "utils/utils.h"
 
 #include <boost/make_shared.hpp>
 #include <GL/glus.h>
@@ -11,6 +12,86 @@ ShapeFactory::ShapeFactory(void)
 
 ShapeFactory::~ShapeFactory(void)
 {
+}
+
+ShapePtr ShapeFactory::createPlane(float halfExtent, float texCoordMult, int halfTiles)
+{
+	int tiles = 2 * halfTiles;
+
+	const unsigned int VERTICES_COUNT = (tiles + 1) * (tiles + 1);
+	const unsigned int TEX_COORDS_COUNT = VERTICES_COUNT;
+	const unsigned int INDICES_COUNT = 2 * 3 * tiles * tiles;
+	float* vertices = new float[VERTICES_COUNT * 4];
+	float* normals = new float[VERTICES_COUNT * 3];
+	float* tangents = new float[VERTICES_COUNT * 3];
+	float* bitangents = new float[VERTICES_COUNT * 3];
+	float* tex_coords = new float[TEX_COORDS_COUNT * 2];
+	unsigned int* indices = new unsigned int[INDICES_COUNT];
+
+	float tileWidth = halfExtent / halfTiles;
+	int num = 0;
+
+	for (int i = 0; i <= tiles; i++) {
+		for (int j = 0; j <= tiles; j++) {
+			vertices[num++] = -halfExtent + i * tileWidth; 
+			vertices[num++] = 0.0f;
+			vertices[num++] = -halfExtent + j * tileWidth;
+			vertices[num++] = 1.0f;
+		}
+	}
+
+	num = 0;
+	for (int i = 0; i <= tiles; i++) {
+		for (int j = 0; j <= tiles; j++) {
+			normals[num++] = 0.0f;
+			normals[num++] = 1.0f;
+			normals[num++] = 0.0f;
+		}
+	}
+
+	num = 0;
+	for (int i = 0; i <= tiles; i++) {
+		for (int j = 0; j <= tiles; j++) {
+			tangents[num++] = 1.0f;
+			tangents[num++] = 0.0f;
+			tangents[num++] = 0.0f;
+		}
+	}
+
+	num = 0;
+	for (int i = 0; i <= tiles; i++) {
+		for (int j = 0; j <= tiles; j++) {
+			bitangents[num++] = 0.0f;
+			bitangents[num++] = 0.0f;
+			bitangents[num++] = -1.0f;
+		}
+	}
+
+	float texCoordStep = 1.0 / tiles;
+	num = 0;
+	for (int i = 0; i <= tiles; i++) {
+		for (int j = 0; j <= tiles; j++) {
+			tex_coords[num++] = i * texCoordStep * texCoordMult;
+			tex_coords[num++] = j * texCoordStep * texCoordMult;
+		}
+	}
+
+	num = 0;
+	for (int i = 0; i < tiles; i++) {
+		for (int j = 0; j < tiles; j++) {
+			// first triangle
+			indices[num++] = i + 1 + (j + 1) * (tiles + 1);
+			indices[num++] = i     + (j + 1) * (tiles + 1);
+			indices[num++] = i     +  j      * (tiles + 1);
+
+			// second triangle
+			indices[num++] = (i + 1) + j * (tiles + 1);
+			indices[num++] = (i + 1) + (j + 1) * (tiles + 1);
+			indices[num++] = i + j * (tiles + 1);
+		}
+	}
+
+	return boost::make_shared<Shape>(vertices, VERTICES_COUNT, normals, tangents, bitangents,  indices, INDICES_COUNT, tex_coords);
 }
 
 ShapePtr ShapeFactory::createPlane(float halfExtent, float texCoorMult)
@@ -75,7 +156,7 @@ ShapePtr ShapeFactory::createPlane(float halfExtent, float texCoorMult)
 	tex_coords[i++] = texCoorMult;        tex_coords[i++] = texCoorMult;
 	tex_coords[i++] = 0.5f * texCoorMult; tex_coords[i++] = 0.5f * texCoorMult;
 
-	return boost::make_shared<Shape>(vertices, VERTICES_COUNT, normals, indices, INDICES_COUNT, tex_coords);
+	return boost::make_shared<Shape>(vertices, VERTICES_COUNT, normals, tangents, bitangents,  indices, INDICES_COUNT, tex_coords);
 }
 
 ShapePtr ShapeFactory::createBox(float halfExtent)

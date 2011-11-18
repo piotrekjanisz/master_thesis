@@ -69,6 +69,7 @@ public:
 	ShapeFactory(void);
 	~ShapeFactory(void);
 
+	ShapePtr createPlane(float halfExtent, float texCoordMult, int tiles);
 	ShapePtr createPlane(float halfExtent, float texCoorMult);
 	ShapePtr createBox(float halfExtent);
 	ShapePtr createSkyBox(float halfExtent);

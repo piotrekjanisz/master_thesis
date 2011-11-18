@@ -73,6 +73,11 @@ public:
 private:
     void loadAux(const std::string& vertexSoruce, const std::string& fragmentSource, const std::string& geometrySource) throw(ShaderException);
     int loadShader(const std::string& source, int shaderType) throw(ShaderException);
+	
+	std::string getShaderSourcesString()
+	{
+		return _vertexSource + ", " + _fragmentSource + ", " + _geometrySource; 
+	}
 
 	std::string shaderTypeToString(int shaderType);
 
@@ -85,5 +90,9 @@ private:
     int _vertexProgram;
     int _fragmentProgram;
     int _geometryProgram;
+
+	std::string _vertexSource;
+	std::string _fragmentSource;
+	std::string _geometrySource;
 };
 

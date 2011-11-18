@@ -28,6 +28,10 @@ void ShaderProgram::load(const std::string& vertexSource, const std::string& fra
 
 void ShaderProgram::loadAux(const std::string& vertexSoruce, const std::string& fragmentSource, const std::string& geometrySource) throw (ShaderException)
 {
+	_vertexSource = vertexSoruce;
+	_fragmentSource = fragmentSource;
+	_geometrySource = geometrySource;
+
     if (!vertexSoruce.empty()) {
         _vertexProgram = loadShader(vertexSoruce, GL_VERTEX_SHADER);
     }
@@ -154,7 +158,7 @@ int ShaderProgram::getAttribLocation(const char* name)
 {
 	int retVal = glGetAttribLocation(_programId, name);
 	if (retVal == -1) {
-		throw ShaderException(string("can't find attrib: \"") + string(name) + string("\""));
+		throw ShaderException(string("can't find attrib: \"") + string(name) + string("\" in ") + _vertexSource);
 	}
 	return retVal;
 }
@@ -163,7 +167,7 @@ int ShaderProgram::getUniformLocation(const char* name)
 {
 	int retVal = glGetUniformLocation(_programId, name);
 	if (retVal == -1) {
-		throw ShaderException(string("can't find uniform: \"") + string(name) + string("\""));
+		throw ShaderException(string("can't find uniform: \"") + string(name) + string("\" in any of ") + getShaderSourcesString());
 	}
 	return retVal;
 }
@@ -190,16 +194,16 @@ void ShaderProgram::setUniform1f(const char* name, float value)
 
 void ShaderProgram::setUniform2f(const char* name, float v0, float v1)
 {
-	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
+	int location = glGetUniformLocation(getId(), name);
 	useThis();
-	CHECK_GL_CMD(glUniform2f(location, v0, v1));
+	glUniform2f(location, v0, v1);
 }
 
 void ShaderProgram::setUniform3f(const char* name, float* data)
 {
-	CHECK_GL_CMD(int location = glGetUniformLocation(getId(), name));
+	int location = glGetUniformLocation(getId(), name);
 	useThis();
-	CHECK_GL_CMD(glUniform3fv(location, 1, data));
+	glUniform3fv(location, 1, data);
 }
 
 void ShaderProgram::setUniform4f(const char* name, float* data)

@@ -83,7 +83,10 @@ void main()
 	float Ex = 0.5 * dzx * dDx - ddzx*D;
 	float Ey = 0.5 * dzy * dDy - ddzy*D;
 
-	float H = edge * 0.5 * (Cy*Ex + Cx*Ey) / (pow(D, 1.5));
+	float H = 0.0;
+
+	if (edge > 0.0)
+		H = 0.5 * (Cy*Ex + Cx*Ey) / (pow(D, 1.5));
 
 	frag_color = z + timeStep * H;
 }

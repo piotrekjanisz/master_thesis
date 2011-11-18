@@ -24,10 +24,12 @@ Scene::Scene()
 	_additionalBlurPhases(0),
 	_particleDepth(0.05f),
 	_filterSizeMult(0.5f),
-	_lightDirection(-1.0, -1.0, -1.0, 0.0),
+	_lightDirection(-1.0, -1.0, 1.0, 0.0),
+	_lightPosition(50.0f, 50.0f, -50.0f, 1.0f),
+	_lightController(vmml::vec3f(50.0f, 50.0f, -50.0f)),
 	_timeStep(-0.00000001f),
 	_timeStepChange(0.0000000005f),
-	_edgeTreshold(0.01f),
+	_edgeTreshold(0.004f),
 	_edgeTresholdChange(0.001f)
 {
 	// don't put any opengl command here!!!
@@ -125,6 +127,15 @@ void Scene::changeEdgeTreshold(float change)
 	DEBUG_PRINT_VAR(_edgeTreshold);
 }
 
+void Scene::changeLightPosition(const vmml::vec4f& change)
+{
+	_lightPosition += change;
+	_lightController.translate(change.get_sub_vector<3>());
+	DEBUG_PRINT_VAR(_lightController.position());
+	DEBUG_PRINT_VAR(_lightController.getModelMatrix());
+	DEBUG_PRINT_VAR(_viewMatrix);
+}
+
 void Scene::rotateLightDir(float xrot, float yrot)
 {
 	vmml::vec3f lightDirection(_lightDirection.x(), _lightDirection.y(), _lightDirection.z());
@@ -152,8 +163,8 @@ bool Scene::setupTextures()
 	CHECK_GL_CMD(_smoothedTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_smoothedTexture2 = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_edgeTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
-	CHECK_GL_CMD(_floorTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor2.tga"));
-	CHECK_GL_CMD(_floorNormalMapTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor2_normalmap.tga"));
+	CHECK_GL_CMD(_floorTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor_bl.tga"));
+	CHECK_GL_CMD(_floorNormalMapTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_REPEAT, "textures/floor_bl_normal.tga"));
 	CHECK_GL_CMD(_boxTexture = Texture::createTexture2DFromImage(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/box.tga"));
 	CHECK_GL_CMD(_skyBoxTexture = Texture::createCubeMap(GL_LINEAR, GL_CLAMP_TO_EDGE, "textures/sk3"));
 
@@ -211,6 +222,19 @@ bool Scene::setupFramebuffers()
 bool Scene::setupShaders()
 {
 	try {
+		_phongShader = boost::make_shared<ShaderProgram>();
+		_phongShader->load("shaders/phong_vertex.glsl", "shaders/phong_fragment.glsl");
+		CHECK_GL_CMD(_phongShader->setUniform1i("tex", 0));
+		CHECK_GL_CMD(_phongShader->bindFragDataLocation(0, "fragColor"));
+
+		_debugShader = boost::make_shared<ShaderProgram>();
+		_debugShader->load("shaders/debug_light_vertex.glsl", "shaders/light_source_fragment.glsl", "shaders/debug_geometry.glsl");
+		CHECK_GL_CMD(_debugShader->bindFragDataLocation(0, "fragColor"));
+
+		_simpleShader = boost::make_shared<ShaderProgram>();
+		_simpleShader->load("shaders/light_source_vertex.glsl", "shaders/light_source_fragment.glsl");
+		CHECK_GL_CMD(_simpleShader->bindFragDataLocation(0, "fragColor"));
+
 		_shaderProgram = boost::make_shared<ShaderProgram>();
 		_shaderProgram->load("shaders/vertex.glsl", "shaders/fragment.glsl");
 		CHECK_GL_CMD(_shaderProgram->bindFragDataLocation(0, "fragColor"));
@@ -326,13 +350,20 @@ bool Scene::setupObjects()
 	try {
 		_box = boost::make_shared<GfxStaticObject>(_shaderProgram);
 		_plane = boost::make_shared<GfxStaticObject>(_normalMapShader);
+		//_plane = boost::make_shared<GfxStaticObject>(_phongShader);
+		_planeDebug = boost::make_shared<GfxStaticObject>(_debugShader);
 		_skyBox = boost::make_shared<GfxStaticObject>(_skyBoxShader);
-		ShapePtr plane = ShapeFactory().createPlane(100.0f, 100.0);
+		_light = boost::make_shared<GfxStaticObject>(_simpleShader);
+		ShapePtr plane = ShapeFactory().createPlane(100.0f, 200.0f, 200);
 		ShapePtr box = ShapeFactory().createBox(0.5f);
 		ShapePtr skyBox = ShapeFactory().createSkyBox(50.0f);
+		GLUSshape sphere;
+		glusCreateSpheref(&sphere, 1.0f, 32);
 		CHECK_GL_CMD(_box->createFromShape(box));
 		CHECK_GL_CMD(_plane->createFromShape(plane));
+		//CHECK_GL_CMD(_planeDebug->createFromShape(plane));
 		CHECK_GL_CMD(_skyBox->createFromShape(skyBox));
+		CHECK_GL_CMD(_light->createFromGlusShape(sphere));
 	} catch(const GfxException& ex) {
 		cout << ex.what() << endl;
 		fgetc(stdin);
@@ -341,7 +372,6 @@ bool Scene::setupObjects()
 
 	return true;
 }
-
 
 bool Scene::setup()
 {
@@ -361,10 +391,10 @@ bool Scene::setup()
 
 	_debugData = new float[640*480*4];
 	
-	translate(0.0f, 1.5f, -0.5f);
-	rotateX(-0.4f);
+	translate(0.0f, 5.0f, -20.0f);
+	//rotateX(-0.4f);
 
-	translate(0.0f, 0.0f, -5.0f);
+	//translate(0.0f, 0.0f, -5.0f);
 
 	if (! setupTextures())
 		return false;
@@ -377,6 +407,8 @@ bool Scene::setup()
 
 	if (! setupObjects())
 		return false;
+
+	glLineWidth(5.0f);
 
 	return true;
 }
@@ -467,6 +499,11 @@ void Scene::render(NxScene* physicsScene)
 	setupMatrixes();
 
 	vmml::vec4f lightDirectionEyeSpace = getLightInEyeSpace();
+	vmml::vec3f normalMatrix = getNormalMatrix(_viewMatrix);
+	lightDirectionEyeSpace.normalize();
+
+	//vmml::vec4f lightPositionEyeSpace = getLightPositionInEyeSpace();
+	vmml::vec4f lightPositionEyeSpace = _viewMatrix * _lightController.getModelMatrix() * vmml::vec4f(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// render scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _sceneFrameBuffer->getId()));
@@ -478,6 +515,13 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_skyBoxTexture->bindToTextureUnit(GL_TEXTURE0));
 	CHECK_GL_CMD(_skyBox->render());
 
+	vmml::vec4f lightColor(1.0f, 1.0f, 0.0f, 1.0f);
+	CHECK_GL_CMD(_light->getShader()->useThis());
+	CHECK_GL_CMD(_light->getShader()->setUniform4f("color", lightColor));
+	CHECK_GL_CMD(_light->getShader()->setUniformMat4f("modelViewProjectionMatrix", _projectionMatrix * _viewMatrix * _lightController.getModelMatrix()));
+	//CHECK_GL_CMD(_light->getShader()->setUniform4f("translation", _lightPosition));
+	CHECK_GL_CMD(_light->render());
+
 	/*
 	_shaderProgram->useThis();
 	CHECK_GL_CMD(_shaderProgram->setUniformMat4f("projectionMatrix", _projectionMatrix));
@@ -487,13 +531,34 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
 	CHECK_GL_CMD(_plane->render());
 	*/
-	
-	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewProjectionMatrix", _modelViewProjectionMatrix));
-	CHECK_GL_CMD(_plane->getShader()->setUniform3f("lightDirection", _lightDirection));
+
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("projectionMatrix", _projectionMatrix));
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
+	CHECK_GL_CMD(_plane->getShader()->setUniform4f("lightPositionEyeSpace", lightPositionEyeSpace));
 	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
 	CHECK_GL_CMD(_floorNormalMapTexture->bindToTextureUnit(GL_TEXTURE1));
 	CHECK_GL_CMD(_plane->render());
-	
+
+
+	/*
+	//CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewProjectionMatrix", _modelViewProjectionMatrix));
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("projectionMatrix", _projectionMatrix));
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
+	CHECK_GL_CMD(_plane->getShader()->setUniform4f("lightPositionEyeSpace", lightPositionEyeSpace));
+	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
+	//CHECK_GL_CMD(_floorNormalMapTexture->bindToTextureUnit(GL_TEXTURE1));
+	CHECK_GL_CMD(_plane->render());
+	*/
+
+	/*
+	CHECK_GL_CMD(_planeDebug->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
+	CHECK_GL_CMD(_planeDebug->getShader()->setUniformMat4f("projectionMatrix", _projectionMatrix));
+	CHECK_GL_CMD(_planeDebug->getShader()->setUniform4f("lightPositionEyeSpace", lightPositionEyeSpace));
+	CHECK_GL_CMD(_planeDebug->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
+	CHECK_GL_CMD(_planeDebug->render());
+	*/
 
 	int nbActors = physicsScene->getNbActors();
 	NxActor** actors = physicsScene->getActors();
@@ -554,7 +619,7 @@ void Scene::render(NxScene* physicsScene)
 			CHECK_GL_CMD(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 			CHECK_GL_CMD(glEnable(GL_BLEND));
 			CHECK_GL_CMD(glBlendEquation(GL_FUNC_ADD));
-			CHECK_GL_CMD(glBlendFunc(GL_ONE, GL_ONE));
+			CHECK_GL_CMD(glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE));
 			CHECK_GL_CMD(glDisable(GL_DEPTH_TEST));
 
 			_waterDepthShader->useThis();
@@ -666,7 +731,7 @@ void Scene::render(NxScene* physicsScene)
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
 	/*
-	CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_edgeTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
 	CHECK_GL_CMD(_grayscaleIntermediateQuad->render());
 	*/
 	
@@ -685,7 +750,7 @@ void Scene::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
 	//CHECK_GL_CMD(glUniformMatrix4fv(_inverseProjectionLocation, 1, GL_FALSE, _inverseProjectionMatrix));
 	CHECK_GL_CMD(_finalQuad->render());
-
+	
 	computeFrameRate();
 }
 

@@ -11,6 +11,7 @@
 #include "Texture.h"
 #include "ScreenQuad.h"
 #include "ShapeFactory.h"
+#include "SpaceObject.h"
 #include <surface_extraction/SurfaceExtractor.h>
 #include <surface_extraction/MtSurfaceExtractor.h>
 #include <utils/utils.h>
@@ -53,13 +54,19 @@ private: // fields
 	ShaderProgramPtr _skyBoxShader;
 	ShaderProgramPtr _gaussianBlurShader;
 	ShaderProgramPtr _grayscaleTextureShader;
+	ShaderProgramPtr _phongShader;
+	ShaderProgramPtr _simpleShader;
+
+	ShaderProgramPtr _debugShader;
 
 	ShaderProgramPtr _bilateralGaussSmoothShader;
 	ShaderProgramPtr _curvatureFlowShader;
 	ShaderProgramPtr _edgeDetectionShader;
 	
 	GfxStaticObjectPtr _box;
+	GfxStaticObjectPtr _light;
 	GfxStaticObjectPtr _plane;
+	GfxStaticObjectPtr _planeDebug;
 	GfxStaticObjectPtr _skyBox;
 	GfxObjectPtr _water;
 	GfxObjectPtr _isoWater;
@@ -132,6 +139,10 @@ private: // fields
 
 	vmml::vec4f _lightDirection;
 
+	vmml::vec4f _lightPosition;
+
+	SpaceObject _lightController;
+
 private: // methods
 	bool setupTextures();
 	bool setupFramebuffers();
@@ -153,6 +164,7 @@ public:
 	void changeParticleSize(float change);
 	void changeTimeStep(float change);
 	void changeEdgeTreshold(float change);
+	void changeLightPosition(const vmml::vec4f& change);
 
 	void rotateLightDir(float xrot, float yrot);
 
@@ -170,6 +182,11 @@ public:
 	vmml::vec4f getLightInEyeSpace()
 	{
 		return _viewMatrix * _lightDirection;
+	}
+
+	vmml::vec4f getLightPositionInEyeSpace()
+	{
+		return _viewMatrix * _lightPosition;
 	}
 };
 

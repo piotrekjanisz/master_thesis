@@ -93,6 +93,7 @@
     <ClCompile Include="ScreenQuad.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShapeFactory.cpp" />
+    <ClCompile Include="SpaceObject.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +116,7 @@
     <ClInclude Include="ScreenQuad.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShapeFactory.h" />
+    <ClInclude Include="SpaceObject.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +127,8 @@
     <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
     <None Include="resources\shaders\curvature_flow2.glsl" />
     <None Include="resources\shaders\curvature_flow_fragment.glsl" />
+    <None Include="resources\shaders\debug_geometry.glsl" />
+    <None Include="resources\shaders\debug_light_vertex.glsl" />
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
     <None Include="resources\shaders\draw_image_fragment.glsl" />
     <None Include="resources\shaders\edge_detection_fragment.glsl" />
@@ -132,10 +136,14 @@
     <None Include="resources\shaders\final_stage_fragment2.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\gaussian_blur_fragment.glsl" />
+    <None Include="resources\shaders\light_source_fragment.glsl" />
+    <None Include="resources\shaders\light_source_vertex.glsl" />
     <None Include="resources\shaders\normalization_vertex.glsl" />
     <None Include="resources\shaders\normal_map_fragment.glsl" />
     <None Include="resources\shaders\normal_map_vertex.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
+    <None Include="resources\shaders\phong_fragment.glsl" />
+    <None Include="resources\shaders\phong_vertex.glsl" />
     <None Include="resources\shaders\screen_quad_vertex.glsl" />
     <None Include="resources\shaders\semi_implicit_curvature_flow_fragment.glsl" />
     <None Include="resources\shaders\separable_bilateral_gauss_fragment.glsl" />

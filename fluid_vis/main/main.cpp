@@ -250,6 +250,18 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 		g_scene.changeTimeStep(-1.0f);
 	} else if (key == '>') {
 		g_scene.changeTimeStep(1.0f);
+	} else if (key == 'w') {
+		g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, -0.5f, 0.0f));
+	} else if (key == 's') {
+		g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, 0.5f, 0.0f));
+	} else if (key == 'a') {
+		g_scene.changeLightPosition(vmml::vec4f(-0.5f, 0.0f, 0.0f, 0.0f));
+	} else if (key == 'f') {
+		g_scene.changeLightPosition(vmml::vec4f(0.5f, 0.0f, 0.0f, 0.0f));
+	} else if (key == 'z') {
+		g_scene.changeLightPosition(vmml::vec4f(0.0f, -0.5f, 0.0f, 0.0f));
+	} else if (key == 'x') {
+		g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.5f, 0.0f, 0.0f));
 	}
 }
 

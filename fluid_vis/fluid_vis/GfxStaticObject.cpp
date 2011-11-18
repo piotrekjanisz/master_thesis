@@ -24,8 +24,9 @@ void GfxStaticObject::addAttribute(const std::string& name, float* data, int cou
 	try {
 		attribLocation = _shaderProgram->getAttribLocation(name.c_str());
 	} catch (const ShaderException& ex) {
-		throw GfxException(ex.what());
-	}
+		std::cerr << ex.what() << std::endl;
+		return;
+	} 
 
 	glBindVertexArray(_vao);
 	unsigned int vbo;
@@ -54,12 +55,14 @@ void GfxStaticObject::createFromGlusShape(const GLUSshape& shape) throw(GfxExcep
 	_shaderProgram->useThis();
 	addAttribute("vertex", shape.vertices, shape.numberVertices, 4);
 	addAttribute("normal", shape.normals, shape.numberVertices, 3);
+
 	unsigned int indicesVBO;
 	glGenBuffers(1, &indicesVBO);
 	_vbos.push_back(indicesVBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, shape.numberIndices * sizeof(int), shape.indices, GL_STATIC_DRAW);
 	_numberIndices = shape.numberIndices;
+	_primitiveType = GL_TRIANGLES;
 }
 
 void GfxStaticObject::createFromShape(const ShapePtr& shape) throw(GfxException)
