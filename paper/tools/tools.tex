@@ -129,13 +129,12 @@ PhysX works in asynchronous way - that means simulation step is computed either 
 My project uses two PhysX features - rigid body and water simulations and thus those will be described in more details. 
 \subsection{Rigid bodies}
 
+
 \subsection{Fluids}
 
-PhysX provides fluid simulations with SPH method which is used in this project. 
+PhysX provides two methods for simulating fluids SPH and simple method. First one was described in chapter (TODO reference to chapter). Second one does not take interparticle forces into concideration thus simplifies computations. This simplified method is good for simulating phenomenas such as smoke or fog, but for realistic water SPH must be used. 
 
-TODO more details about fluids in PhysX - simulation methods, emiters, drains, limitations (64K particles per fluid)
-
-TODO details about rigid bodies in PhysX
+TODO more details about fluids in PhysX - simulation methods, parameters, compare with SPH chapter, emiters, drains, limitations (64K particles per fluid)
 
 TODO $ftp://download.nvidia.com/developer/cuda/seminar/TDCI_PhysX.pdf$
 

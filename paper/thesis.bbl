@@ -1,5 +1,15 @@
 \begin{thebibliography}{10}
 
+\bibitem{Monaghan1992}
+{\sc J.~J. Monaghan}.
+\newblock {\bf Smoothed particle hydrodynamics}.
+\newblock {\em Annual review of astronomy and astrophysics}, 1992.
+
+\bibitem{Liu}
+{\sc M.~B.~Liu G.~R.~Liu}.
+\newblock {\em Smoothed Particle Hydrodynamics a meshfree particle method}.
+\newblock Worlds Scientific Publishing Co. Pte. Ltd., 2003.
+
 \bibitem{OglBindings}
 {\bf OpenGL Language Bindings}.
 \newblock \url{http://www.opengl.org/wiki/Language_bindings}, 2011.

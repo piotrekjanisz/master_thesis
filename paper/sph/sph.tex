@@ -9,3 +9,47 @@
 \graphicspath{{sph/figures/}}
 
 This chapter will provide brief introduction to modeling method used in my project - Smoothed Particle Hydrodynamics (SPH).
+
+
+\begin{equation}
+\label{eq:sph_interpolant}
+A_I(r) = \int A(r')W(r - r', h)dr'
+\end{equation}
+
+\begin{equation}
+\label{eq:sph_kernel_property_1}
+\int W(r - r', h)dr' = 1
+\end{equation}
+
+\begin{equation}
+\label{eq:sph_kernel_property_2}
+\lim_{h \to 1}W(r - r', h) = \delta(r-r')
+\end{equation}
+
+\begin{equation}
+\label{eq:sumation_interpolant}
+A_s(r) = \sum_{b}m_b\frac{A_b}{\rho_b}W(r-r_b,h)
+\end{equation}
+
+\begin{equation}
+\label{eq:sumation_interpolant_gradient}
+\triangledown A_s(r) = \sum_{b}m_b\frac{A_b}{\rho_b}\triangledown W(r-r_b,h) 
+\end{equation}
+
+SPH is a interpolation method - does not uses a grid (MESHFREE), approximates fluid or other materials as a set of particles. Requires less resources comparing to grid methods when it comes to such phenomenas as splasches or breaking waves. 
+
+TODO integral interpolant of any function
+TODO sumation interpolant
+
+eulerian methods - computed on fixed grid
+	grid has to cover entire area to which the material can possibly flow. 
+	hard to track surface - we have only field values at fixed grid points. 
+
+SPH moves differentiation from field function to smoothing function
+
+SPH first used by Leon Lucy and R. A. Gingold and J. J. Monaghan
+
+
+paper on astrophysics from 1992 - \cite{Monaghan1992}
+
+book about sph - \cite{Liu}

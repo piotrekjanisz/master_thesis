@@ -66,7 +66,11 @@ Bilateral filter has some undesired effect when applied on z-buffer output. The 
 Another issue with smoothing using fixed kernel size filter is that further surfaces are more smoothed than closer surfaces (see figure~\ref{edge_preservation}). Solving that problem would require using filter with variable kernel size, depending on fragment distance from viewer. As implementing this efficiently on graphic hardware is hard and the effect is not so irritating this won't be considered any more. Section~\ref{sec:curvatureflowsmoothing} will describe another smoothing technique that doesn't suffer from this problem. 
 
 \subsubsection{Curvature flow smoothing} \label{sec:curvatureflowsmoothing}
-This technique was presented in \cite{laanSainz2009}. 
+This technique was presented in \cite{laanSainz2009}. It uses curvature flow to smooth surface. Curvature is a .... TODO.
+
+So instead of smoothing surface itself we can smooth out sudden changes in curvature. Such changes occur between particles as shown on figure \ref{sudden_changes}
+
+\figuremacroW{sudden_changes}{Some title}{Some description}{0.7}
 
 \subsection{Thickness} \label{sec:thickness}
 This step is computed to determine how opaque is surface in given point. It is achieved by rendering particles as circles into depth buffer with additive blending enabled. Resulting thickness texture is then smoothed with Gaussian filter (this time regular one). In order to speed up rendering process this texture can be rendered with lower resolution and then applied with linear interpolation. 
