@@ -10,9 +10,18 @@
 
 This chapter will provide brief introduction to modeling method used in my project - Smoothed Particle Hydrodynamics (SPH).
 
+\section{Introduction}
+To perform numerical simulation of natural phenomena several steps have to be performed (see \cite[section 1.1.2]{Liu}). First the mathematical model has to be obtained from observation of physical phenomena. The mathematical model consists of a set of governing equations, boundary conditions and initial conditions. Next governing equations have to be discretized in order to solve them with a numerical algorithm.
+For describing physical governing equations two basic techniques exists: Eulerian description and Lagrarian description. First represents 
+
+For describing governing equations of fluid flows two basic techniques exists: Lagrarian and Eulerian. In the first one we look at the fluid as a set of parcels which moves though space and time. Each fluid parcel has it's own mass which is fixed, and is identified by it's position $x_0$ at time $t = 0$. We also assume that we can obtain a function of fluid parcels position $x = x(t, x_0)$. 
+Eulerian description assumes that we observe fluid that moves through fixed spatial points. Thus we are given velocity field $v$ at every spatial point $x$ and time $t$ - $v = v(x, t)$. 
+
+For discretization there are several approaches: grid based (lagrarian grid and eulerian grid) and meshfree methods (SPH, particle in cell).
+
+TODO: references!!!!
+
 \section{Fundamentals}
-
-
 
 \begin{equation}
 \label{eq:sph_interpolant}
@@ -52,9 +61,19 @@ SPH moves differentiation from field function to smoothing function
 
 SPH first used by Leon Lucy and R. A. Gingold and J. J. Monaghan
 
+Different kernels can be used for different computations.
+SPH equations needs to be symmetrized.
 
-paper on astrophysics from 1992 - \cite{Monaghan1992}
+paper on astrophysics from 1992 (Monaghan1992) - \cite{Monaghan1992}
 
-book about sph - \cite{Liu}
+book about sph (Liu) - \cite{Liu}
+
+Particle based simulations for interactive applications (Muller2003) - \cite{Muller2003}
 
 \section{SPH for fluids}
+
+Navier-Stokes equations: 
+ - continuity, 
+ - momentum conservation, 
+ - energy conservation
+For SPH first one is not necessary and for fluid simulation in games energy conservation equation can be discarded as we only interested in fluid movement, not temperature (we can assume the temperature is constant). 

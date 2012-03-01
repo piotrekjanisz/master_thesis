@@ -1,5 +1,7 @@
-\backcite {Monaghan1992}{{4}{2.1}{equation.2.1.5}}
-\backcite {Liu}{{4}{2.1}{equation.2.1.5}}
+\backcite {Liu}{{3}{2.1}{section.2.1}}
+\backcite {Monaghan1992}{{4}{2.2}{equation.2.2.5}}
+\backcite {Liu}{{4}{2.2}{equation.2.2.5}}
+\backcite {Muller2003}{{4}{2.2}{equation.2.2.5}}
 \backcite {OglBindings}{{5}{3.1}{section.3.1}}
 \backcite {GPUGems3}{{6}{3.1}{section.3.1}}
 \backcite {OpenGLSuperbible}{{6}{3.1.1}{subsection.3.1.1}}

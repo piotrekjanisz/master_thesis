@@ -1,14 +1,20 @@
 \begin{thebibliography}{10}
 
+\bibitem{Liu}
+{\sc M.~B.~Liu G.~R.~Liu}.
+\newblock {\em Smoothed Particle Hydrodynamics a meshfree particle method}.
+\newblock Worlds Scientific Publishing Co. Pte. Ltd., 2003.
+
 \bibitem{Monaghan1992}
 {\sc J.~J. Monaghan}.
 \newblock {\bf Smoothed particle hydrodynamics}.
 \newblock {\em Annual review of astronomy and astrophysics}, 1992.
 
-\bibitem{Liu}
-{\sc M.~B.~Liu G.~R.~Liu}.
-\newblock {\em Smoothed Particle Hydrodynamics a meshfree particle method}.
-\newblock Worlds Scientific Publishing Co. Pte. Ltd., 2003.
+\bibitem{Muller2003}
+{\sc M.~Gross M.~M{\"{u}}ller, D.~Charypar}.
+\newblock {\bf Particle-based fluid simulation for interactive applications}.
+\newblock {\em SCA '03 Proceedings of the 2003 ACM SIGGRAPH/Eurographics
+  symposium on Computer animation}, 2003.
 
 \bibitem{OglBindings}
 {\bf OpenGL Language Bindings}.
