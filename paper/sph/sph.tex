@@ -18,11 +18,14 @@ For describing governing equations of fluid flows two basic techniques exists: L
 Eulerian description assumes that we observe fluid that moves through fixed spatial points. Thus we are given velocity field $v$ at every spatial point $x$ and time $t$ - $v = v(x, t)$. 
 
 For discretization there are several approaches: grid based (lagrarian grid and eulerian grid) and meshfree methods (SPH, particle in cell).
+Lagrarian grid is attached to material and moves with it. Each mesh cell represents one fluid parcel from Lagrarian description. The advantages of this method are simpler equations given by lagrarian description, less memory usage (as the mesh is specified only where fluid or other material is present), easiness of tracking movement of fluid parcels. However this method does not handle large material deformations over time (like for instance water splashes) well. In such cases mesh must be recomputed and it an expensive procedure.
+Eulerian grid, on the other hand, is fixed in space, and covers entire domain in which fluid can move. In each grid node we calculate mass momentum and energy flux. This method handles large deformations of material easily but its computional complexity is large, especially in three dimensions. The amount of memory require is also large as whole domain must be covered with grid. 
+Third way of discretization are mesh free method. The idea of them is to combine strong points of both eulerian and lagrarian grids, but without using a grid or a mesh. This is done usually by discretizing material as a set of particles. At each particle values of functions, derivatives and integrals are approximated with particle approximations. An example of mesh free method is SPH which will be further described in this chapter. 
 
 TODO: references!!!!
 
-\section{Fundamentals}
-
+\section{Fundamentals of SPH}
+ 
 \begin{equation}
 \label{eq:sph_interpolant}
 A_I(r) = \int A(r')W(r - r', h)dr'
