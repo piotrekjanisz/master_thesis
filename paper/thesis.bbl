@@ -5,6 +5,17 @@
 \newblock {\em Smoothed Particle Hydrodynamics a meshfree particle method}.
 \newblock Worlds Scientific Publishing Co. Pte. Ltd., 2003.
 
+\bibitem{Hauke2008}
+{\sc G.~Hauke}.
+\newblock {\em An Introduction to Fluid Mechanics and Transport Phenomena}.
+\newblock Springer, 2008.
+
+\bibitem{Price06}
+{\sc James~F. Price}.
+\newblock {\bf Lagrarian and Eulerian Representations of Fluid Flow: Kinematics
+  and the Equations of Motion}.
+\newblock http://www.whoi.edu/science/PO/people/jprice/ELreps.pdf, 2006.
+
 \bibitem{Monaghan1992}
 {\sc J.~J. Monaghan}.
 \newblock {\bf Smoothed particle hydrodynamics}.
