@@ -51,6 +51,11 @@ Where W is a smoothing kernel and has following properties:
 \lim_{h \to 0}W(r - r', h) = \delta(r-r')
 \end{equation}
 
+\begin{equation}
+\label{eq:compact_condition}
+(\exists \kappa \in \mathbb{R}_+ )(W(r-r', h) = 0~when~|r-r'| > \kappa h)
+\end{equation}
+
 Integral interpolant \ref{eq:sph_kernel_interpolant} can be further approximated by sumation interpolant:
 
 \begin{equation}
@@ -58,8 +63,15 @@ Integral interpolant \ref{eq:sph_kernel_interpolant} can be further approximated
 A_s(r) = \sum_{b}m_b\frac{A_b}{\rho_b}W(r-r_b,h)
 \end{equation}
 
-where $\frac{m_b}{\rho_b}$ is a volume of particle $b$. What SPH does is it divides space into set of particles, each particle has it's own mass and density. Mass is fixed and density can change thus changing particle's volume. When we want to compute value of A in some point in space $r$ we compute weighted average of A at neighboring particles. Weight depends on distance of particle's center form $r$ and particles volume. 
-It's also worth noting that 
+where $\frac{m_b}{\rho_b}$ is a volume of particle $b$. What SPH does is it divides space into set of particles, each particle has it's own mass and density. Mass is fixed and density can change thus changing particle's volume. When we want to compute value of A in some point in space $r$ we compute weighted average of A at neighboring particles. Weight depends on distance of particle's center form $r$ and on particles volume. 
+It's also worth noting that \ref{eq:compact_condition} defines finite domain in which smoothing kernel is non-zero. This allows to speed up computations by summing over particles in nearest neighborhood.
+
+In many physical simulations we need to compute gradient of some field A. It turns out that using integral interpolant \ref{eq:sph_kernel_interpolant} we only need to compute gradient of smoothing kernel $W$:
+
+\begin{equation}
+\label{eq:integral_interpolant_gradient}
+\triangledown A_I(r) = \int A(r') \triangledown W(r - r', h)dr'
+\end{equation}
 
 \begin{equation}
 \label{eq:sumation_interpolant_gradient}
