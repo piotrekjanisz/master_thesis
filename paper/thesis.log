@@ -1,8 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  14 MAR 2012 15:13
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.10.29)  18 MAR 2012 17:40
 entering extended mode
-**//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/thesis.tex
-
-(//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/thesis.tex
+**D:/studia/magisterka/code/master_thesis/paper/thesis.tex
+(D:/studia/magisterka/code/master_thesis/paper/thesis.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -15,12 +14,12 @@ romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swis
 sgerman, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, u
 senglishmax, welsh, loaded.
 
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\Latex/Class
-es/PhDthesisPSnPDF.cls
+(D:\studia\magisterka\code\master_thesis\paper\Latex/Classes/PhDthesisPSnPDF.cl
+s
 Document Class: Latex/Classes/PhDthesisPSnPDF 2007/09/06 v2 PhD thesis class
-(C:\MiKTeX\tex\latex\base\book.cls
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\book.cls"
 Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
-(C:\MiKTeX\tex\latex\base\bk11.clo
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\bk11.clo"
 File: bk11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -35,10 +34,11 @@ File: bk11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-) (C:\MiKTeX\tex\latex\amsfonts\amssymb.sty
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
 Package: amssymb 2009/06/22 v3.00
 
-(C:\MiKTeX\tex\latex\amsfonts\amsfonts.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
 Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
 \@emptytoks=\toks14
 \symAMSa=\mathgroup4
@@ -46,35 +46,35 @@ Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
 ))
-(C:\MiKTeX\tex\latex\graphics\graphics.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-(C:\MiKTeX\tex\latex\graphics\trig.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\trig.sty"
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(C:\MiKTeX\tex\latex\00miktex\graphics.cfg
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
 File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
 )
 Package graphics Info: Driver file: pdftex.def on input line 91.
 
-(C:\MiKTeX\tex\latex\pdftex-def\pdftex.def
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-(C:\MiKTeX\tex\generic\oberdiek\infwarerr.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/message (HO)
 )
-(C:\MiKTeX\tex\generic\oberdiek\ltxcmds.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
 Package: ltxcmds 2011/04/18 v1.20 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count88
 ))
-(C:\MiKTeX\tex\latex\caption\caption.sty
-Package: caption 2010/01/09 v3.1m Customizing captions (AR)
+(C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
+Package: caption 2011/11/10 v3.2e Customizing captions (AR)
 
-(C:\MiKTeX\tex\latex\caption\caption3.sty
-Package: caption3 2010/01/14 v3.1m caption3 kernel (AR)
+(C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
+Package: caption3 2011/11/01 v1.4a caption3 kernel (AR)
 
-(C:\MiKTeX\tex\latex\graphics\keyval.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks15
 )
@@ -87,7 +87,7 @@ Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 )
 \c@ContinuedFloat=\count89
 )
-(C:\MiKTeX\tex\latex\fancyhdr\fancyhdr.sty
+(C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\latex\fancyhdr\fancyhdr.sty
 \fancy@headwidth=\skip43
 \f@ncyO@elh=\skip44
 \f@ncyO@erh=\skip45
@@ -98,21 +98,24 @@ Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \f@ncyO@olf=\skip50
 \f@ncyO@orf=\skip51
 )
-(C:\MiKTeX\tex\latex\amsfonts\eucal.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\eucal.sty"
 Package: eucal 2009/06/22 v3.00 Euler Script fonts
 LaTeX Font Info:    Overwriting math alphabet `\EuScript' in version `bold'
 (Font)                  U/eus/m/n --> U/eus/b/n on input line 33.
-) (C:\MiKTeX\tex\generic\babel\babel.sty
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\babel.sty"
 Package: babel 2008/07/08 v3.8m The Babel package
+
 *************************************
 * Local config file bblopts.cfg used
 *
-(C:\MiKTeX\tex\latex\00miktex\bblopts.cfg
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\bblopts.cfg"
 File: bblopts.cfg 2006/07/31 v1.0 MiKTeX 'babel' configuration
 )
-(C:\MiKTeX\tex\generic\babel\english.ldf
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\english.ldf"
 Language: english 2005/03/30 v3.3o English support from the babel system
- (C:\MiKTeX\tex\generic\babel\babel.def
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\babel.def"
 File: babel.def 2008/07/08 v3.8m Babel common definitions
 \babel@savecnt=\count90
 \U@D=\dimen109
@@ -120,18 +123,19 @@ File: babel.def 2008/07/08 v3.8m Babel common definitions
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
-)) (C:\MiKTeX\tex\latex\graphics\color.sty
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\color.sty"
 Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
 
-(C:\MiKTeX\tex\latex\00miktex\color.cfg
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 
-(C:\MiKTeX\tex\latex\graphics\dvipsnam.def
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\dvipsnam.def"
 File: dvipsnam.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
 ))
-(C:\MiKTeX\tex\latex\footmisc\footmisc.sty
+(C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\latex\footmisc\footmisc.sty
 Package: footmisc 2011/06/06 v5.5b a miscellany of footnote facilities
 \FN@temptoken=\toks16
 \footnotemargin=\dimen110
@@ -146,16 +150,17 @@ Package footmisc Info: Declaring symbol style lamport* on input line 903.
 Package footmisc Info: Declaring symbol style lamport*-robust on input line 924
 .
 )
-(C:\MiKTeX\tex\latex\natbib\natbib.sty
+(C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\latex\natbib\natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip52
 \bibsep=\skip53
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count93
-) (C:\MiKTeX\tex\latex\base\ifthen.sty
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ifthen.sty"
 Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
-(C:\MiKTeX\tex\latex\tools\multicol.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\multicol.sty"
 Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
 \c@tracingmulticols=\count94
 \mult@box=\box26
@@ -203,14 +208,14 @@ Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
 \colbreak@box=\box51
 \multicol@sort@counter=\count102
 )
-(C:\MiKTeX\tex\latex\tocbibind\tocbibind.sty
+(C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\latex\tocbibind\tocbibind.sty
 Package: tocbibind 2010/10/13 v1.5k extra ToC listings
 Package tocbibind Info: The document has chapter divisions on input line 50.
 
 
 Package tocbibind Note: Using chapter style headings, unless overridden.
 
-) (C:\MiKTeX\tex\latex\nomencl\nomencl.sty
+) (C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\latex\nomencl\nomencl.sty
 Package: nomencl 2005/09/22 v4.2 Nomenclature package (LN)
 \nomlabelwidth=\dimen119
 \nom@tempdim=\dimen120
@@ -219,17 +224,17 @@ Package: nomencl 2005/09/22 v4.2 Nomenclature package (LN)
 \@nomenclaturefile=\write3
 
 Writing nomenclature file thesis.nlo
-(C:\MiKTeX\tex\generic\oberdiek\ifpdf.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
-(C:\MiKTeX\tex\latex\hyperref\hyperref.sty
-Package: hyperref 2011/04/17 v6.82g Hypertext links for LaTeX
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\hyperref.sty"
+Package: hyperref 2011/08/19 v6.82h Hypertext links for LaTeX
 
-(C:\MiKTeX\tex\generic\oberdiek\hobsub-hyperref.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\hobsub-hyperref.sty"
 Package: hobsub-hyperref 2011/04/23 v1.4 Bundle oberdiek, subset hyperref (HO)
 
-(C:\MiKTeX\tex\generic\oberdiek\hobsub-generic.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\hobsub-generic.sty"
 Package: hobsub-generic 2011/04/23 v1.4 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2011/04/23 v1.4 Subsetting bundle oberdiek (HO)
 Package hobsub Info: Skipping package `infwarerr' (already loaded).
@@ -266,26 +271,26 @@ Package: atbegshi 2011/01/30 v1.15 At begin shipout hook (HO)
 Package: refcount 2010/12/01 v3.2 Data extraction from references (HO)
 Package: hycolor 2011/01/30 v1.7 Color options of hyperref/bookmark (HO)
 )
-(C:\MiKTeX\tex\generic\ifxetex\ifxetex.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-(C:\MiKTeX\tex\latex\oberdiek\kvoptions.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
 Package: kvoptions 2010/12/23 v3.10 Keyval support for LaTeX options (HO)
 )
 \@linkdim=\dimen121
 \Hy@linkcounter=\count103
 \Hy@pagecounter=\count104
 
-(C:\MiKTeX\tex\latex\hyperref\pd1enc.def
-File: pd1enc.def 2011/04/17 v6.82g Hyperref: PDFDocEncoding definition (HO)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
+File: pd1enc.def 2011/08/19 v6.82h Hyperref: PDFDocEncoding definition (HO)
 )
 \Hy@SavedSpaceFactor=\count105
 
-(C:\MiKTeX\tex\latex\00miktex\hyperref.cfg
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\hyperref.cfg"
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Option `plainpages' set `false' on input line 3905.
-Package hyperref Info: Option `pdfpagelabels' set `true' on input line 3905.
+Package hyperref Info: Option `plainpages' set `false' on input line 3932.
+Package hyperref Info: Option `pdfpagelabels' set `true' on input line 3932.
 
 
 Package hyperref Warning: Values of option `pdfpagelayout':
@@ -296,51 +301,51 @@ Package hyperref Warning: Values of option `pdfpagelayout':
 (hyperref)                * `TwoPageLeft' (PDF 1.5)
 (hyperref)                * `TwoPageRight' (PDF 1.5)
 (hyperref)                * An empty value disables the option.
-(hyperref)                Unknown value `useoutlines' on input line 3905.
+(hyperref)                Unknown value `useoutlines' on input line 3932.
 
-Package hyperref Info: Option `bookmarks' set `true' on input line 3905.
-Package hyperref Info: Option `bookmarksopen' set `true' on input line 3905.
-Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 3905
+Package hyperref Info: Option `bookmarks' set `true' on input line 3932.
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 3932.
+Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 3932
 .
-Package hyperref Info: Option `breaklinks' set `true' on input line 3905.
-Package hyperref Info: Option `linktocpage' set `true' on input line 3905.
-Package hyperref Info: Option `colorlinks' set `false' on input line 3905.
-Package hyperref Info: Option `hyperindex' set `true' on input line 3905.
-Package hyperref Info: Option `hyperfigures' set `true' on input line 3905.
-Package hyperref Info: Hyper figures ON on input line 4024.
-Package hyperref Info: Link nesting OFF on input line 4031.
-Package hyperref Info: Hyper index ON on input line 4034.
-Package hyperref Info: Plain pages OFF on input line 4041.
-Package hyperref Info: Backreferencing ON on input line 4044.
+Package hyperref Info: Option `breaklinks' set `true' on input line 3932.
+Package hyperref Info: Option `linktocpage' set `true' on input line 3932.
+Package hyperref Info: Option `colorlinks' set `false' on input line 3932.
+Package hyperref Info: Option `hyperindex' set `true' on input line 3932.
+Package hyperref Info: Option `hyperfigures' set `true' on input line 3932.
+Package hyperref Info: Hyper figures ON on input line 4051.
+Package hyperref Info: Link nesting OFF on input line 4058.
+Package hyperref Info: Hyper index ON on input line 4061.
+Package hyperref Info: Plain pages OFF on input line 4068.
+Package hyperref Info: Backreferencing ON on input line 4071.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4264.
-(C:\MiKTeX\tex\latex\hyperref\backref.sty
+Package hyperref Info: Bookmarks ON on input line 4291.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\backref.sty"
 Package: backref 2010/08/30 v1.36 Bibliographical back referencing
 
-(C:\MiKTeX\tex\latex\oberdiek\rerunfilecheck.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\oberdiek\rerunfilecheck.sty"
 Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 ))
 \c@Hy@tempcnt=\count106
 
-(C:\MiKTeX\tex\latex\ltxmisc\url.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ltxmisc\url.sty"
 \Urlmuskip=\muskip10
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 4617.
+LaTeX Info: Redefining \url on input line 4644.
 \Fld@menulength=\count107
 \Field@Width=\dimen122
 \Fld@charsize=\dimen123
-Package hyperref Info: Hyper figures ON on input line 5699.
-Package hyperref Info: Link nesting OFF on input line 5706.
-Package hyperref Info: Hyper index ON on input line 5709.
-Package hyperref Info: backreferencing ON on input line 5714.
-Package hyperref Info: Link coloring OFF on input line 5721.
-Package hyperref Info: Link coloring with OCG OFF on input line 5726.
-Package hyperref Info: PDF/A mode OFF on input line 5731.
-LaTeX Info: Redefining \ref on input line 5771.
-LaTeX Info: Redefining \pageref on input line 5775.
+Package hyperref Info: Hyper figures ON on input line 5728.
+Package hyperref Info: Link nesting OFF on input line 5735.
+Package hyperref Info: Hyper index ON on input line 5738.
+Package hyperref Info: backreferencing ON on input line 5743.
+Package hyperref Info: Link coloring OFF on input line 5750.
+Package hyperref Info: Link coloring with OCG OFF on input line 5755.
+Package hyperref Info: PDF/A mode OFF on input line 5760.
+LaTeX Info: Redefining \ref on input line 5800.
+LaTeX Info: Redefining \pageref on input line 5804.
 \Hy@abspage=\count108
 \c@Item=\count109
 \c@Hfootnote=\count110
@@ -348,38 +353,37 @@ LaTeX Info: Redefining \pageref on input line 5775.
 
 Package hyperref Message: Driver: hpdftex.
 
-(C:\MiKTeX\tex\latex\hyperref\hpdftex.def
-File: hpdftex.def 2011/04/17 v6.82g Hyperref driver for pdfTeX
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\hpdftex.def"
+File: hpdftex.def 2011/08/19 v6.82h Hyperref driver for pdfTeX
 \Fld@listcount=\count111
 \c@bookmark@seq@number=\count112
 \Hy@SectionHShift=\skip57
 )
-(C:\MiKTeX\tex\latex\graphics\graphicx.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 \Gin@req@height=\dimen124
 \Gin@req@width=\dimen125
 ))
 \@input{Latex/Macros/MacroFile1.aux}
-
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\Latex/Macro
-s/MacroFile1.tex) (C:\MiKTeX\tex\latex\ams\math\amsmath.sty
+(D:\studia\magisterka\code\master_thesis\paper\Latex/Macros/MacroFile1.tex)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsmath.sty"
 Package: amsmath 2000/07/18 v2.13 AMS math features
 \@mathmargin=\skip58
 
 For additional information on amsmath, use the `?' option.
-(C:\MiKTeX\tex\latex\ams\math\amstext.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amstext.sty"
 Package: amstext 2000/06/29 v2.01
 
-(C:\MiKTeX\tex\latex\ams\math\amsgen.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsgen.sty"
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks17
 \ex@=\dimen126
 ))
-(C:\MiKTeX\tex\latex\ams\math\amsbsy.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsbsy.sty"
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen127
 )
-(C:\MiKTeX\tex\latex\ams\math\amsopn.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsopn.sty"
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count113
@@ -420,21 +424,15 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 LaTeX Info: Redefining \[ on input line 2666.
 LaTeX Info: Redefining \] on input line 2667.
 )
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.aux
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\0_frontmatt
-er/abstract.aux)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\introductio
-n/introduction.aux)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\sph/sph.aux
-)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\tools/tools
-.aux
+(D:\studia\magisterka\code\master_thesis\paper\thesis.aux
+(D:\studia\magisterka\code\master_thesis\paper\0_frontmatter/abstract.aux)
+(D:\studia\magisterka\code\master_thesis\paper\introduction/introduction.aux)
+(D:\studia\magisterka\code\master_thesis\paper\sph/sph.aux)
+(D:\studia\magisterka\code\master_thesis\paper\tools/tools.aux
 
 LaTeX Warning: Label `eg:after_perspective_projection' multiply defined.
 
-)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
-techniques.aux))
+) (D:\studia\magisterka\code\master_thesis\paper\techniques/techniques.aux))
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
 LaTeX Font Info:    ... okay on input line 89.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 89.
@@ -449,7 +447,8 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 89.
 LaTeX Font Info:    ... okay on input line 89.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 89.
 LaTeX Font Info:    ... okay on input line 89.
- (C:\MiKTeX\tex\context\base\supp-pdf.mkii
+
+(C:\Users\piotrek\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count125
 \scratchdimen=\dimen135
@@ -469,10 +468,10 @@ Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box55
 Package backref Info: ** backref set up for natbib ** on input line 89.
 Package hyperref Info: Link coloring OFF on input line 89.
- (C:\MiKTeX\tex\latex\hyperref\nameref.sty
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2010/04/30 v2.40 Cross-referencing by name of section
 
-(C:\MiKTeX\tex\generic\oberdiek\gettitlestring.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count131
@@ -481,9 +480,10 @@ LaTeX Info: Redefining \ref on input line 89.
 LaTeX Info: Redefining \pageref on input line 89.
 LaTeX Info: Redefining \nameref on input line 89.
 
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.out)
+(D:\studia\magisterka\code\master_thesis\paper\thesis.out)
+(D:\studia\magisterka\code\master_thesis\paper\thesis.out)
 \@outlinefile=\write4
+
 <0_frontmatter/figures/logo.png, id=143, 301.125pt x 129.48375pt>
 File: 0_frontmatter/figures/logo.png Graphic file (type png)
 
@@ -497,40 +497,35 @@ Package pdftex.def Info: 0_frontmatter/figures/logo.png used on input line 100.
 
 \FN@pp@footnotehinttrue 
 
-{C:/Users/pjanisz/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <//cern.ch
-/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/0_frontmatter/figures
-/logo.png>]
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\0_frontmatt
-er/abstract.tex [2
+{C:/Users/piotrek/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <D:/studia
+/magisterka/code/master_thesis/paper/0_frontmatter/figures/logo.png>]
+(D:\studia\magisterka\code\master_thesis\paper\0_frontmatter/abstract.tex
+[2
 
-])
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.toc
+]) (D:\studia\magisterka\code\master_thesis\paper\thesis.toc
 LaTeX Font Info:    Try loading font information for U+msa on input line 3.
 
-(C:\MiKTeX\tex\latex\amsfonts\umsa.fd
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 3.
- (C:\MiKTeX\tex\latex\amsfonts\umsb.fd
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-)
-[3
+) [3
 \FN@pp@footnotehinttrue 
 
 
 ])
 \tf@toc=\write5
  [4]
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\introductio
-n/introduction.tex
+(D:\studia\magisterka\code\master_thesis\paper\introduction/introduction.tex
  1.
 ) [1
 
 
 
-]
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\sph/sph.tex
-[2
+] (D:\studia\magisterka\code\master_thesis\paper\sph/sph.tex [2
 
 
 
@@ -547,27 +542,30 @@ File: sph/figures/eulerian_lagrarian.png Graphic file (type png)
 Package pdftex.def Info: sph/figures/eulerian_lagrarian.png used on input line 
 21.
 (pdftex.def)             Requested size: 412.56496pt x 156.66817pt.
- [3] [4 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/sph
-/figures/eulerian_lagrarian.png>]
-[5]) [6]
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\tools/tools
-.tex
+ [3]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [4 <D:/studia/magisterka/code/master_thesis/paper/sph/figures/eulerian_lagrari
+an.png>]
+[5]
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ‡ in font cmr10!
+) [6] (D:\studia\magisterka\code\master_thesis\paper\tools/tools.tex
  3.
 [7
 
 
 
-] <tools/figures/opengl_pipeline.jpg, id=275, 689.57625pt x 486.31688pt>
+] <tools/figures/opengl_pipeline.jpg, id=280, 689.57625pt x 486.31688pt>
 File: tools/figures/opengl_pipeline.jpg Graphic file (type jpg)
 
 <use tools/figures/opengl_pipeline.jpg>
 Package pdftex.def Info: tools/figures/opengl_pipeline.jpg used on input line 3
 1.
 (pdftex.def)             Requested size: 412.56496pt x 290.96127pt.
- [8] [9 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/too
-ls/figures/opengl_pipeline.jpg>]
-[10]
-<tools/figures/perspective_projection.png, id=308, 527.0892pt x 410.7345pt>
+ [8] [9 <D:/studia/magisterka/code/master_thesis/paper/tools/figures/opengl_pip
+eline.jpg>] [10]
+<tools/figures/perspective_projection.png, id=313, 527.0892pt x 410.7345pt>
 File: tools/figures/perspective_projection.png Graphic file (type png)
 
 <use tools/figures/perspective_projection.png>
@@ -575,43 +573,42 @@ Package pdftex.def Info: tools/figures/perspective_projection.png used on input
  line 63.
 (pdftex.def)             Requested size: 412.56496pt x 321.506pt.
 
-<tools/figures/homogenous_space.png, id=309, 248.127pt x 285.2256pt>
+<tools/figures/homogenous_space.png, id=314, 248.127pt x 285.2256pt>
 File: tools/figures/homogenous_space.png Graphic file (type png)
 
 <use tools/figures/homogenous_space.png>
 Package pdftex.def Info: tools/figures/homogenous_space.png used on input line 
 65.
 (pdftex.def)             Requested size: 288.7942pt x 331.97171pt.
- [11 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
-figures/perspective_projection.png>]
-[12 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/f
-igures/homogenous_space.png>]
-<tools/figures/z_buffer_dist.png, id=321, 1027.84pt x 770.88pt>
+ [11 <D:/studia/magisterka/code/master_thesis/paper/tools/figures/perspective_p
+rojection.png>] [12 <D:/studia/magisterka/code/master_thesis/paper/tools/figure
+s/homogenous_space.png>]
+<tools/figures/z_buffer_dist.png, id=326, 1027.84pt x 770.88pt>
 File: tools/figures/z_buffer_dist.png Graphic file (type png)
 
 <use tools/figures/z_buffer_dist.png>
 Package pdftex.def Info: tools/figures/z_buffer_dist.png used on input line 100
 .
 (pdftex.def)             Requested size: 412.56496pt x 309.42871pt.
- [13] [14 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
-ools/figures/z_buffer_dist.png>] [15]
-<tools/figures/physx_workflow.png, id=346, 311.9655pt x 318.59026pt>
+ [13] [14 <D:/studia/magisterka/code/master_thesis/paper/tools/figures/z_buffer
+_dist.png>] [15]
+<tools/figures/physx_workflow.png, id=351, 311.9655pt x 318.59026pt>
 File: tools/figures/physx_workflow.png Graphic file (type png)
 
 <use tools/figures/physx_workflow.png>
 Package pdftex.def Info: tools/figures/physx_workflow.png used on input line 12
 7.
 (pdftex.def)             Requested size: 288.7942pt x 294.94902pt.
- [16 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
-figures/physx_workflow.png>]) [17]
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
-techniques.tex [18
+ [16 <D:/studia/magisterka/code/master_thesis/paper/tools/figures/physx_workflo
+w.png>]) [17]
+(D:\studia\magisterka\code\master_thesis\paper\techniques/techniques.tex
+[18
 
 
 
 ]
  4.
-<techniques/figures/screen_space.png, id=360, 630.10406pt x 465.99094pt>
+<techniques/figures/screen_space.png, id=365, 630.10406pt x 465.99094pt>
 File: techniques/figures/screen_space.png Graphic file (type png)
 
 <use techniques/figures/screen_space.png>
@@ -619,35 +616,34 @@ Package pdftex.def Info: techniques/figures/screen_space.png used on input line
  16.
 (pdftex.def)             Requested size: 288.7942pt x 213.57628pt.
 
-<techniques/figures/spheres.png, id=371, 336.50719pt x 335.75438pt>
+<techniques/figures/spheres.png, id=376, 336.50719pt x 335.75438pt>
 File: techniques/figures/spheres.png Graphic file (type png)
 
 <use techniques/figures/spheres.png>
 Package pdftex.def Info: techniques/figures/spheres.png used on input line 22.
 (pdftex.def)             Requested size: 206.28247pt x 205.82426pt.
  [19]
-<techniques/figures/spheres_no_smoothing.png, id=381, 481.8pt x 360.59718pt>
+<techniques/figures/spheres_no_smoothing.png, id=386, 481.8pt x 360.59718pt>
 File: techniques/figures/spheres_no_smoothing.png Graphic file (type png)
 
 <use techniques/figures/spheres_no_smoothing.png>
 Package pdftex.def Info: techniques/figures/spheres_no_smoothing.png used on in
 put line 39.
 (pdftex.def)             Requested size: 288.7942pt x 216.15088pt.
- [20 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/screen_space.png>]
-<techniques/figures/gaussian_filter_img.png, id=390, 339.51843pt x 191.9672pt>
+ [20 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/screen_s
+pace.png>]
+<techniques/figures/gaussian_filter_img.png, id=395, 339.51843pt x 191.9672pt>
 File: techniques/figures/gaussian_filter_img.png Graphic file (type png)
 
 <use techniques/figures/gaussian_filter_img.png>
 Package pdftex.def Info: techniques/figures/gaussian_filter_img.png used on inp
 ut line 43.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [21 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/spheres.png>]
-[22 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
-ues/figures/spheres_no_smoothing.png> <//cern.ch/dfs/Users/p/pjanisz/Documents/
-master/master_thesis/paper/techniques/figures/gaussian_filter_img.png>]
-<techniques/figures/bilateral_comp.png, id=409, 339.51843pt x 191.9672pt>
+ [21 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/spheres.
+png>] [22 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/sph
+eres_no_smoothing.png> <D:/studia/magisterka/code/master_thesis/paper/technique
+s/figures/gaussian_filter_img.png>] <techniques/figures/bilateral_comp.png, id=
+414, 339.51843pt x 191.9672pt>
 File: techniques/figures/bilateral_comp.png Graphic file (type png)
 
 <use techniques/figures/bilateral_comp.png>
@@ -655,31 +651,31 @@ Package pdftex.def Info: techniques/figures/bilateral_comp.png used on input li
 ne 61.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
 
-<techniques/figures/edge_preservation.png, id=414, 339.51843pt x 191.9672pt>
+<techniques/figures/edge_preservation.png, id=419, 339.51843pt x 191.9672pt>
 File: techniques/figures/edge_preservation.png Graphic file (type png)
 
 <use techniques/figures/edge_preservation.png>
 Package pdftex.def Info: techniques/figures/edge_preservation.png used on input
  line 64.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [23 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/bilateral_comp.png>] <techniques/figures/sudden_changes.png, id=42
-6, 339.51843pt x 191.9672pt>
+ [23 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/bilatera
+l_comp.png>]
+<techniques/figures/sudden_changes.png, id=431, 339.51843pt x 191.9672pt>
 File: techniques/figures/sudden_changes.png Graphic file (type png)
 
 <use techniques/figures/sudden_changes.png>
 Package pdftex.def Info: techniques/figures/sudden_changes.png used on input li
 ne 73.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [24 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/edge_preservation.png>] [25 <//cern.ch/dfs/Users/p/pjanisz/Documen
-ts/master/master_thesis/paper/techniques/figures/sudden_changes.png>]
+ [24 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/edge_pre
+servation.png>] [25 <D:/studia/magisterka/code/master_thesis/paper/techniques/f
+igures/sudden_changes.png>]
 
 Package amsmath Warning: Foreign command \over;
 (amsmath)                \frac or \genfrac should be used instead
 (amsmath)                 on input line 97.
 
-<techniques/figures/metaballs.png, id=442, 702.625pt x 200.75pt>
+<techniques/figures/metaballs.png, id=447, 702.625pt x 200.75pt>
 File: techniques/figures/metaballs.png Graphic file (type png)
 
 <use techniques/figures/metaballs.png>
@@ -688,15 +684,15 @@ Package pdftex.def Info: techniques/figures/metaballs.png used on input line 10
 (pdftex.def)             Requested size: 412.56496pt x 117.87784pt.
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 109.
 
- (C:\MiKTeX\tex\latex\base\omscmr.fd
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 109.
-
-[26] [27 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/te
-chniques/figures/metaballs.png (PNG copy)>]
-<techniques/figures/fig_local_minima.png, id=460, 339.51843pt x 191.9672pt>
+ [26] [27 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/met
+aballs.png (PNG copy)>]
+<techniques/figures/fig_local_minima.png, id=465, 339.51843pt x 191.9672pt>
 File: techniques/figures/fig_local_minima.png Graphic file (type png)
 
 <use techniques/figures/fig_local_minima.png>
@@ -707,21 +703,21 @@ Missing character: There is no Å in font cmr10!
 Missing character: There is no ¼ in font cmr10!
 Missing character: There is no Å in font cmr10!
 Missing character: There is no › in font cmr10!
- [28] [29 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
-echniques/figures/fig_local_minima.png>]
-<techniques/figures/normal_generation.png, id=472, 339.51843pt x 191.9672pt>
+ [28] [29 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/fig
+_local_minima.png>]
+<techniques/figures/normal_generation.png, id=477, 339.51843pt x 191.9672pt>
 File: techniques/figures/normal_generation.png Graphic file (type png)
 
 <use techniques/figures/normal_generation.png>
 Package pdftex.def Info: techniques/figures/normal_generation.png used on input
  line 151.
 (pdftex.def)             Requested size: 412.56496pt x 233.27986pt.
- [30 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/normal_generation.png>]) [31]
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.bbl
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.brf)
+ [30 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/normal_g
+eneration.png>]) [31]
+(D:\studia\magisterka\code\master_thesis\paper\thesis.bbl
+(D:\studia\magisterka\code\master_thesis\paper\thesis.brf)
 \tf@brf=\write6
-[32
+ [32
 
 
 ]
@@ -735,54 +731,54 @@ Package natbib Warning: There were undefined citations.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 195.
 [33]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 195.
-
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.aux
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\0_frontmatt
-er/abstract.aux)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\introductio
-n/introduction.aux)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\sph/sph.aux
-)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\tools/tools
-.aux)
-(\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
-techniques.aux))
+ (D:\studia\magisterka\code\master_thesis\paper\thesis.aux
+(D:\studia\magisterka\code\master_thesis\paper\0_frontmatter/abstract.aux)
+(D:\studia\magisterka\code\master_thesis\paper\introduction/introduction.aux)
+(D:\studia\magisterka\code\master_thesis\paper\sph/sph.aux)
+(D:\studia\magisterka\code\master_thesis\paper\tools/tools.aux)
+(D:\studia\magisterka\code\master_thesis\paper\techniques/techniques.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 195.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 195.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
 (rerunfilecheck)             Checksum: 5F8CE3FAFDFEEABA639AFE6EFF9D7198;2389.
 Package rerunfilecheck Info: File `thesis.brf' has not changed.
-(rerunfilecheck)             Checksum: 0A0872DC678F1197491E4D52F163CAFA;1672.
+(rerunfilecheck)             Checksum: 487B0561CA36BA8F7F47EC6A28E25ED6;1810.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8610 strings out of 494045
- 128799 string characters out of 3155635
- 227406 words of memory out of 3000000
- 11580 multiletter control sequences out of 15000+200000
+ 8675 strings out of 494045
+ 132027 string characters out of 3145962
+ 224876 words of memory out of 3000000
+ 11644 multiletter control sequences out of 15000+200000
  14670 words of font info for 56 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 43i,12n,48p,1832b,458s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmbx12.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx6.pf
-b><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/MiKTeX/fonts/type1/
-public/amsfonts/cm/cmex10.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.
-pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/MiKTeX/fonts/type1/
-public/amsfonts/cm/cmmi8.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pf
-b><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmr6.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C
-:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/MiKTeX/fonts/type1/publi
-c/amsfonts/cm/cmsy8.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C
-:/MiKTeX/fonts/type1/public/amsfonts/cm/cmti7.pfb><C:/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmtt10.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt8.pfb><C:
-/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><C:/MiKTeX/fonts/type1/p
-ublic/amsfonts/symbols/msbm10.pfb>
-Output written on thesis.pdf (37 pages, 1756920 bytes).
+ 43i,12n,48p,1811b,458s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx6.pfb><C:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Pr
+ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Prog
+ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Progra
+m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program F
+iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program File
+s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (
+x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86)/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmti7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmtt10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmtt8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
+1/public/amsfonts/symbols/msam10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/symbols/msbm10.pfb>
+Output written on thesis.pdf (37 pages, 1759120 bytes).
 PDF statistics:
- 620 PDF objects out of 1000 (max. 8388607)
- 126 named destinations out of 1000 (max. 500000)
+ 628 PDF objects out of 1000 (max. 8388607)
+ 127 named destinations out of 1000 (max. 500000)
  366 words of extra memory for PDF output out of 10000 (max. 10000000)
 

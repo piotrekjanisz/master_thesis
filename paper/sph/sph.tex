@@ -28,12 +28,7 @@ Lagrarian and Eulerian grids as well as meshfree methods are described in more d
 
 \section{Fundamentals of SPH}
 
-\begin{equation}
-\label{eq:integral_identity}
-A(r) = \int A(r')\delta(r - r')dx'
-\end{equation}
-
-The main idea of SPH is to replace given field A with it's integral interpolant:
+The main idea of SPH is to replace given field A with it's integral interpolant (or kernel interpolant):
 \begin{equation}
 \label{eq:sph_kernel_interpolant}
 A_I(r) = \int A(r')W(r - r', h)dr'
@@ -66,12 +61,16 @@ A_s(r) = \sum_{b}m_b\frac{A_b}{\rho_b}W(r-r_b,h)
 where $\frac{m_b}{\rho_b}$ is a volume of particle $b$. What SPH does is it divides space into set of particles, each particle has it's own mass and density. Mass is fixed and density can change thus changing particle's volume. When we want to compute value of A in some point in space $r$ we compute weighted average of A at neighboring particles. Weight depends on distance of particle's center form $r$ and on particles volume. 
 It's also worth noting that \ref{eq:compact_condition} defines finite domain in which smoothing kernel is non-zero. This allows to speed up computations by summing over particles in nearest neighborhood.
 
-In many physical simulations we need to compute gradient of some field A. It turns out that using integral interpolant \ref{eq:sph_kernel_interpolant} we only need to compute gradient of smoothing kernel $W$:
+Replacing field $A$ with it's kernel interpolation $A_I$ yields error of $h^2$ (see~\cite[section 2.2.1]{Liu}). On the other hand accuracy of sumation interpolant \ref{eq:sumation_interpolant} is hard to predict (see~\cite[section 12.1]{Monaghan1992}).
+
+In many physical simulations we need to compute gradient of some field A. It turns out that using integral interpolant \ref{eq:sph_kernel_interpolant} we only need to compute gradient of smoothing kernel $W$ (\cite[section 2.2.2]{Liu}):
 
 \begin{equation}
 \label{eq:integral_interpolant_gradient}
 \triangledown A_I(r) = \int A(r') \triangledown W(r - r', h)dr'
 \end{equation}
+
+As earlier we can aproximate integral with sumation:
 
 \begin{equation}
 \label{eq:sumation_interpolant_gradient}
@@ -80,19 +79,10 @@ In many physical simulations we need to compute gradient of some field A. It tur
 
 SPH is a interpolation method - does not uses a grid (MESHFREE), approximates fluid or other materials as a set of particles. Requires less resources comparing to grid methods when it comes to such phenomenas as splasches or breaking waves. 
 
-TODO integral interpolant of any function
-TODO sumation interpolant
-
-eulerian methods - computed on fixed grid
-	grid has to cover entire area to which the material can possibly flow. 
-	hard to track surface - we have only field values at fixed grid points. 
-
-SPH moves differentiation from field function to smoothing function
-
 SPH first used by Leon Lucy and R. A. Gingold and J. J. Monaghan
 
 Different kernels can be used for different computations.
-SPH equations needs to be symmetrized.
+
 
 paper on astrophysics from 1992 (Monaghan1992) - \cite{Monaghan1992}
 
@@ -101,9 +91,24 @@ book about sph (Liu) - \cite{Liu}
 Particle based simulations for interactive applications (Muller2003) - \cite{Muller2003}
 
 \section{SPH for fluids}
+Fluid motion can be described by two equations. First one is conservation of mass:
+\begin{equation}
+\label{eq:mass_conservation}
+\frac{DM}{Dt} = 0
+\end{equation}
+second one is Navier-Stokes conservation of momentum equation:
+\begin{equation}
+\label{eq:momentum_conservation}
+\rho \frac{Dv}{Dt} = -\triangledown p + \mu \triangledown^2v + f
+\end{equation}
+
+Both equations are presented in Lagrarian form. $\frac{D}{Dt}$ is a material derivative (TODO opisać co to jest, referencja).  $p$ is the pressure, $\mu$ is fluid viscosity and f represents external forces acting on the fluid. 
 
 Navier-Stokes equations: 
  - continuity, 
  - momentum conservation, 
  - energy conservation
 For SPH first one is not necessary and for fluid simulation in games energy conservation equation can be discarded as we only interested in fluid movement, not temperature (we can assume the temperature is constant). 
+
+TODO SPH equations needs to be symmetrized.
+
