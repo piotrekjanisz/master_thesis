@@ -76,6 +76,9 @@ As earlier we can aproximate integral with sumation:
 \label{eq:sumation_interpolant_gradient}
 \triangledown A_s(r) = \sum_{b}m_b\frac{A_b}{\rho_b}\triangledown W(r-r_b,h) 
 \end{equation}
+This simplifies computations as $W$ is known and it's gradient can be given analitically. 
+
+SPH gives a flexibility in choosing smoothing kernel. Generally Gaussian-like smoothing kernel are used, however any function W satisfying \ref{eq:sph_kernel_property_1}, \ref{eq:sph_kernel_property_2} and \ref{eq:compact_condition} can be used. It is even possible to utilize variable width kernels (TODO reference) which can be useful in case of large fluctuations in particles distributions. \cite[chapter 3]{Liu} is entirely devoted to smoothing kernels. 
 
 SPH is a interpolation method - does not uses a grid (MESHFREE), approximates fluid or other materials as a set of particles. Requires less resources comparing to grid methods when it comes to such phenomenas as splasches or breaking waves. 
 
