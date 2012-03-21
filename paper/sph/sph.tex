@@ -22,7 +22,9 @@ More on fluid field description can be found in \cite[section 2.1]{Hauke2008} an
 
 For discretization there are several approaches: grid based (lagrarian grid and eulerian grid) and meshfree methods (SPH, particle in cell).
 Lagrarian grid is attached to material and moves with it. Each mesh cell represents one fluid parcel from Lagrarian description. The advantages of this method are simpler equations given by lagrarian description, less memory usage (as the mesh is specified only where fluid or other material is present), easiness of tracking movement of fluid parcels. However this method does not handle large material deformations over time (like for instance water splashes) well. In such cases mesh must be recomputed and it an expensive procedure.
+
 Eulerian grid, on the other hand, is fixed in space, and covers entire domain in which fluid can move. In each grid node we calculate mass momentum and energy flux. This method handles large deformations of material easily but its computional complexity is large, especially in three dimensions. The amount of memory require is also large as whole domain must be covered with grid. 
+
 Third way of discretization are mesh free method. The idea of them is to combine strong points of both eulerian and lagrarian grids, but without using a grid or a mesh. This is done usually by discretizing material as a set of particles. At each particle values of functions, derivatives and integrals are approximated with particle approximations. An example of mesh free method is SPH which will be further described in this chapter. 
 Lagrarian and Eulerian grids as well as meshfree methods are described in more details in \cite[chapter 1]{Liu}
 
@@ -63,6 +65,12 @@ It's also worth noting that \ref{eq:compact_condition} defines finite domain in 
 
 Replacing field $A$ with it's kernel interpolation $A_I$ yields error of $h^2$ (see~\cite[section 2.2.1]{Liu}). On the other hand accuracy of sumation interpolant \ref{eq:sumation_interpolant} is hard to predict (see~\cite[section 12.1]{Monaghan1992}).
 
+Density - $\rho$ - that appears in sumation interpolant \ref{eq:sumation_interpolant} varies in time as opposed to mass. Thus it must be computed at each time step. Density field can be obtained using sumation interpolant as follows:
+\begin{equation}
+\label{eq:sph_density}
+\rho(r) = \sum_{b}m_b\frac{\rho_j}{\rho_j}W(r-r_b, h) = \sum_{b}m_b W(r-r_b, h)
+\end{equation}
+
 In many physical simulations we need to compute gradient of some field A. It turns out that using integral interpolant \ref{eq:sph_kernel_interpolant} we only need to compute gradient of smoothing kernel $W$ (\cite[section 2.2.2]{Liu}):
 
 \begin{equation}
@@ -78,20 +86,11 @@ As earlier we can aproximate integral with sumation:
 \end{equation}
 This simplifies computations as $W$ is known and it's gradient can be given analitically. 
 
-SPH gives a flexibility in choosing smoothing kernel. Generally Gaussian-like smoothing kernel are used, however any function W satisfying \ref{eq:sph_kernel_property_1}, \ref{eq:sph_kernel_property_2} and \ref{eq:compact_condition} can be used. It is even possible to utilize variable width kernels (TODO reference) which can be useful in case of large fluctuations in particles distributions. \cite[chapter 3]{Liu} is entirely devoted to smoothing kernels. 
+SPH gives a flexibility in choosing smoothing kernel.Gaussian function would be preferable however it doesn't meet compact condition \ref{eq:compact_condition}. Thus Gaussian-like functions are usually constructed, although any function that satisfies \ref{eq:sph_kernel_property_1}, \ref{eq:sph_kernel_property_2} and \ref{eq:compact_condition} can be used. It is even possible to utilize variable width kernels \ref[section 6]{Monaghan1992} which can be useful in case of large fluctuations in particles distributions. Chapter 3 of \cite{Liu} is entirely devoted to smoothing kernels and their construction, \ref[section 3.5]{Muller2003} discuss usage of different kernels. 
 
 SPH is a interpolation method - does not uses a grid (MESHFREE), approximates fluid or other materials as a set of particles. Requires less resources comparing to grid methods when it comes to such phenomenas as splasches or breaking waves. 
 
 SPH first used by Leon Lucy and R. A. Gingold and J. J. Monaghan
-
-Different kernels can be used for different computations.
-
-
-paper on astrophysics from 1992 (Monaghan1992) - \cite{Monaghan1992}
-
-book about sph (Liu) - \cite{Liu}
-
-Particle based simulations for interactive applications (Muller2003) - \cite{Muller2003}
 
 \section{SPH for fluids}
 Fluid motion can be described by two equations. First one is conservation of mass:
@@ -102,16 +101,42 @@ Fluid motion can be described by two equations. First one is conservation of mas
 second one is Navier-Stokes conservation of momentum equation:
 \begin{equation}
 \label{eq:momentum_conservation}
-\rho \frac{Dv}{Dt} = -\triangledown p + \mu \triangledown^2v + f
+\rho \frac{Dv}{Dt} = -\triangledown p + \mu \triangledown^2v + f^{external}
 \end{equation}
 
-Both equations are presented in Lagrarian form. $\frac{D}{Dt}$ is a material derivative (TODO opisać co to jest, referencja).  $p$ is the pressure, $\mu$ is fluid viscosity and f represents external forces acting on the fluid. 
+Both equations are presented in Lagrarian form. $\frac{D}{Dt}$ is a material derivative (TODO opisać co to jest, referencja), $p$ is the pressure, $\mu$ is fluid viscosity and $f^{external}$ represents external forces acting on the fluid. Usually external forces consists only of gravity giving $f^{external} = \rho g$
+When using SPH conservation of mass is guaranteed by particles - as mass of the particles does not change. 
+Pressure term $-\triangledown p$  at particle $i$ can be estimated using \ref{eq:sumation_interpolant} as follows:
+\begin{equation}
+\label{eq:sph_pressure_force1}
+-\triangledown p_i = -\sum_{j}m_j \frac{p_j}{\rho_j}\triangledown W(r_i - r_j, h) 
+\end{equation}
+Pressure force computed as above is not symmetric which can be seen when two particles interacts. Gradient of the kernel $W$ is zero at particle's center and thus only particle j contributes to compute pressure of particle i. As densities of particles can be different this may lead to pressure forces will not be symmetric. Many ways of symmetrizing equation \ref{eq:sph_pressure_force1} are proposed in literature (TODO referencja). Very simple one was purposed by \cite{Muller2003}:
+\begin{equation}
+\label{eq:sph_pressure_force_muller}
+-\triangledown p(r_i) = -\sum_{j}m_j \frac{p_j + p_i}{2\rho_j}\triangledown W(r_i - r_j, h) 
+\end{equation}
+Pressure at particle i is defined as:
+\begin{equation}
+\label{eq:pressure}
+p_i = k(\rho_i - \rho_0)
+\end{equation}
+where $k$ is gas constant and $\rho_0$ is rest density.
 
-Navier-Stokes equations: 
- - continuity, 
- - momentum conservation, 
- - energy conservation
-For SPH first one is not necessary and for fluid simulation in games energy conservation equation can be discarded as we only interested in fluid movement, not temperature (we can assume the temperature is constant). 
+SPH formula for viscosity force - $f^{viscosity} =  \mu \triangledown^2v$ - acting on particle i will be:
+\begin{equation}
+\label{eq:sph_viscosity_force}
+f^{viscosity}_i = \mu \sum_{j}m_j \frac{v_j}{\rho_j}\triangledown^2 W(r_i - r_j, h) 
+\end{equation}
+Again, this yields asymmetric force as velocity varies between particles. Fortunately it can be simply symmetrizied as follows:
+\begin{equation}
+\label{eq:sph_viscosity_force_sym}
+f^{viscosity}_i = \mu \sum_{j}m_j \frac{v_j - v_i}{\rho_j}\triangledown^2 W(r_i - r_j, h) 
+\end{equation}
 
-TODO SPH equations needs to be symmetrized.
+External force which is equal to gravity force, does not require using SPH and it's simply:
+\begin{equation}
+f^{external}_i = \rho_i g
+\end{equation}
+
 
