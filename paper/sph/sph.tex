@@ -4,6 +4,7 @@
 
 %: ----------------------- introduction file header -----------------------
 \chapter{SPH}
+\label{chap:sph}
 
 
 \graphicspath{{sph/figures/}}
@@ -86,7 +87,7 @@ As earlier we can aproximate integral with sumation:
 \end{equation}
 This simplifies computations as $W$ is known and it's gradient can be given analitically. 
 
-SPH gives a flexibility in choosing smoothing kernel.Gaussian function would be preferable however it doesn't meet compact condition \ref{eq:compact_condition}. Thus Gaussian-like functions are usually constructed, although any function that satisfies \ref{eq:sph_kernel_property_1}, \ref{eq:sph_kernel_property_2} and \ref{eq:compact_condition} can be used. It is even possible to utilize variable width kernels \ref[section 6]{Monaghan1992} which can be useful in case of large fluctuations in particles distributions. Chapter 3 of \cite{Liu} is entirely devoted to smoothing kernels and their construction, \ref[section 3.5]{Muller2003} discuss usage of different kernels. 
+SPH gives a flexibility in choosing smoothing kernel.Gaussian function would be preferable however it doesn't meet compact condition \ref{eq:compact_condition}. Thus Gaussian-like functions are usually constructed, although any function that satisfies \ref{eq:sph_kernel_property_1}, \ref{eq:sph_kernel_property_2} and \ref{eq:compact_condition} can be used. It is even possible to utilize variable width kernels \cite[section 6]{Monaghan1992} which can be useful in case of large fluctuations in particles distributions. Chapter 3 of \cite{Liu} is entirely devoted to smoothing kernels and their construction, \cite[section 3.5]{Muller2003} discuss usage of different kernels. 
 
 SPH is a interpolation method - does not uses a grid (MESHFREE), approximates fluid or other materials as a set of particles. Requires less resources comparing to grid methods when it comes to such phenomenas as splasches or breaking waves. 
 
@@ -139,4 +140,6 @@ External force which is equal to gravity force, does not require using SPH and i
 f^{external}_i = \rho_i g
 \end{equation}
 
+It is also important that choosing smoothing kernel have significant impact on stability and correctness. \cite{Monaghan1992} discusses impact of smoothing kernel on error of integral interpolant. \cite{Muller03} points out that gradient o kernel used for computing pressure force should not approach zero when $r$ approaches zero. This would lead to creation of particle clusters as pressure force would decrease when particles are closer to each other.
 
+Another essential restriction must be imposed on viscosity smoothing kernel. As viscosity  is the force that tends to decrease particles relative velocity. That is why it should only be dependent on particles velocity differences. However if Laplacian of the smoothing kernel gets negative the direction of the viscosity force gets inverted which leads to increase of particles relative speed. \cite{Muller2003} proposed smoothing kernel which Laplacian is positive within radius of influence. 

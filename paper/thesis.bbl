@@ -59,6 +59,10 @@
   Versions 3.0 and 3.1 (7th Edition)}.
 \newblock Addison-Wesley Professional, 2009.
 
+\bibitem{PhysXDoc}
+{\bf PhysX Documentation}.
+\newblock NVIDIA Corporation, 2008.
+
 \bibitem{Harris08}
 {\sc Mark Harris}.
 \newblock {\bf CUDA Fluid Simulation in NVIDIA PhysX}.

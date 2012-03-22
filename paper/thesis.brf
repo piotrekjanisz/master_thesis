@@ -5,8 +5,12 @@
 \backcite {Liu}{{5}{2.2}{equation.2.2.5}}
 \backcite {Monaghan1992}{{5}{2.2}{equation.2.2.5}}
 \backcite {Liu}{{6}{2.2}{equation.2.2.6}}
+\backcite {Monaghan1992}{{6}{2.2}{equation.2.2.8}}
 \backcite {Liu}{{6}{2.2}{equation.2.2.8}}
+\backcite {Muller2003}{{6}{2.2}{equation.2.2.8}}
 \backcite {Muller2003}{{7}{2.3}{equation.2.3.11}}
+\backcite {Monaghan1992}{{7}{2.3}{equation.2.3.16}}
+\backcite {Muller2003}{{8}{2.3}{equation.2.3.16}}
 \backcite {OglBindings}{{9}{3.1}{section.3.1}}
 \backcite {GPUGems3}{{10}{3.1}{section.3.1}}
 \backcite {OpenGLSuperbible}{{10}{3.1.1}{subsection.3.1.1}}
@@ -18,6 +22,9 @@
 \backcite {OpenGLSuperbible}{{17}{3.1.6}{subsection.3.1.6}}
 \backcite {OpenGLSuperbible}{{17}{3.1.6}{subsection.3.1.6}}
 \backcite {RedBook}{{17}{3.1.6}{subsection.3.1.6}}
+\backcite {PhysXDoc}{{19}{3.3.2}{subsection.3.3.2}}
+\backcite {Harris08}{{19}{3.3.2}{subsection.3.3.2}}
+\backcite {PhysXDoc}{{19}{3.3.2}{subsection.3.3.2}}
 \backcite {Harris08}{{19}{3.3.2}{subsection.3.3.2}}
 \backcite {laanSainz2009}{{21}{4.1}{figure.caption.8}}
 \backcite {Green2010}{{22}{4.1}{figure.caption.8}}

@@ -131,10 +131,14 @@ My project uses two PhysX features - rigid body and water simulations and thus t
 
 
 \subsection{Fluids}
+PhysX provides three methods for simulating fluids SPH, simple method and mixed method. First one was described in chapter~\ref{chap:sph}. Second one does not take interparticle forces into concideration thus simplifies computations. This simplified method is good for simulating phenomenas such as smoke or fog, but for realistic water SPH must be used. Third one - mixed method - according to documentation \cite{PhysXDoc} alternates between SPH and simple mode, providing more performance than SPH but still maintaining some dense characteristics.
 
+Implementation details of PhysX's SPH method are covered in \cite{Harris08}. It solves conservation of momentum equation~\ref{eq:momentum_conservation} to move particles. External force includes only gravity force. Symmetrization of pressure and viscosity forces is done as in equations \ref{eq:sph_pressure_force_muller} and \ref{eq:sph_viscosity_force_sym}. TODO surface tension.
+
+TODO collisions with other objecs, viscosity, surface tension. List of parameters.
+
+PhysX Documentation - \cite{PhysXDoc}
 On implementation of SPH in PhysX \cite{Harris08}.
-
-PhysX provides two methods for simulating fluids SPH and simple method. First one was described in chapter (TODO reference to chapter). Second one does not take interparticle forces into concideration thus simplifies computations. This simplified method is good for simulating phenomenas such as smoke or fog, but for realistic water SPH must be used. 
 
 TODO more details about fluids in PhysX - simulation methods, parameters, compare with SPH chapter, emiters, drains, limitations (64K particles per fluid)
 
