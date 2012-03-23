@@ -155,9 +155,9 @@ Yet another approach is to compute normal for every triangle that includes given
 \subsection{Multithreading}
 \cite{RosenbergBirdwell2008} presented algorithm that run in one thread. However algorithm has a potential of parallelization due to block processing. Parallelization of this algorithm is even more desired as nowadays CPU manufacturers increase performance by multiplying CPU cores instead of increasing clock frequency of single core. 
 
-As mentioned before processing of block is independent of one another. The algorithm uses thread pool which size can be configured and the single task is a single block. The architecture is illustrated on figure (TODO). The single thread checks if there are still blocks to process in blocks queue, takes one and extracts surface in this block. Result of extracting surface in one block is put into results list. Thread stops when there are no more task in queue. As the main thread doesn't take part in surface extraction there is possibility of working asynchronously. Main thread can render surface extracted in previous frame while working threads are extracting surface for current frame. This increases latency but it is not visible when frame rate is high. 
+As mentioned before processing of block is independent of one another. The algorithm uses thread pool which size can be configured and the single task is a single block. The architecture is illustrated on figure~\ref{threading_architecture}. The single thread checks if there are still blocks to process in blocks queue, takes one and extracts surface in this block. Result of extracting surface in one block is put into results list. Thread stops when there are no more task in queue. As the main thread doesn't take part in surface extraction there is possibility of working asynchronously. Main thread can render surface extracted in previous frame while working threads are extracting surface for current frame. This increases latency but it is not visible when frame rate is high. 
 
-TODO diagram
+\figuremacroW{threading_architecture}{Threading architecture}{architecture diagram of parallelization of surface extraction algorithm}{0.7}
 
 % ---------------------------------------------------------------------------
 % ----------------------- end of thesis sub-document ------------------------

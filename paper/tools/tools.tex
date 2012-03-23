@@ -105,7 +105,7 @@ Unlike default framebuffer object, the one created by user is not limited in siz
 
 Details about framebuffer objects, their creation and attaching storage to then can be found in \cite[chapter~8]{OpenGLSuperbible} and \cite[chapter~10]{RedBook}.
 
-\section{boost}
+\section{Boost library}
 Boost is a set of libraries extending capabilities of C++ language. Libraries provides classes and functions for most common task and algorithms, like reqular expressions, hash maps, threading. They are also cross platform. 
 
 The advantage of boost libraries is that they are designed for maximum flexibility and speed. They make heavy use of C++ template programming to be as general as possible. The other advantage of boost libraries is that they often become included in C++ standard - like regular expressions (FIXME). 
@@ -127,24 +127,69 @@ PhysX works in asynchronous way - that means simulation step is computed either 
 \myFigureMacroW{physx_workflow}{Diagram of PhysX SDK workflow}{0.7}
 
 My project uses two PhysX features - rigid body and water simulations and thus those will be described in more details. 
+
+% --------------------------------- Rigid bodies 
 \subsection{Rigid bodies}
 
+Basic entity of simulation is actor. Actors can be either static objects, fixed in space (walls, ground, etc.) or dynamic rigid bodies.
+Figure~\ref{physx_actors} shows different ways the same actors can be represented. Actors have shapes assigned to them which are used by collision detection system. This shape can be the same mesh as used by rendering system however it is much more efficient to approximate it by set of bounding volumes (figure~\ref{physx_actors}). Bounding volumes are simple shapes for which collision detection is simple and fast - usually rectangles and spheres. 
 
+For physics computation actors is represented as a tensor located at center of mass (figure~\ref{physx_actors}). In case of collision with other object contact points are provided as points in space with normal vector of collision planes (red arrows on figure~\ref{physx_actors}). Center of mass is automatically computed from actor's shape however there is a possibility to manually set it.
+\figuremacroW{physx_actors}{Different ways of representing actors}{From left: graphical representation for rendering engine, bounding volumes used by collision detection and finally representation used for dynamics.}{1.0}
+
+TODO actor's frame
+
+Body movement can be a combination of rectilinear (along path) and angular (around center of mass) motions. Dynamic actors have set of properties used for rigid body simulation. All properties have a linear and angular version. They are gathered in table~\ref{tab:rigid_body_properties}
+
+\begin{table}[htdp]
+\caption[Rigid body parameters]{\textbf{Comparision of sphere rendering methods}}
+\centering
+    \begin{tabular}{|l|l|}
+        \hline
+        {\bf Linear property } & {\bf Angular property } \\ \hline
+        mass           & interia - mass distribution of the body along its three dimensions         \\ 
+        position - center of mass position of rigid body       & orientation - 3x3 matrix representing  principal moments relative to the actor's frame     \\ 
+        velocity - linear velocity vector      & angular velocity - vector representing axis of rotation which length is equal to magnitude of angular velocity \\ 
+        force - vector representing force acting on body     & torque - angular force acting on a body represented as axis of rotation with length equal to magnitude of angular velocity          \\
+        \hline
+    \end{tabular}
+\label{tab:rigid_body_properties}
+\end{table}
+
+% --------------------------------- Fluids
 \subsection{Fluids}
 PhysX provides three methods for simulating fluids SPH, simple method and mixed method. First one was described in chapter~\ref{chap:sph}. Second one does not take interparticle forces into concideration thus simplifies computations. This simplified method is good for simulating phenomenas such as smoke or fog, but for realistic water SPH must be used. Third one - mixed method - according to documentation \cite{PhysXDoc} alternates between SPH and simple mode, providing more performance than SPH but still maintaining some dense characteristics.
 
-Implementation details of PhysX's SPH method are covered in \cite{Harris08}. It solves conservation of momentum equation~\ref{eq:momentum_conservation} to move particles. External force includes only gravity force. Symmetrization of pressure and viscosity forces is done as in equations \ref{eq:sph_pressure_force_muller} and \ref{eq:sph_viscosity_force_sym}. TODO surface tension.
+Implementation details of PhysX's SPH method are covered in \cite{Harris08}. It solves conservation of momentum equation~\ref{eq:momentum_conservation} to move particles. External force includes only gravity force. Symmetrization of pressure and viscosity forces are done as in equations \ref{eq:sph_pressure_force_muller} and \ref{eq:sph_viscosity_force_sym}. Surface tension is also modeled (see~\ref{eq:surface_tension}), however there are no implementation details given on that.
 
-TODO collisions with other objecs, viscosity, surface tension. List of parameters.
+There are two ways of creating fluids in PhysX - either directly specifying particles initial positions, velocities, etc. or by using emitters (figure~\ref{emitters_drains}). Emitters are objects that generates particles. They can be static objects or they may be attached to a rigid body and interact with other objects in the scene. Emitters can generate particles in two modes:
+\begin{itemize}\itemsep2pt
+\item \textit{Constant pressure} - in which state of surrounding fluid is taken into account. Emitter tries to match rest spacing of particles (which is one of fluids parameters). 
+\item \textit{Constant flow} - emitter keeps generating the same number of particles each frame. 
+\end{itemize}
 
-PhysX Documentation - \cite{PhysXDoc}
-On implementation of SPH in PhysX \cite{Harris08}.
+\figuremacro{emitters_drains}{PhysX emitters and drains}{Simple 2D scene with one emitter and two drains.}
 
-TODO more details about fluids in PhysX - simulation methods, parameters, compare with SPH chapter, emiters, drains, limitations (64K particles per fluid)
+Removing particles can be done in three ways:
+\begin{itemize}\itemsep2pt
+\item By removing particles manually.
+\item By setting particles lifetime parameter which is time in seconds an emitted particle lives.
+\item By creating drain objects (figure~\ref{emitters_drains}). When particle hits drain it is removed from simulation. Those object are useful to prevent fluid from spreading too far negatively affecting performance.
+\end{itemize}
 
-TODO $ftp://download.nvidia.com/developer/cuda/seminar/TDCI_PhysX.pdf$
+Fluids can interact with other objects in the scene. The interaction is handled bypassing conservation of momentum equation~\ref{eq:momentum_conservation} by applying velocity changes directly to particles. Interaction with rigid bodies can be either one-way (rigid body acts on fluid) or two-way (when fluid also acts on rigid body).
 
-TODO prezentacja
+Most important fluid parameters that can be set are:
+\begin{description}\itemsep1pt
+\item[Kernel Radius Multiplier] Corresponds to $k$ parameter of SPH smoothing kernel. Together with \textit{Rest Particle Per Meter} defines particles radius of influence (area within smoothing kernel is non-zero): $radius = \frac{kernelRadiusMultiplier}{restParticlesPerMeter}$
+\item[Rest Particles Per Meter] Defines number of particles per volume unit when fluid is in rest state.
+\item[Rest Density] Corresponds to $\rho_0$ from equation~\ref{eq:pressure}. Defines density of fluid in it's rest state.
+\item[Viscosity] Corresponds to $\mu$ constant in equation~\ref{eq:momentum_conservation}. Lower viscosity will produce more runny fluids like water, higher viscosity will produce more sticky fluids like honey.
+\item[Stiffness] Corresponds to $k$ constant in equation~\ref{eq:pressure}. Defines how compressible the fluid is. Higher values means less compressible fluids (for instance water). 
+\item[Surface Tension] Equivalent of $\sigma$ from equation~\ref{eq:surface_tension}. The higher this parameter is the smoother fluid surface will be. 
+\end{description}
+
+PhysX allows creating different fluids with different parameters and simulating them in the same time. However those fluids can't interact. That means it is not possible to simulate mixing two fluids together. Another limitation of PhysX's fluids is limit of 64000 particles per fluid.
 % ----------------------------------------------------------------------
 
 
