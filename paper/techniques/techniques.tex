@@ -8,17 +8,18 @@
 % ----------------------- contents from here ------------------------
 
 Output from particle base simulations is list of particles containing positions. It can also contain additional parameters - for example PhysX fluid simulation returns velocity, lifetime and density in addition to position for each particle. 
-Traditionally triangle meshes are used for rendering objects. Using this approach requires constructing fluid triangle mesh for given particle positions. This method is called isosurface extraction and will be described in second section of this chapter. 
+Traditionally triangle meshes are used for rendering objects. Using this approach requires constructing fluid's triangle mesh for given particle positions. This method is called isosurface extraction and will be described in section~\ref{sec:isosurfaceextraction}.
 Another possibility is to render each particle as a point (or a billboard in general) with opacity so that when large amount of particles is rendered the result would give illusion of a smooth surface. Such technique has one major drawback - it does not produces surface prevents us from adding effects of reflection and refraction.
-Similar technique is to extract visible surface by rendering each particle as a sphere into depth buffer. This will be described in first section.
+Similar technique is to extract visible surface by rendering each particle as a sphere into depth buffer. This will be described in section~\ref{sec:screen_space}.
 
-\section{Screen space}
+\section{Screen space} \label{sec:screen_space}
 \figuremacroW{screen_space}{Screen Space Fluid Rendering}{The figure shows high level overview of the method, taken from \cite{Green2010}}{0.7}
 As mentioned before this approach extracts visible surface by rendering each particle into depth buffer. High level overview ot this method is presented on figure~\ref{screen_space} and consists of following steps \cite{laanSainz2009}: rendering depth texture (section~\ref{sec:surfacedepth}) and thickness textures (section~\ref{sec:thickness}), depth smoothing (section~\ref{sec:smoothing}) and assembling fluid surface with rest of the scene (section~\ref{sec:rendering}).
 
 \subsection{Surface depth} \label{sec:surfacedepth}
-To obtain fluid surface visible from the viewpoint of camera each particle is rendered as a sphere into depth texture [rysunek]. At each pixel only closest value is kept using hardware depth test. 
-To avoid rendering large amount of geometry each particle is rendered as a point sprite and it's depth is generated in fragment shader. This common technique speeds up rendering process significantly as well as improves quality of rendered spheres (as can be seen on figure~\ref{spheres}) because depth values are generated for each pixel. Rendering spheres as point sprites is 10 to 100 times faster comparing to rendering them as triangle meshes (see table~\ref{sphere_speed_comp}).
+To obtain fluid surface visible from the viewpoint of camera each particle is rendered as a sphere into depth texture (figure~\ref{sphere_depth}). At each pixel only closest value is kept using hardware depth test. 
+\figuremacroW{sphere_depth}{Particles rendered as spheres into depth texture}{}{0.7}
+In order to avoid rendering large amount of geometry each particle is rendered as a point sprite and it's depth is generated in fragment shader. This common technique speeds up rendering process significantly as well as improves quality of rendered spheres (as can be seen on figure~\ref{spheres}). Rendering spheres as point sprites is 10 to 100 times faster comparing to rendering them as triangle meshes (see table~\ref{sphere_speed_comp}).
 \figuremacroW{spheres}{Spheres rendered with different methods}{1 - mesh with 128 triangles, 2 - mesh with 512 triangles, 3 - mesh with 2048 triangles, 4 - point sprite with normals generated in fragment shader}{0.5}
 \begin{table}[htdp]
 \caption[Comparision of sphere rendering methods]{\textbf{Comparision of sphere rendering methods}}
@@ -34,13 +35,14 @@ Point Sprites & 200 \\
 \label{sphere_speed_comp}
 \end{table}
 
-\subsection{Smoothing} \label{sec:smoothing}
+\subsection{Smoothing} 
+\label{sec:smoothing}
 Although previous step produces surface it's quality is not sufficient. As can be seen on figure~\ref{spheres_no_smoothing} individual spheres can be seen giving fluid surface gelly-like appearance. To remove this artifact some kind of smoothing has to be applied. Section~\ref{sec:gaussiansmoothing} will describe gaussian smoothing and section~\ref{sec:curvatureflowsmoothing} curvature flow smoothing.
 \figuremacroW{spheres_no_smoothing}{Fluid surface rendered without smoothing phase}{Individual spheres can be seen, giving surface unnatural appearance}{0.7}
 
 \subsubsection{Gaussian smoothing} \label{sec:gaussiansmoothing}
 Most obvious way to smooth values in depth texture is to apply gaussian filter. It's easy to implement and can be computed fast due to it's linear separability. However this filter produces undesired effect of blending drops of fluid with background surfaces (see figure~\ref{gaussian_filter_img}). 
-\figuremacroW{gaussian_filter_img}{Fluid surface rendered with Gaussian smoothing}{From left: depth image, depth image after applying Gaussian filter, diffuse shaded surface}{0.7}
+\figuremacroW{gaussian_filter_img}{Fluid surface rendered with Gaussian smoothing}{it can be seen that different part of fluid are blended together creating undesired effect of one big surface.}{0.7}
 Thus edge-preserving filters needs to be used which are also called bilateral filters. Bilateral Gaussian filter is a modification that changes wages of pixels depending on difference between their tonal value ($I(s)$) and tonal value of central pixel ($I(s_0)$). This can be described by following formula (from~\cite{PhamVliet2005}): 
 \begin{equation}
 \label{bilateral_equation}
@@ -56,7 +58,7 @@ is the bilateral filter for the neighborhood around $s_0$. $g_s$ is a spatial we
 \label{bilateral_dist_equation}
 g_s(s) = g(x, \sigma_S)g(y, \sigma_S)  \quad   g_t(I) = g(I, \sigma_t)
 \end{equation}
-As can be seen on equation~\ref{bilateral_weights_equation} only change in bilateral filter (in comparison to regular bilateral filter) is introduction of tonal weight $g_t$. This change makes filter space-variant - that means it can't be computed as a product of two one dimensional filters ($g_s$ in equation~\ref{bilateral_dist_equation}). 
+As can be seen in equation~\ref{bilateral_weights_equation} only change in bilateral filter (in comparison to regular bilateral filter) is introduction of tonal weight $g_t$. This change makes filter space-variant - that means it can't be computed as a product of two one dimensional filters ($g_s$ in equation~\ref{bilateral_dist_equation}). 
 Computional complexity of space-variant filters is $O(Nm^d)$ comparing to only $O(Nmd)$ for space-invariant (d is image dimensionality, m is the size of filtering kernel and N is the number of pixels in the image). For smoothing fluid surface kernel with $m = 20$ must be used, which gives for 2 dimensional image about 400 operations for each pixel when using bilateral filtering. In comparison separable implementation requires 40 operations. It turns out however that computing bilateral filter as it was a space-invariant gives good approximation for real time applications (see figure~\ref{bilateral_comp}). Approximation gives some artifacts but they are not visible when fluid is moving and other effects (reflection and refraction) are applied.
 \figuremacroW{bilateral_comp}{Comparision of normal bilateral filter with it's separable approximation}{Upper row presents images for bilateral filter and bottom row presents separable approximation.}{0.7}
 

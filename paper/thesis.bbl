@@ -1,5 +1,11 @@
 \begin{thebibliography}{10}
 
+\bibitem{RosenbergBirdwell2008}
+{\sc Ken~Birdwell Ilya D.~Rosenberg}.
+\newblock {\bf Real-time particle isosurface extraction}.
+\newblock {\em Proceedings of the 2008 symposium on Interactive 3D graphics and
+  games}, 2008.
+
 \bibitem{Liu}
 {\sc M.~B.~Liu G.~R.~Liu}.
 \newblock {\em Smoothed Particle Hydrodynamics a meshfree particle method}.
@@ -53,11 +59,23 @@
   SIGGRAPH 2007}, chapter~9.
 \newblock SIGGRAPH, 2007.
 
+\bibitem{Dunlop2006}
+{\sc Robert Dunlop}.
+\newblock \href{http://www.mvps.org/directx/articles/linear_z/linearz.htm}{{\bf
+  Linearized Depth using Vertex Shaders}}.
+\newblock \url{http://www.mvps.org/directx/articles/linear_z/linearz.htm"},
+  2006.
+
 \bibitem{RedBook}
 {\sc Dave Shreiner}.
 \newblock {\em OpenGL Programming Guide: The Official Guide to Learning OpenGL,
   Versions 3.0 and 3.1 (7th Edition)}.
 \newblock Addison-Wesley Professional, 2009.
+
+\bibitem{CppRef}
+{\bf Working Draft, Standard for Programming Language C++}.
+\newblock http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3242.pdf,
+  2011.
 
 \bibitem{PhysXDoc}
 {\bf PhysX Documentation}.
@@ -87,24 +105,11 @@
 \newblock {\em Multimedia and Expo, 2005. ICME 2005. IEEE International
   Conference on}, 2005.
 
-\bibitem{Dunlop2006}
-{\sc Robert Dunlop}.
-\newblock \href{http://www.mvps.org/directx/articles/linear_z/linearz.htm}{{\bf
-  Linearized Depth using Vertex Shaders}}.
-\newblock \url{http://www.mvps.org/directx/articles/linear_z/linearz.htm"},
-  2006.
-
 \bibitem{LorensenCline1987}
 {\sc Harvey E.~Cline William E.~Lorensen}.
 \newblock {\bf Marching cubes: A high resolution 3D surface construction
   algorithm}.
 \newblock {\em Proceedings of the 14th annual conference on Computer graphics
   and interactive techniques, Vol. 21, No. 4.}, 1987.
-
-\bibitem{RosenbergBirdwell2008}
-{\sc Ken~Birdwell Ilya D.~Rosenberg}.
-\newblock {\bf Real-time particle isosurface extraction}.
-\newblock {\em Proceedings of the 2008 symposium on Interactive 3D graphics and
-  games}, 2008.
 
 \end{thebibliography}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  23 MAR 2012 16:58
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  27 MAR 2012 12:43
 entering extended mode
 **//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/thesis.tex
 
@@ -540,7 +540,7 @@ n/introduction.tex
 Package natbib Warning: Citation `eulerian_lagrarian' on page 3 undefined on in
 put line 19.
 
-<sph/figures/eulerian_lagrarian.png, id=220, 577.9191pt x 219.4599pt>
+<sph/figures/eulerian_lagrarian.png, id=222, 577.9191pt x 219.4599pt>
 File: sph/figures/eulerian_lagrarian.png Graphic file (type png)
 
 <use sph/figures/eulerian_lagrarian.png>
@@ -562,7 +562,7 @@ Missing character: There is no ‡ in font cmr10!
 
 
 
-] <tools/figures/opengl_pipeline.jpg, id=311, 689.57625pt x 486.31688pt>
+] <tools/figures/opengl_pipeline.jpg, id=313, 689.57625pt x 486.31688pt>
 File: tools/figures/opengl_pipeline.jpg Graphic file (type jpg)
 
 <use tools/figures/opengl_pipeline.jpg>
@@ -572,7 +572,7 @@ Package pdftex.def Info: tools/figures/opengl_pipeline.jpg used on input line 3
  [10] [11 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
 ools/figures/opengl_pipeline.jpg>]
 [12]
-<tools/figures/perspective_projection.png, id=343, 527.0892pt x 410.7345pt>
+<tools/figures/perspective_projection.png, id=345, 527.0892pt x 410.7345pt>
 File: tools/figures/perspective_projection.png Graphic file (type png)
 
 <use tools/figures/perspective_projection.png>
@@ -580,7 +580,7 @@ Package pdftex.def Info: tools/figures/perspective_projection.png used on input
  line 63.
 (pdftex.def)             Requested size: 412.56496pt x 321.506pt.
 
-<tools/figures/homogenous_space.png, id=344, 248.127pt x 285.2256pt>
+<tools/figures/homogenous_space.png, id=346, 248.127pt x 285.2256pt>
 File: tools/figures/homogenous_space.png Graphic file (type png)
 
 <use tools/figures/homogenous_space.png>
@@ -590,61 +590,71 @@ Package pdftex.def Info: tools/figures/homogenous_space.png used on input line
  [13 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
 figures/perspective_projection.png>]
 [14 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/f
-igures/homogenous_space.png>]
-<tools/figures/z_buffer_dist.png, id=356, 1027.84pt x 770.88pt>
+igures/homogenous_space.png>] [15]
+<tools/figures/z_fighting.png, id=374, 432.11438pt x 221.32687pt>
+File: tools/figures/z_fighting.png Graphic file (type png)
+
+<use tools/figures/z_fighting.png>
+Package pdftex.def Info: tools/figures/z_fighting.png used on input line 109.
+(pdftex.def)             Requested size: 412.56496pt x 211.32312pt.
+
+<tools/figures/z_buffer_dist.png, id=375, 1027.84pt x 770.88pt>
 File: tools/figures/z_buffer_dist.png Graphic file (type png)
 
 <use tools/figures/z_buffer_dist.png>
-Package pdftex.def Info: tools/figures/z_buffer_dist.png used on input line 100
+Package pdftex.def Info: tools/figures/z_buffer_dist.png used on input line 110
 .
 (pdftex.def)             Requested size: 412.56496pt x 309.42871pt.
- [15] [16 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
-ools/figures/z_buffer_dist.png>] [17]
-<tools/figures/physx_workflow.png, id=381, 311.9655pt x 318.59026pt>
+ [16 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
+figures/z_fighting.png>] [17 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/ma
+ster_thesis/paper/tools/figures/z_buffer_dist.png>] [18]
+<tools/figures/physx_workflow.png, id=400, 311.9655pt x 318.59026pt>
 File: tools/figures/physx_workflow.png Graphic file (type png)
 
 <use tools/figures/physx_workflow.png>
-Package pdftex.def Info: tools/figures/physx_workflow.png used on input line 12
-7.
+Package pdftex.def Info: tools/figures/physx_workflow.png used on input line 13
+5.
 (pdftex.def)             Requested size: 288.7942pt x 294.94902pt.
- [18 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
+
+Underfull \vbox (badness 4899) has occurred while \output is active []
+
+ [19 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
 figures/physx_workflow.png>]
-<tools/figures/physx_actors.png, id=391, 520.19344pt x 149.8097pt>
+<tools/figures/physx_actors.png, id=410, 520.19344pt x 149.8097pt>
 File: tools/figures/physx_actors.png Graphic file (type png)
 
 <use tools/figures/physx_actors.png>
-Package pdftex.def Info: tools/figures/physx_actors.png used on input line 138.
+Package pdftex.def Info: tools/figures/physx_actors.png used on input line 146.
 
 (pdftex.def)             Requested size: 412.56496pt x 118.81467pt.
+ [20 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
+figures/physx_actors.png>] [21]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 176.
 
-Overfull \hbox (423.2567pt too wide) in paragraph at lines 145--155
- [][] 
- []
 
-[19 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/f
-igures/physx_actors.png>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 165.
-
- (C:\MiKTeX\tex\latex\base\omscmr.fd
+(C:\MiKTeX\tex\latex\base\omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 165.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 176.
 
-<tools/figures/emitters_drains.png, id=407, 622.2447pt x 319.1925pt>
+<tools/figures/emitters_drains.png, id=434, 622.2447pt x 319.1925pt>
 File: tools/figures/emitters_drains.png Graphic file (type png)
 
 <use tools/figures/emitters_drains.png>
 Package pdftex.def Info: tools/figures/emitters_drains.png used on input line 1
-69.
+80.
 (pdftex.def)             Requested size: 412.56496pt x 211.63692pt.
- [20] [21 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
-ools/figures/emitters_drains.png>])
-[22]
+ [22 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/tools/
+figures/emitters_drains.png>]) [23]
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\techniques/
-techniques.tex
+techniques.tex [24
+
+
+
+]
  4.
-<techniques/figures/screen_space.png, id=431, 630.10406pt x 465.99094pt>
+<techniques/figures/screen_space.png, id=456, 630.10406pt x 465.99094pt>
 File: techniques/figures/screen_space.png Graphic file (type png)
 
 <use techniques/figures/screen_space.png>
@@ -652,109 +662,118 @@ Package pdftex.def Info: techniques/figures/screen_space.png used on input line
  16.
 (pdftex.def)             Requested size: 288.7942pt x 213.57628pt.
 
-<techniques/figures/spheres.png, id=442, 336.50719pt x 335.75438pt>
+<techniques/figures/sphere_depth.png, id=466, 339.51843pt x 191.9672pt>
+File: techniques/figures/sphere_depth.png Graphic file (type png)
+
+<use techniques/figures/sphere_depth.png>
+Package pdftex.def Info: techniques/figures/sphere_depth.png used on input line
+ 21.
+(pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
+
+<techniques/figures/spheres.png, id=469, 336.50719pt x 335.75438pt>
 File: techniques/figures/spheres.png Graphic file (type png)
 
 <use techniques/figures/spheres.png>
-Package pdftex.def Info: techniques/figures/spheres.png used on input line 22.
+Package pdftex.def Info: techniques/figures/spheres.png used on input line 23.
 (pdftex.def)             Requested size: 206.28247pt x 205.82426pt.
- [23
 
+Underfull \vbox (badness 1728) has occurred while \output is active []
 
-
-]
-<techniques/figures/spheres_no_smoothing.png, id=452, 481.8pt x 360.59718pt>
+ [25]
+[26 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
+ues/figures/screen_space.png> <//cern.ch/dfs/Users/p/pjanisz/Documents/master/m
+aster_thesis/paper/techniques/figures/sphere_depth.png>]
+<techniques/figures/spheres_no_smoothing.png, id=485, 481.8pt x 360.59718pt>
 File: techniques/figures/spheres_no_smoothing.png Graphic file (type png)
 
 <use techniques/figures/spheres_no_smoothing.png>
 Package pdftex.def Info: techniques/figures/spheres_no_smoothing.png used on in
-put line 39.
+put line 41.
 (pdftex.def)             Requested size: 288.7942pt x 216.15088pt.
- [24 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/screen_space.png>]
-<techniques/figures/gaussian_filter_img.png, id=461, 339.51843pt x 191.9672pt>
+
+<techniques/figures/gaussian_filter_img.png, id=487, 339.51843pt x 191.9672pt>
 File: techniques/figures/gaussian_filter_img.png Graphic file (type png)
 
 <use techniques/figures/gaussian_filter_img.png>
 Package pdftex.def Info: techniques/figures/gaussian_filter_img.png used on inp
-ut line 43.
+ut line 45.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [25 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ [27 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/spheres.png>]
-[26 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniq
-ues/figures/spheres_no_smoothing.png> <//cern.ch/dfs/Users/p/pjanisz/Documents/
-master/master_thesis/paper/techniques/figures/gaussian_filter_img.png>]
-<techniques/figures/bilateral_comp.png, id=479, 339.51843pt x 191.9672pt>
+<techniques/figures/bilateral_comp.png, id=501, 339.51843pt x 191.9672pt>
 File: techniques/figures/bilateral_comp.png Graphic file (type png)
 
 <use techniques/figures/bilateral_comp.png>
 Package pdftex.def Info: techniques/figures/bilateral_comp.png used on input li
-ne 61.
+ne 63.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
-
-<techniques/figures/edge_preservation.png, id=484, 339.51843pt x 191.9672pt>
+ [28 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/spheres_no_smoothing.png>]
+<techniques/figures/edge_preservation.png, id=515, 339.51843pt x 191.9672pt>
 File: techniques/figures/edge_preservation.png Graphic file (type png)
 
 <use techniques/figures/edge_preservation.png>
 Package pdftex.def Info: techniques/figures/edge_preservation.png used on input
- line 64.
+ line 66.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [27 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/bilateral_comp.png>] <techniques/figures/sudden_changes.png, id=49
-7, 339.51843pt x 191.9672pt>
+ [29 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/gaussian_filter_img.png>] [30 <//cern.ch/dfs/Users/p/pjanisz/Docum
+ents/master/master_thesis/paper/techniques/figures/bilateral_comp.png> <//cern.
+ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techniques/figures/
+edge_preservation.png>]
+<techniques/figures/sudden_changes.png, id=530, 339.51843pt x 191.9672pt>
 File: techniques/figures/sudden_changes.png Graphic file (type png)
 
 <use techniques/figures/sudden_changes.png>
 Package pdftex.def Info: techniques/figures/sudden_changes.png used on input li
-ne 73.
+ne 75.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [28 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/edge_preservation.png>] [29 <//cern.ch/dfs/Users/p/pjanisz/Documen
-ts/master/master_thesis/paper/techniques/figures/sudden_changes.png>]
+ [31 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/sudden_changes.png>]
 
 Package amsmath Warning: Foreign command \over;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 97.
+(amsmath)                 on input line 99.
 
-<techniques/figures/metaballs.png, id=513, 702.625pt x 200.75pt>
+<techniques/figures/metaballs.png, id=539, 702.625pt x 200.75pt>
 File: techniques/figures/metaballs.png Graphic file (type png)
 
 <use techniques/figures/metaballs.png>
 Package pdftex.def Info: techniques/figures/metaballs.png used on input line 10
-4.
+6.
 (pdftex.def)             Requested size: 412.56496pt x 117.87784pt.
- [30] [31 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
+ [32] [33 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
 echniques/figures/metaballs.png (PNG copy)>]
-<techniques/figures/fig_local_minima.png, id=530, 339.51843pt x 191.9672pt>
+<techniques/figures/fig_local_minima.png, id=557, 339.51843pt x 191.9672pt>
 File: techniques/figures/fig_local_minima.png Graphic file (type png)
 
 <use techniques/figures/fig_local_minima.png>
 Package pdftex.def Info: techniques/figures/fig_local_minima.png used on input 
-line 137.
+line 139.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
 Missing character: There is no Å in font cmr10!
 Missing character: There is no ¼ in font cmr10!
 Missing character: There is no Å in font cmr10!
 Missing character: There is no › in font cmr10!
- [32] [33 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
+ [34] [35 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
 echniques/figures/fig_local_minima.png>]
-<techniques/figures/normal_generation.png, id=543, 339.51843pt x 191.9672pt>
+<techniques/figures/normal_generation.png, id=569, 339.51843pt x 191.9672pt>
 File: techniques/figures/normal_generation.png Graphic file (type png)
 
 <use techniques/figures/normal_generation.png>
 Package pdftex.def Info: techniques/figures/normal_generation.png used on input
- line 151.
+ line 153.
 (pdftex.def)             Requested size: 412.56496pt x 233.27986pt.
- [34 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ [36 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/normal_generation.png>]
-<techniques/figures/threading_architecture.png, id=551, 542.2659pt x 628.0263pt
+<techniques/figures/threading_architecture.png, id=577, 542.2659pt x 628.0263pt
 >
 File: techniques/figures/threading_architecture.png Graphic file (type png)
  <use techniques/figures/threading_architecture.png>
 Package pdftex.def Info: techniques/figures/threading_architecture.png used on 
-input line 160.
+input line 162.
 (pdftex.def)             Requested size: 288.7942pt x 334.47186pt.
-) [35] [36 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/
+) [37] [38 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/
 techniques/figures/threading_architecture.png>]
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.bbl
 (\\cern.ch\dfs\Users\p\pjanisz\Documents\master\master_thesis\paper\thesis.brf)
@@ -767,7 +786,7 @@ Missing character: There is no “ in font cmti7!
 Package natbib Warning: There were undefined citations.
 
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 195.
-[37
+[39
 
 
 ]
@@ -787,19 +806,19 @@ techniques.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 195.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 195.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 51B95C055248106B6E22B45CD75AB727;2397.
+(rerunfilecheck)             Checksum: 173F03488A83411F1C66FA8284306B01;2397.
 Package rerunfilecheck Info: File `thesis.brf' has not changed.
-(rerunfilecheck)             Checksum: 53A419799A4B84E418357DB029E22DD5;2178.
+(rerunfilecheck)             Checksum: 8D45575D899B0888C9F3D6067219D0FE;2393.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8674 strings out of 494045
- 130115 string characters out of 3155635
- 228133 words of memory out of 3000000
- 11619 multiletter control sequences out of 15000+200000
+ 8700 strings out of 494045
+ 130641 string characters out of 3155635
+ 229363 words of memory out of 3000000
+ 11637 multiletter control sequences out of 15000+200000
  15016 words of font info for 57 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  43i,12n,48p,1832b,458s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -818,9 +837,9 @@ c/amsfonts/cm/cmti7.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C
 :/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt8.pfb><C:/MiKTeX/fonts/type1/public
 /amsfonts/symbols/msam10.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/symbols/msb
 m10.pfb>
-Output written on thesis.pdf (41 pages, 1995193 bytes).
+Output written on thesis.pdf (43 pages, 2009300 bytes).
 PDF statistics:
- 708 PDF objects out of 1000 (max. 8388607)
- 147 named destinations out of 1000 (max. 500000)
- 381 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 741 PDF objects out of 1000 (max. 8388607)
+ 153 named destinations out of 1000 (max. 500000)
+ 391 words of extra memory for PDF output out of 10000 (max. 10000000)
 
