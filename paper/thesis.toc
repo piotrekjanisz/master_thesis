@@ -25,12 +25,12 @@
 \contentsline {subsubsection}{\numberline {4.1.2.1}Gaussian smoothing}{28}{subsubsection.4.1.2.1}
 \contentsline {subsubsection}{\numberline {4.1.2.2}Curvature flow smoothing}{31}{subsubsection.4.1.2.2}
 \contentsline {subsection}{\numberline {4.1.3}Thickness}{33}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Rendering}{33}{subsection.4.1.4}
+\contentsline {subsection}{\numberline {4.1.4}Rendering}{34}{subsection.4.1.4}
 \contentsline {section}{\numberline {4.2}Isosurface extraction}{34}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Overview}{34}{subsection.4.2.1}
 \contentsline {subsection}{\numberline {4.2.2}Block subdivision}{35}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Block processing}{35}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Lookup cache}{36}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.3}Block processing}{36}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Lookup cache}{37}{subsection.4.2.4}
 \contentsline {subsection}{\numberline {4.2.5}Normals generation}{38}{subsection.4.2.5}
-\contentsline {subsection}{\numberline {4.2.6}Multithreading}{39}{subsection.4.2.6}
+\contentsline {subsection}{\numberline {4.2.6}Multithreading}{38}{subsection.4.2.6}
 \contentsline {chapter}{Bibliography}{41}{chapter*.26}
