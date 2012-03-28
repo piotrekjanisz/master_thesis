@@ -68,11 +68,104 @@ Bilateral filter has some undesired effect when applied on z-buffer output. The 
 Another issue with smoothing using fixed kernel size filter is that further surfaces are more smoothed than closer surfaces (see figure~\ref{edge_preservation}). Solving that problem would require using filter with variable kernel size, depending on fragment distance from viewer. As implementing this efficiently on graphic hardware is hard and the effect is not so irritating this won't be considered any more. Section~\ref{sec:curvatureflowsmoothing} will describe another smoothing technique that doesn't suffer from this problem. 
 
 \subsubsection{Curvature flow smoothing} \label{sec:curvatureflowsmoothing}
-This technique was presented in \cite{laanSainz2009}. It uses curvature flow to smooth surface. Curvature is a .... TODO.
+This technique was presented in \cite{laanSainz2009}. It utilizes curvature flow to smooth surface. Curvature is a differential geometry concept which measures how geometric object deviates from being flat. Curvature flow evolves surface by moving it's points with velocity given by:
+\begin{equation}
+\vec{v_p} = -\kappa_p \hat{n}_p
+\end{equation}
+where $\kappa_p$ is mean curvature at point $p$ and $\hat{n}_p$ is unit normal vector at point $p$.
+We can then write equation of motion under mean curvature for surface $u$:
+\begin{equation}
+\label{eq:curvature_flow}
+\frac{du}{dt} = -\kappa \vec{n}
+\end{equation}
+Since we are working with depth texture ($z(x, y)$) we only move surface in direction of $z$ axis. Thus we can omit surface normal:
+\begin{equation}
+\label{eq:curvature_flow_z}
+\frac{dz}{dt} = -\kappa
+\end{equation}
 
-So instead of smoothing surface itself we can smooth out sudden changes in curvature. Such changes occur between particles as shown on figure \ref{sudden_changes}
+In depth buffer, areas with highest curvature occurs in contact places of particles (see figure~\ref{sudden_changes}). Those are also areas that requires most smoothing. Boundary conditions have to be enforced in equation~\ref{eq:curvature_flow} to ensure that different patches of fluid won't be blended together (see figure~\ref{sudden_changes}).
 
-\figuremacroW{sudden_changes}{Some title}{Some description}{0.7}
+\figuremacroW{sudden_changes}{Depth texture in 2D}{Areas with highest curvature marked by green circles. In red circle there is area that shouldn't be smoothed.}{1.0}
+
+Mean curvature is defined as:
+\begin{equation} \label{eq:mean_curvature}
+\kappa = \frac{1}{2} \triangledown \dot \hat{n}
+\end{equation}
+
+To compute surface normal from depth texture we need to invert perspective projection to obtain point P:
+\begin{equation}
+P(x, y) = 
+\begin{pmatrix}
+\frac{2x -1.0}{F_x} \\
+\frac{2y -1.0}{F_y} \\
+1
+\end{pmatrix}
+z(x,y) = 
+\begin{pmatrix}
+W_x \\
+W_y \\
+1
+\end{pmatrix} z(x,y)
+\end{equation}
+where $F_x$ and $F_y$ is camera's focal length in the x and y direction. To compute surface normal we have to take cross product between partial derivatives of P in x and y directions:
+
+\begin{align} \label{eq:surface_normal}
+n(x, y) &=  \frac{\partial P}{\partial x} \times \frac{\partial P}{\partial y}  \nonumber \\
+	&= 
+		\begin{pmatrix} 
+			C_x z  + W_x \frac{\partial z}{\partial x} \\
+			W_y \frac{\partial z}{\partial x} \\
+			\frac{\partial z}{\partial x}
+		\end{pmatrix}
+		\times
+		\begin{pmatrix} 
+			W_x \frac{\partial z}{\partial y} \\
+			C_y z  + W_y \frac{\partial z}{\partial y} \\
+			\frac{\partial z}{\partial y}
+		\end{pmatrix} \nonumber \\		
+	&\approx
+		\begin{pmatrix}
+			C_x z \\
+			0 \\
+			\frac{\partial z}{\partial x}
+		\end{pmatrix}
+		\times
+		\begin{pmatrix}
+			0 \\
+			C_y z \\
+			\frac{\partial z}{\partial y}
+		\end{pmatrix}
+		=
+		\begin{pmatrix}
+			-C_y \frac{\partial z}{\partial x} \\
+			-C_x \frac{\partial z}{\partial y} \\
+			-C_x  C_y z 
+		\end{pmatrix} z
+\end{align}
+where $C_x = \frac{2}{F_x}$, $C_y = \frac{2}{F_y}$. \cite{laanSainz2009} suggested to discard terms of derivative of P that depend on view position $W_x$ and $W_y$. Unit normal is given by:
+\begin{equation}
+	\hat{n} = \frac{n(x, y)}{|n(x, y)|} = \frac{\left(-C_y \frac{\partial z}{\partial x}, -C_x \frac{\partial z}{\partial y}, -C_x  C_y z\right)^T}{\sqrt{D}}
+\end{equation}
+in which
+\begin{equation}
+D = C^2_y \left(\frac{\partial z}{\partial x}\right)^2 + C^2_x \left(\frac{\partial z}{\partial y}\right)^2 + C^2_x  C^2_y z^2 
+\end{equation}
+
+Now $\hat{n}$ can be substituted into equation~\ref{eq:mean_curvature}. The z component of divergence will be 0 as $\frac{\partial z}{\partial z} = 0$. Thus we have:
+\begin{equation}
+\kappa = \frac{1}{2} \left( \frac{\partial \hat{n}}{\partial x} + \frac{\partial \hat{n}}{\partial y} \right) = \frac{C_y E_x + C_x E_y}{D^{\frac{3}{2}}}
+\end{equation}
+in which 
+\begin{equation}
+E_x = \frac{1}{2} \frac{\partial z}{\partial x} \frac{\partial D}{\partial x} - \frac{\partial^2 z}{\partial x^2}D
+\end{equation}
+\begin{equation}
+E_y = \frac{1}{2} \frac{\partial z}{\partial y} \frac{\partial D}{\partial y} - \frac{\partial^2 z}{\partial y^2}D
+\end{equation}
+
+To modify z values in each iteration Euler integration of equation~\ref{eq:curvature_flow_z} is used. Amount of smoothing can be controlled by number of iterations - the more iterations the smoother surface will be. Since equation is stiff, integration time step has to be quite small to retain stability. If it is too large undesirable visual artifacts appears (figure~\ref{curvature_instabilities}). My experiments shown that time step should have order of magnitude $10^{-7}$ or lower.
+\figuremacroW{curvature_instabilities}{Curvature flow smoothing artifacts}{artifacts occurs when integration time step is too big}{0.7}
 
 \subsection{Thickness} \label{sec:thickness}
 This step is computed to determine how opaque is surface in given point. It is achieved by rendering particles as circles into depth buffer with additive blending enabled. Resulting thickness texture is then smoothed with Gaussian filter (this time regular one). In order to speed up rendering process this texture can be rendered with lower resolution and then applied with linear interpolation. 
