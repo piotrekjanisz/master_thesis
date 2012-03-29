@@ -31,6 +31,6 @@
 \contentsline {subsection}{\numberline {4.2.2}Block subdivision}{35}{subsection.4.2.2}
 \contentsline {subsection}{\numberline {4.2.3}Block processing}{36}{subsection.4.2.3}
 \contentsline {subsection}{\numberline {4.2.4}Lookup cache}{37}{subsection.4.2.4}
-\contentsline {subsection}{\numberline {4.2.5}Normals generation}{38}{subsection.4.2.5}
-\contentsline {subsection}{\numberline {4.2.6}Multithreading}{38}{subsection.4.2.6}
-\contentsline {chapter}{Bibliography}{41}{chapter*.26}
+\contentsline {subsection}{\numberline {4.2.5}Normals generation}{39}{subsection.4.2.5}
+\contentsline {subsection}{\numberline {4.2.6}Multithreading}{41}{subsection.4.2.6}
+\contentsline {chapter}{Bibliography}{43}{chapter*.29}

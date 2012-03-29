@@ -112,4 +112,15 @@
 \newblock {\em Proceedings of the 14th annual conference on Computer graphics
   and interactive techniques, Vol. 21, No. 4.}, 1987.
 
+\bibitem{Blinn1982}
+{\sc J.~F. Blinn}.
+\newblock {\bf A Generalization of Algebraic Surface Drawing}.
+\newblock {\em ACM Transactions on Graphics}, {\bf 1}, 1982.
+
+\bibitem{Bentley1975}
+{\sc J.~L. Bentley}.
+\newblock {\bf Multidimensional binary search trees used for associative
+  searching}.
+\newblock {\em Communications of the ACM}, {\bf 18}, 1975.
+
 \end{thebibliography}
