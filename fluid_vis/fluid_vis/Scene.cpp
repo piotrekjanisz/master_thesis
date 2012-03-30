@@ -778,11 +778,7 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 		CHECK_GL_CMD(_box->render());
 	}
 
-	// render fluids into depth buffer
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterFrameBuffer->getId()));
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	// render fluids
 	NxFluid** fluids = physicsScene->getFluids();
 	int nbFluids = physicsScene->getNbFluids();
 
@@ -792,7 +788,7 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 		if (myFluid) {
 			_particleCount = myFluid->getParticlesCount();
 			_debugDataController.setDensityBuffer(myFluid->getDensityAsync(), _particleCount);
-			_waterShader->useThis();
+			
 			/*
 			const int PART_COUNT = 2;
 			float particles[] = {
@@ -805,20 +801,16 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			CHECK_GL_CMD(_water->updateAttribute("vertex", particles, PART_COUNT));
 			CHECK_GL_CMD(_water->render(PART_COUNT, GL_POINTS, _waterShader));
 			*/
-			
-			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
-			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
-			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
-			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
-			CHECK_GL_CMD(_water->updateAttribute("density", myFluid->getDensityAsync(), myFluid->getParticlesCount()));
-			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
 
+			// render fluid thickness
 			CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterDepthFrameBuffer->getId()));
-			CHECK_GL_CMD(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+			CHECK_GL_CMD(_waterDepthFrameBuffer->attachTexture2D(_sceneDepthTexture, GL_DEPTH_ATTACHMENT));
+			CHECK_GL_CMD(glClear(GL_COLOR_BUFFER_BIT));
 			CHECK_GL_CMD(glEnable(GL_BLEND));
 			CHECK_GL_CMD(glBlendEquation(GL_FUNC_ADD));
 			CHECK_GL_CMD(glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE));
-			CHECK_GL_CMD(glDisable(GL_DEPTH_TEST));
+			//CHECK_GL_CMD(glDisable(GL_DEPTH_TEST));
+			CHECK_GL_CMD(glDepthMask(false));
 
 			_waterDepthShader->useThis();
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterDepthProjectionLocation, 1, GL_FALSE, _projectionMatrix));
@@ -828,7 +820,10 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			//CHECK_GL_CMD(_water->render(PART_COUNT, GL_POINTS, _waterDepthShader));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterDepthShader));
 
+
+			CHECK_GL_CMD(_waterDepthFrameBuffer->detachTexture2D(GL_DEPTH_ATTACHMENT));
 			CHECK_GL_CMD(glEnable(GL_DEPTH_TEST));
+			CHECK_GL_CMD(glDepthMask(true));
 			CHECK_GL_CMD(glDisable(GL_BLEND));
 
 			CHECK_GL_CMD(glClear(GL_DEPTH_BUFFER_BIT));
@@ -839,6 +834,19 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			//CHECK_GL_CMD(glClear(GL_DEPTH_BUFFER_BIT));
 			CHECK_GL_CMD(_blurQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
 			CHECK_GL_CMD(_blurQuad->render());
+			
+			// render fluid into depth texture
+			_waterShader->useThis();
+			glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+			CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterFrameBuffer->getId()));
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
+			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
+			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
+			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
+			CHECK_GL_CMD(_water->updateAttribute("density", myFluid->getDensityAsync(), myFluid->getParticlesCount()));
+			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
 		}
 	}
 
@@ -930,7 +938,7 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
 
-	//CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_waterDepthTexture, GL_TEXTURE0));
+	//CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_sceneDepthTexture, GL_TEXTURE0));
 	//CHECK_GL_CMD(_grayscaleIntermediateQuad->render());
 	
 	
