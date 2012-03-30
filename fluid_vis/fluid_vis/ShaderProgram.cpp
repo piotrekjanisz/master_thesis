@@ -257,10 +257,10 @@ void ShaderProgram::printParameters()
 {
 	std::cout << "UNIFORMS: " << std::endl;
 	for (map<string, ShaderParameter>::iterator it = _uniforms.begin(); it != _uniforms.end(); ++it) {
-		std::cout << "\t" << it->first << std::endl;
+		std::cout << "\t" << it->first << "; size: " << it->second.size << std::endl;
 	}
 	std::cout << "ATTRIBUTES: " << std::endl;
 	for (map<string, ShaderParameter>::iterator it = _attributes.begin(); it != _attributes.end(); ++it) {
-		std::cout << "\t" << it->first << std::endl;
+		std::cout << "\t" << it->first << "; size: " << it->second.size << "; type: " << it->second.type << std::endl;
 	}
 }

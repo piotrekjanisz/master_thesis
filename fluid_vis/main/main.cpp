@@ -52,13 +52,15 @@ void createFluid()
 		NxFluidEmitterDesc emitterDesc = configurationFactory.createFluidEmitterDesc("emitter1");
 
 		float data[] = {
-			1.0f, 0.0f, 0.0f, 0.3f,
-			0.0f, 0.0f, 1.0f, 0.3f, 
-			1.0f, 1.0f, 0.0f, 0.0f, 
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 5.0f, 
+			0.0f, 0.0f, 1.0f, -3.0f, 
 			0.0f, 0.0f, 0.0f, 1.0f
 		};
 		emitterDesc.relPose.setRowMajor44(data);
-		
+		gFluid->createEmitter(emitterDesc);
+
+		/*
 		float data2[] = {
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.3f, 
@@ -112,6 +114,7 @@ void createFluid()
 		};
 		emitterDesc.relPose.setRowMajor44(data7);
 		gFluid->createEmitter(emitterDesc);
+		*/
 	} catch (std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 	} catch (...) {
@@ -130,13 +133,28 @@ void createCube(const NxVec3& pos, float size = 1.0f, const NxVec3& initialVeloc
 
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions = NxVec3(size, size, size);
+	boxDesc.skinWidth = 0.05f;
 
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxDesc);
 	actorDesc.body = &bodyDesc;
 	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = pos;
-	g_NxScene->createActor(actorDesc)->userData = (void*)size_t(size);
+	g_NxScene->createActor(actorDesc)->userData = (void*)1;
+}
+
+void createStaticBox(const NxVec3& pos, const NxVec3& dim)
+{
+	NxBoxShapeDesc boxShape;
+	boxShape.dimensions = dim;
+	boxShape.skinWidth = 0.05f;
+
+	NxActorDesc boxActor;
+	boxActor.shapes.pushBack(&boxShape);
+	boxActor.body = NULL;
+	boxActor.globalPose.t = pos;
+
+	g_NxScene->createActor(boxActor)->userData = (void*)0;
 }
 
 void createCubeFromEye(float size, float velocity)
@@ -179,7 +197,8 @@ GLUSboolean update(GLUSfloat time)
 	if (g_useSurfaceExtraction)
 		g_scene.renderIsoSurface(g_NxScene);
 	else 
-		g_scene.render(g_NxScene);
+		g_scene.renderCurvatureFlow(g_NxScene);
+		//g_scene.renderBilateralGauss(g_NxScene);
 	
 	g_NxScene->flushStream();
 	g_NxScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
@@ -204,8 +223,7 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 	const GLUSuint KEY_8 = 56;
 
 	if (key == KEY_F) {
-		createCubeFromEye(1.0f, 50.0f);
-		//createCubeFromEye(0.5f, 50.0f);
+		createCubeFromEye(0.5f, 50.0f);
 	} else if (key == 100) {
 		createCubesFromEye(1.0f, 50.0f, 10);
 	} else if (key == KEY_1) {
@@ -284,7 +302,7 @@ bool initNx()
 		std::cout << "INFO: PhysX hardware acceleration possible. Fluid simulated on GPU" << std::endl;
 		g_gpuAccelerationPossible = true;
 	}
-
+	
 	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.2f); // 0.2 is the best I've tried
 
 	NxSceneDesc sceneDesc;
@@ -302,9 +320,15 @@ bool initNx()
 	defaultMaterial->setDynamicFriction(0.5f);
 
 	NxPlaneShapeDesc planeDesc;
+	planeDesc.skinWidth = 0.05f;
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&planeDesc);
 	g_NxScene->createActor(actorDesc);
+
+	createStaticBox(NxVec3(2.0f, 1.0f, 0.0f), NxVec3(0.2f, 1.0f, 2.0f));
+	createStaticBox(NxVec3(-2.0f, 1.0f, 0.0f), NxVec3(0.2f, 1.0f, 2.0f));
+	createStaticBox(NxVec3(0.0f, 1.0f, 2.0f), NxVec3(2.0f, 1.0f, 0.2f));
+	createStaticBox(NxVec3(0.0f, 1.0f, -2.0f), NxVec3(2.0f, 1.0f, 0.2f));
 
 	return true;
 }

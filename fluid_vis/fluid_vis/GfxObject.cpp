@@ -49,7 +49,9 @@ void GfxObject::updateAttribute(const std::string& name, float* data, int count)
 		Attribute& attribute = _attributes[name];
 		glBindBuffer(GL_ARRAY_BUFFER, attribute.vbo);
 		glBufferData(GL_ARRAY_BUFFER, count * attribute.components * sizeof(float), data, GL_DYNAMIC_DRAW);
-	} 
+	} else {
+		std::cerr << "No attribute \"" + name + "\"" << std::endl;
+	}
 }
 
 void GfxObject::addShader(ShaderProgramPtr& shader)

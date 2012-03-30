@@ -11,6 +11,9 @@ MyFluid::MyFluid(NxScene* scene, NxFluidDesc& fluidDesc, const NxVec3& color, fl
 	_maxParticles = fluidDesc.maxParticles;
 	_posBuffer = new float[_maxParticles * COMPONENT_COUNT];
 	_currentPosBuffer = new float[_maxParticles * COMPONENT_COUNT];
+
+	_densityBuffer = new float[_maxParticles];
+	_currentDensityBuffer = new float[_maxParticles];
 	for (int i = 0; i < _maxParticles; i++) {
 		_posBuffer[i * COMPONENT_COUNT + COMPONENT_COUNT - 1] = 1.0f;
 	}
@@ -19,6 +22,8 @@ MyFluid::MyFluid(NxScene* scene, NxFluidDesc& fluidDesc, const NxVec3& color, fl
 	particleData.numParticlesPtr = &_particleCount;
 	particleData.bufferPos = _posBuffer;
 	particleData.bufferPosByteStride = COMPONENT_COUNT * sizeof(float);
+	particleData.bufferDensity = _densityBuffer;
+	particleData.bufferDensityByteStride = sizeof(float);
 
 	fluidDesc.userData = this;
 	fluidDesc.particlesWriteData = particleData;

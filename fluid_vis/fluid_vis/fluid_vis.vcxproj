@@ -79,6 +79,7 @@
     <ClCompile Include="AbstractScene.cpp" />
     <ClCompile Include="BaseException.cpp" />
     <ClCompile Include="CameraFrame.cpp" />
+    <ClCompile Include="DebugData.cpp" />
     <ClCompile Include="debug_utils.cpp" />
     <ClCompile Include="ErrorStream.cpp" />
     <ClCompile Include="filters.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="GfxStaticObject.cpp" />
     <ClCompile Include="MyFluid.cpp" />
     <ClCompile Include="ConfigurationFactory.cpp" />
+    <ClCompile Include="ParticleRenderer.cpp" />
     <ClCompile Include="physx_utils.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -101,6 +103,7 @@
     <ClInclude Include="BaseException.h" />
     <ClInclude Include="CameraFrame.h" />
     <ClInclude Include="data_types.h" />
+    <ClInclude Include="DebugData.h" />
     <ClInclude Include="debug_utils.h" />
     <ClInclude Include="ErrorStream.h" />
     <ClInclude Include="filters.h" />
@@ -110,6 +113,7 @@
     <ClInclude Include="MyFluid.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="ConfigurationFactory.h" />
+    <ClInclude Include="ParticleRenderer.h" />
     <ClInclude Include="physx_utils.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="Scene.h" />

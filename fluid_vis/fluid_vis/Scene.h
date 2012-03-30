@@ -12,6 +12,7 @@
 #include "ScreenQuad.h"
 #include "ShapeFactory.h"
 #include "SpaceObject.h"
+#include "DebugData.h"
 #include <surface_extraction/SurfaceExtractor.h>
 #include <surface_extraction/MtSurfaceExtractor.h>
 #include <utils/utils.h>
@@ -143,6 +144,8 @@ private: // fields
 
 	SpaceObject _lightController;
 
+	DebugData _debugDataController;
+
 private: // methods
 	bool setupTextures();
 	bool setupFramebuffers();
@@ -168,7 +171,8 @@ public:
 
 	void rotateLightDir(float xrot, float yrot);
 
-	void render(NxScene* physicsScene);
+	void renderBilateralGauss(NxScene* physicsScene);
+	void renderCurvatureFlow(NxScene* physicsScene);
 	void renderIsoSurface(NxScene* physicsScene);
 
 	virtual void reshape(int width, int height);

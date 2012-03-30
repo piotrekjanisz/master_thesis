@@ -13,13 +13,14 @@ uniform float Cy_square;
 uniform float timeStep;
 
 uniform vec2 coordStep;
-uniform vec2 coordStepInv;
+uniform vec2 coordStepInv; // = vec2(width, height)
 
 out float frag_color;
 
 void main()
 {
-	float z = texture(depthTexture, tex_coord).x;
+	float z_dep = texture(depthTexture, tex_coord).x;
+	float z = z_dep * 100.0;
 	float edge = texture(edgeTexture, tex_coord).x;
 	float edge_t = texture(edgeTexture, tex_coord + vec2(0.0, coordStep.y)).x;
 	float edge_r = texture(edgeTexture, tex_coord + vec2(coordStep.x, 0.0)).x;
@@ -27,13 +28,11 @@ void main()
 	float edge_l = texture(edgeTexture, tex_coord + vec2(0.0, -coordStep.y)).x;
 
 	edge = edge * edge_t * edge_r * edge_l * edge_b;
-	edge_t = edge;
-	edge_r = edge;
 
-	float z_top = texture(depthTexture, tex_coord + vec2(0.0, coordStep.y)).x;
-	float z_bot = texture(depthTexture, tex_coord + vec2(0.0, -coordStep.y)).x;
-	float z_left = texture(depthTexture, tex_coord + vec2(-coordStep.x, 0.0)).x;
-	float z_right = texture(depthTexture, tex_coord + vec2(coordStep.x, 0.0)).x;
+	float z_top = texture(depthTexture, tex_coord + vec2(0.0, coordStep.y)).x * 100.0;
+	float z_bot = texture(depthTexture, tex_coord + vec2(0.0, -coordStep.y)).x * 100.0;
+	float z_left = texture(depthTexture, tex_coord + vec2(-coordStep.x, 0.0)).x * 100.0;
+	float z_right = texture(depthTexture, tex_coord + vec2(coordStep.x, 0.0)).x * 100.0;
 	/*
 	float z_t = texture(depthTexture, tex_coord + vec2(0.0, coordStep.y)).x;
 	float z_b = texture(depthTexture, tex_coord + vec2(0.0, -coordStep.y)).x;
@@ -88,5 +87,5 @@ void main()
 	if (edge > 0.0)
 		H = 0.5 * (Cy*Ex + Cx*Ey) / (pow(D, 1.5));
 
-	frag_color = z + timeStep * H;
+	frag_color = z_dep + timeStep * H;;
 }

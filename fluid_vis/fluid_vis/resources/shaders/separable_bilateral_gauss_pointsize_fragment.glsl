@@ -2,7 +2,6 @@
 
 in vec2 tex_coord;
 
-uniform sampler2D inputImage;
 uniform sampler2D linearDepth;
 uniform sampler1DArray gaussianDist;
 uniform sampler1D spatialDist;
@@ -19,12 +18,14 @@ out float frag_color;
 
 void main(void)
 {
-	float depth = texture(inputImage, tex_coord).x;
-	
-	if (depth > 0.99)
-		discard;
+	// float depth = texture(inputImage, tex_coord).x;
 	
 	float center_lin_depth = texture(linearDepth, tex_coord).x;
+
+		
+	if (center_lin_depth > 0.99)
+		discard;
+
 	float pointSize = maxPointSize / (center_lin_depth * farDist);	// good approximation when near close to 0.0;
 	int filterIndex = clamp(int(floor((pointSize * filterSizeMult) / 2.0)), 0, maxFilter);
 	int filter_size = 2 * filterIndex + 1;
@@ -36,13 +37,12 @@ void main(void)
 	for (int i = 0; i < filter_size; i++) {
 		vec2 coord = tex_coord + coordStep * (i - half_filter_size);
 		coord = clamp(coord, vec2(0.0, 0.0), vec2(1.0, 1.0));
-		float sampleVal = texture(inputImage, coord).x;
 		float lin_depth = texture(linearDepth, coord).x;
 		float w = texelFetch(gaussianDist, ivec2(i, filterIndex), 0).x;
 		float g = texture(spatialDist, abs(lin_depth - center_lin_depth)).x;
 
 		w *= g;
-		sum += w * sampleVal;
+		sum += w * lin_depth;
 		wsum += w;
 	}
 
@@ -51,7 +51,7 @@ void main(void)
 	else 
 		sum = 1.0;
 	if (sum <= 0.0)
-		sum = 1.0;
+		sum = 1.0; // FIXME 0.0 maybe better
 
 	frag_color = sum;
 }

@@ -13,6 +13,8 @@ protected:
 	virtual void simpleRender();
 	float* _posBuffer;
 	float* _currentPosBuffer;
+	float* _densityBuffer;
+	float* _currentDensityBuffer;
 	unsigned _currentPartCount;
 	unsigned _particleCount;
 	unsigned _maxParticles;
@@ -56,8 +58,15 @@ public:
 		return _currentPosBuffer;
 	}
 
-	int getParticlesCount() const { return _particleCount; }
+	float* getDensityAsync()
+	{
+		memcpy(_currentDensityBuffer, _densityBuffer, _particleCount * sizeof(float));
+		_currentPartCount = _particleCount;
+		return _currentDensityBuffer;
+	}
 
-	int getParticlesCountAsync() const { return _currentPartCount; }
+	unsigned getParticlesCount() const { return _particleCount; }
+
+	unsigned getParticlesCountAsync() const { return _currentPartCount; }
 };
 
