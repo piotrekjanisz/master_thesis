@@ -698,7 +698,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 	vmml::vec3f normalMatrix = getNormalMatrix(_viewMatrix);
 	lightDirectionEyeSpace.normalize();
 
-	//vmml::vec4f lightPositionEyeSpace = getLightPositionInEyeSpace();
 	vmml::vec4f lightPositionEyeSpace = _viewMatrix * _lightController.getModelMatrix() * vmml::vec4f(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// render scene
@@ -718,16 +717,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 	//CHECK_GL_CMD(_light->getShader()->setUniform4f("translation", _lightPosition));
 	CHECK_GL_CMD(_light->render());
 
-	/*
-	_shaderProgram->useThis();
-	CHECK_GL_CMD(_shaderProgram->setUniformMat4f("projectionMatrix", _projectionMatrix));
-	CHECK_GL_CMD(_shaderProgram->setUniformMat4f("modelViewMatrix", _viewMatrix));
-	CHECK_GL_CMD(_shaderProgram->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
-	CHECK_GL_CMD(_shaderProgram->setUniform4f("lightDirection", lightDirectionEyeSpace));
-	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
-	CHECK_GL_CMD(_plane->render());
-	*/
-
 	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
 	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("projectionMatrix", _projectionMatrix));
 	CHECK_GL_CMD(_plane->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
@@ -735,26 +724,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
 	CHECK_GL_CMD(_floorNormalMapTexture->bindToTextureUnit(GL_TEXTURE1));
 	CHECK_GL_CMD(_plane->render());
-
-
-	/*
-	//CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewProjectionMatrix", _modelViewProjectionMatrix));
-	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
-	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("projectionMatrix", _projectionMatrix));
-	CHECK_GL_CMD(_plane->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
-	CHECK_GL_CMD(_plane->getShader()->setUniform4f("lightPositionEyeSpace", lightPositionEyeSpace));
-	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
-	//CHECK_GL_CMD(_floorNormalMapTexture->bindToTextureUnit(GL_TEXTURE1));
-	CHECK_GL_CMD(_plane->render());
-	*/
-
-	/*
-	CHECK_GL_CMD(_planeDebug->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
-	CHECK_GL_CMD(_planeDebug->getShader()->setUniformMat4f("projectionMatrix", _projectionMatrix));
-	CHECK_GL_CMD(_planeDebug->getShader()->setUniform4f("lightPositionEyeSpace", lightPositionEyeSpace));
-	CHECK_GL_CMD(_planeDebug->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
-	CHECK_GL_CMD(_planeDebug->render());
-	*/
 
 	int nbActors = physicsScene->getNbActors();
 	NxActor** actors = physicsScene->getActors();
@@ -788,19 +757,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 		if (myFluid) {
 			_particleCount = myFluid->getParticlesCount();
 			_debugDataController.setDensityBuffer(myFluid->getDensityAsync(), _particleCount);
-			
-			/*
-			const int PART_COUNT = 2;
-			float particles[] = {
-				0.0f, 5.0f, 0.0f, 1.0f,
-				0.0f, 5.2f, 0.0f, 1.0f,
-			};
-			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
-			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
-			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
-			CHECK_GL_CMD(_water->updateAttribute("vertex", particles, PART_COUNT));
-			CHECK_GL_CMD(_water->render(PART_COUNT, GL_POINTS, _waterShader));
-			*/
 
 			// render fluid thickness
 			CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterDepthFrameBuffer->getId()));
@@ -809,7 +765,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			CHECK_GL_CMD(glEnable(GL_BLEND));
 			CHECK_GL_CMD(glBlendEquation(GL_FUNC_ADD));
 			CHECK_GL_CMD(glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE));
-			//CHECK_GL_CMD(glDisable(GL_DEPTH_TEST));
 			CHECK_GL_CMD(glDepthMask(false));
 
 			_waterDepthShader->useThis();
@@ -820,12 +775,11 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			//CHECK_GL_CMD(_water->render(PART_COUNT, GL_POINTS, _waterDepthShader));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterDepthShader));
 
-
 			CHECK_GL_CMD(_waterDepthFrameBuffer->detachTexture2D(GL_DEPTH_ATTACHMENT));
-			CHECK_GL_CMD(glEnable(GL_DEPTH_TEST));
 			CHECK_GL_CMD(glDepthMask(true));
 			CHECK_GL_CMD(glDisable(GL_BLEND));
 
+			// blurr thickness texture 
 			CHECK_GL_CMD(glClear(GL_DEPTH_BUFFER_BIT));
 			CHECK_GL_CMD(_blurQuad->attachTexture(_waterDepthTexture, GL_TEXTURE0));
 			CHECK_GL_CMD(_blurQuad->attachTexture(_gaussDist1DTexture, GL_TEXTURE1));
@@ -849,32 +803,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
 		}
 	}
-
-	/*
-	// blur phase
-	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
-	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	
-	CHECK_GL_CMD(_screenQuad->attachTexture(_depthTexture, GL_TEXTURE0));
-	//CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDist1DBilateralTexture, GL_TEXTURE1));
-	CHECK_GL_CMD(_screenQuad->attachTexture(_gaussDistributionsArrayTexture, GL_TEXTURE1));
-	CHECK_GL_CMD(_screenQuad->attachTexture(_spatialDistTexture, GL_TEXTURE2));
-	CHECK_GL_CMD(_screenQuad->attachTexture(_zTexture, GL_TEXTURE3));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 0.0f));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1i("maxPointSize", _particleSize));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("filterSizeMult", _filterSizeMult));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1i("maxFilter", _maxFilter));
-	CHECK_GL_CMD(_screenQuad->render());
-
-	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture2, GL_COLOR_ATTACHMENT0));
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);	
-	CHECK_GL_CMD(_screenQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform1f("farDist", getZFar()));
-	CHECK_GL_CMD(_screenQuad->render());
-	*/
 
 	
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
@@ -911,15 +839,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 
 	for (int i = 0; i <	_additionalBlurPhases; i++)
 	{
-		/*
-		CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
-		CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_edgeTexture, GL_COLOR_ATTACHMENT0));
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		CHECK_GL_CMD(_edgeQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 1.0 / getHeight()));
-		CHECK_GL_CMD(_edgeQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
-		CHECK_GL_CMD(_edgeQuad->render());
-		*/
-
 		CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		CHECK_GL_CMD(_curvatureFlowQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
