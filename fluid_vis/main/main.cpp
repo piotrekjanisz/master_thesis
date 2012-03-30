@@ -325,10 +325,34 @@ bool initNx()
 	actorDesc.shapes.pushBack(&planeDesc);
 	g_NxScene->createActor(actorDesc);
 
+	// create basin for water
 	createStaticBox(NxVec3(2.0f, 1.0f, 0.0f), NxVec3(0.2f, 1.0f, 2.0f));
 	createStaticBox(NxVec3(-2.0f, 1.0f, 0.0f), NxVec3(0.2f, 1.0f, 2.0f));
 	createStaticBox(NxVec3(0.0f, 1.0f, 2.0f), NxVec3(2.0f, 1.0f, 0.2f));
 	createStaticBox(NxVec3(0.0f, 1.0f, -2.0f), NxVec3(2.0f, 1.0f, 0.2f));
+
+	// create drains
+	NxPlaneShapeDesc drainDesc;
+	drainDesc.shapeFlags |= NX_SF_FLUID_DRAIN;
+	drainDesc.normal = NxVec3(1.0, 0.0, 0.0);
+	drainDesc.d = -4;
+
+	NxActorDesc drainActor;
+	drainActor.shapes.push_back(&drainDesc);
+	g_NxScene->createActor(drainActor);
+
+	drainDesc.normal = NxVec3(-1.0, 0.0, 0.0);
+	g_NxScene->createActor(drainActor);
+	
+	drainDesc.normal = NxVec3(0.0, 0.0, 1.0);
+	g_NxScene->createActor(drainActor);
+
+	drainDesc.normal = NxVec3(0.0, 0.0, -1.0);
+	g_NxScene->createActor(drainActor);
+
+	drainDesc.d = -9;
+	drainDesc.normal = NxVec3(0.0, -1.0, 0.0);
+	g_NxScene->createActor(drainActor);
 
 	return true;
 }
