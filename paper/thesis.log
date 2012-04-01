@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  29 MAR 2012 16:48
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.8.12)  30 MAR 2012 16:58
 entering extended mode
 **//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/thesis.tex
 
@@ -750,72 +750,72 @@ Package pdftex.def Info: techniques/figures/curvature_instabilities.png used on
  input line 168.
 (pdftex.def)             Requested size: 288.7942pt x 281.36935pt.
  [32] [33 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/t
-echniques/figures/curvature_instabilities.png>]
+echniques/figures/curvature_instabilities.png>] [34]
 
 Package amsmath Warning: Foreign command \over;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 192.
+(amsmath)                 on input line 193.
 
-[34] <techniques/figures/metaballs.png, id=575, 702.625pt x 200.75pt>
+<techniques/figures/metaballs.png, id=576, 702.625pt x 200.75pt>
 File: techniques/figures/metaballs.png Graphic file (type png)
 
 <use techniques/figures/metaballs.png>
-Package pdftex.def Info: techniques/figures/metaballs.png used on input line 19
-9.
+Package pdftex.def Info: techniques/figures/metaballs.png used on input line 20
+0.
 (pdftex.def)             Requested size: 412.56496pt x 117.87784pt.
 
-<techniques/figures/block_subdivision.png, id=577, 339.51843pt x 191.9672pt>
+<techniques/figures/block_subdivision.png, id=578, 339.51843pt x 191.9672pt>
 File: techniques/figures/block_subdivision.png Graphic file (type png)
 
 <use techniques/figures/block_subdivision.png>
 Package pdftex.def Info: techniques/figures/block_subdivision.png used on input
- line 209.
+ line 210.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [35 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/metaballs.png (PNG copy)>] <techniques/figures/block_image.png, id
-=589, 339.51843pt x 191.9672pt>
+=590, 339.51843pt x 191.9672pt>
 File: techniques/figures/block_image.png Graphic file (type png)
 
 <use techniques/figures/block_image.png>
 Package pdftex.def Info: techniques/figures/block_image.png used on input line 
-216.
+217.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [36 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
-ques/figures/block_subdivision.png> <//cern.ch/dfs/Users/p/pjanisz/Documents/ma
-ster/master_thesis/paper/techniques/figures/block_image.png>]
-<techniques/figures/fig_local_minima.png, id=597, 339.51843pt x 191.9672pt>
+ques/figures/block_subdivision.png>]
+<techniques/figures/fig_local_minima.png, id=598, 339.51843pt x 191.9672pt>
 File: techniques/figures/fig_local_minima.png Graphic file (type png)
 
 <use techniques/figures/fig_local_minima.png>
 Package pdftex.def Info: techniques/figures/fig_local_minima.png used on input 
-line 234.
+line 235.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
- [37]
+ [37 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
+ques/figures/block_image.png>]
 <techniques/figures/particle_lookup_cache.png, id=608, 339.51843pt x 191.9672pt
 >
 File: techniques/figures/particle_lookup_cache.png Graphic file (type png)
  <use techniques/figures/particle_lookup_cache.png>
 Package pdftex.def Info: techniques/figures/particle_lookup_cache.png used on i
-nput line 239.
+nput line 240.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [38 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/fig_local_minima.png>] [39 <//cern.ch/dfs/Users/p/pjanisz/Document
 s/master/master_thesis/paper/techniques/figures/particle_lookup_cache.png>]
-<techniques/figures/normal_generation.png, id=622, 339.51843pt x 191.9672pt>
+<techniques/figures/normal_generation.png, id=621, 339.51843pt x 191.9672pt>
 File: techniques/figures/normal_generation.png Graphic file (type png)
 
 <use techniques/figures/normal_generation.png>
 Package pdftex.def Info: techniques/figures/normal_generation.png used on input
- line 262.
+ line 263.
 (pdftex.def)             Requested size: 412.56496pt x 233.27986pt.
  [40 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/techni
 ques/figures/normal_generation.png>]
-<techniques/figures/threading_architecture.png, id=630, 542.2659pt x 628.0263pt
+<techniques/figures/threading_architecture.png, id=631, 542.2659pt x 628.0263pt
 >
 File: techniques/figures/threading_architecture.png Graphic file (type png)
  <use techniques/figures/threading_architecture.png>
 Package pdftex.def Info: techniques/figures/threading_architecture.png used on 
-input line 271.
+input line 272.
 (pdftex.def)             Requested size: 288.7942pt x 334.47186pt.
 ) [41] [42 <//cern.ch/dfs/Users/p/pjanisz/Documents/master/master_thesis/paper/
 techniques/figures/threading_architecture.png>]
@@ -852,17 +852,17 @@ Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 197.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
 (rerunfilecheck)             Checksum: DAD8B4BF8766FDA95714AA38DA6A2665;2397.
 Package rerunfilecheck Info: File `thesis.brf' has not changed.
-(rerunfilecheck)             Checksum: 7C9676EBBE3FD61A87F809FD15DB9C99;2628.
+(rerunfilecheck)             Checksum: 9752C475EC4D24AFAE4AB8E94320A9EC;2628.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8789 strings out of 494045
- 132550 string characters out of 3155635
- 236459 words of memory out of 3000000
- 11698 multiletter control sequences out of 15000+200000
+ 8790 strings out of 494045
+ 132572 string characters out of 3155635
+ 236517 words of memory out of 3000000
+ 11699 multiletter control sequences out of 15000+200000
  15016 words of font info for 57 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  43i,14n,48p,1835b,458s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -881,9 +881,9 @@ c/amsfonts/cm/cmsy6.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:
 /MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmtt8.pfb><C:/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pf
 b><C:/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on thesis.pdf (47 pages, 2855913 bytes).
+Output written on thesis.pdf (47 pages, 2856549 bytes).
 PDF statistics:
- 802 PDF objects out of 1000 (max. 8388607)
+ 804 PDF objects out of 1000 (max. 8388607)
  175 named destinations out of 1000 (max. 500000)
  411 words of extra memory for PDF output out of 10000 (max. 10000000)
 

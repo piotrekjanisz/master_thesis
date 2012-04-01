@@ -144,7 +144,7 @@ n(x, y) &=  \frac{\partial P}{\partial x} \times \frac{\partial P}{\partial y}  
 		\end{pmatrix} z
 \end{align}
 where $C_x = \frac{2}{F_x}$, $C_y = \frac{2}{F_y}$. \cite{laanSainz2009} suggested to discard terms of derivative of P that depend on view position $W_x$ and $W_y$. Unit normal is given by:
-\begin{equation}
+\begin{equation} \label{eq:view_space_normal}
 	\hat{n} = \frac{n(x, y)}{|n(x, y)|} = \frac{\left(-C_y \frac{\partial z}{\partial x}, -C_x \frac{\partial z}{\partial y}, -C_x  C_y z\right)^T}{\sqrt{D}}
 \end{equation}
 in which
@@ -171,7 +171,8 @@ To modify z values in each iteration Euler integration of equation~\ref{eq:curva
 This step is computed to determine how opaque is surface in given point. It is achieved by rendering particles as circles into depth buffer with additive blending enabled. Resulting thickness texture is then smoothed with Gaussian filter (this time regular one). In order to speed up rendering process this texture can be rendered with lower resolution and then applied with linear interpolation. 
 
 \subsection{Rendering} \label{sec:rendering}
-Last step assembles fluid surface with background image. As an input it takes fluid depth texture, thickness texture and texture with rest of the scene rendered. 
+Last step assembles fluid surface with background image. As an input it takes smoothed fluid depth texture, thickness texture and texture with rest of the scene rendered. 
+First normal vectors have to be computed from smoothed depth texture using finite differences of surface depth $d(x, y)$. This is done as in equation~\ref{eq:view_space_normal}. Finite differences are computed in one direction, except edges to avoid undesirable smoothing (figure TODO). 
 [TODO normal reconstruction, refraction, reflection, thickness]
 
 \section{Isosurface extraction} \label{sec:isosurfaceextraction}
