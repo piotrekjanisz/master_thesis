@@ -24,13 +24,11 @@ Scene::Scene()
 	_additionalBlurPhases(30),
 	_particleDepth(0.05f),
 	_filterSizeMult(0.5f),
-	_lightDirection(-1.0, -1.0, 1.0, 0.0),
-	_lightPosition(50.0f, 50.0f, -50.0f, 1.0f),
-	_lightController(vmml::vec3f(50.0f, 50.0f, -50.0f)),
 	_timeStep(-0.00000005f),
 	_timeStepChange(0.0000000005f),
 	_edgeTreshold(0.003f),
-	_edgeTresholdChange(0.001f)
+	_edgeTresholdChange(0.001f),
+	_particleRenderer(this)
 {
 	// don't put any opengl command here!!!
 }
@@ -151,7 +149,6 @@ void Scene::rotateLightDir(float xrot, float yrot)
 int _ntriag = 0;
 int _nvert = 0;
 
-
 bool Scene::setupTextures()
 {
 	CHECK_GL_CMD(_sceneTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
@@ -159,7 +156,8 @@ bool Scene::setupTextures()
 	CHECK_GL_CMD(_zTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_screenQuadTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
 	CHECK_GL_CMD(_depthTexture = Texture::create2DDepthTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
-	CHECK_GL_CMD(_waterDepthTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
+	//CHECK_GL_CMD(_waterDepthTexture = Texture::create2DRGBTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480));
+	CHECK_GL_CMD(_waterDepthTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_smoothedTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_smoothedTexture2 = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
 	CHECK_GL_CMD(_edgeTexture = Texture::create2DTexture(GL_LINEAR, GL_CLAMP_TO_EDGE, 640, 480, GL_R32F, GL_RED));
@@ -410,6 +408,9 @@ bool Scene::setup()
 	if (! setupObjects())
 		return false;
 
+	if (! _particleRenderer.setup())
+		return false;
+
 	glLineWidth(5.0f);
 
 	return true;
@@ -427,6 +428,78 @@ void Scene::render()
 	_box->render();
 	glUniform4fv(_colorLocation, 1, vmml::vec4f(0.5f, 0.5f, 0.0f, 1.0f));
 	_plane->render();
+}
+
+void Scene::render(NxScene* physicsScene)
+{
+	setupMatrixes();
+
+	vmml::vec4f lightDirectionEyeSpace = getLightInEyeSpace();
+	vmml::vec3f normalMatrix = getNormalMatrix(_viewMatrix);
+	lightDirectionEyeSpace.normalize();
+
+	vmml::vec4f lightPositionEyeSpace = _viewMatrix * _lightController.getModelMatrix() * vmml::vec4f(0.0f, 0.0f, 0.0f, 1.0f);
+
+	// render scene
+	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _sceneFrameBuffer->getId()));
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// render skybox
+	CHECK_GL_CMD(_skyBoxShader->useThis());
+	CHECK_GL_CMD(_skyBoxShader->setUniformMat4f("projectionMatrix", _projectionMatrix));
+	CHECK_GL_CMD(_skyBoxShader->setUniformMat4f("modelViewMatrix", _viewMatrix));
+	CHECK_GL_CMD(_skyBoxTexture->bindToTextureUnit(GL_TEXTURE0));
+	CHECK_GL_CMD(_skyBox->render());
+
+	vmml::vec4f lightColor(1.0f, 1.0f, 0.0f, 1.0f);
+	CHECK_GL_CMD(_light->getShader()->useThis());
+	CHECK_GL_CMD(_light->getShader()->setUniform4f("color", lightColor));
+	CHECK_GL_CMD(_light->getShader()->setUniformMat4f("modelViewProjectionMatrix", _projectionMatrix * _viewMatrix * _lightController.getModelMatrix()));
+	//CHECK_GL_CMD(_light->getShader()->setUniform4f("translation", _lightPosition));
+	CHECK_GL_CMD(_light->render());
+
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("projectionMatrix", _projectionMatrix));
+	CHECK_GL_CMD(_plane->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(_viewMatrix)));
+	CHECK_GL_CMD(_plane->getShader()->setUniform4f("lightPositionEyeSpace", lightPositionEyeSpace));
+	CHECK_GL_CMD(_floorTexture->bindToTextureUnit(GL_TEXTURE0));
+	CHECK_GL_CMD(_floorNormalMapTexture->bindToTextureUnit(GL_TEXTURE1));
+	CHECK_GL_CMD(_plane->render());
+
+	int nbActors = physicsScene->getNbActors();
+	NxActor** actors = physicsScene->getActors();
+
+	_shaderProgram->useThis();
+	CHECK_GL_CMD(_shaderProgram->setUniformMat4f("projectionMatrix", _projectionMatrix));
+	CHECK_GL_CMD(_shaderProgram->setUniform4f("lightDirection", lightDirectionEyeSpace));
+	// render boxes
+	_boxTexture->bindToTextureUnit(GL_TEXTURE0);
+	vmml::mat4f modelMatrix;
+	vmml::mat4f modelViewMatrix;
+	while(nbActors--) {
+		NxActor* actor = *actors++;
+		if (!actor->userData) 
+			continue;
+
+		actor->getGlobalPose().getColumnMajor44(modelMatrix);
+		modelViewMatrix = _viewMatrix * modelMatrix;
+		CHECK_GL_CMD(_box->getShader()->setUniformMat4f("modelViewMatrix", modelViewMatrix));
+		CHECK_GL_CMD(_box->getShader()->setUniformMat3f("normalMatrix", getNormalMatrix(modelViewMatrix)));
+		CHECK_GL_CMD(_box->render());
+	}
+
+
+	NxFluid** fluids = physicsScene->getFluids();
+	NxFluid* fluid = fluids[0];
+	MyFluid* myFluid = (MyFluid*)fluid->userData;
+	if (myFluid) {
+		ParticleData data;
+
+		data.particleCount = myFluid->getParticlesCount();
+		data.particles = myFluid->getPositionsAsync();
+		data.particleDensity = myFluid->getDensityAsync();
+
+		_particleRenderer.render(_sceneTexture, _sceneDepthTexture, data);
+	}
 }
 
 void Scene::renderIsoSurface(NxScene* physicsScene)
@@ -758,6 +831,9 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			_particleCount = myFluid->getParticlesCount();
 			_debugDataController.setDensityBuffer(myFluid->getDensityAsync(), _particleCount);
 
+			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
+			CHECK_GL_CMD(_water->updateAttribute("density", myFluid->getDensityAsync(), myFluid->getParticlesCount()));
+
 			// render fluid thickness
 			CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterDepthFrameBuffer->getId()));
 			CHECK_GL_CMD(_waterDepthFrameBuffer->attachTexture2D(_sceneDepthTexture, GL_DEPTH_ATTACHMENT));
@@ -772,7 +848,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			CHECK_GL_CMD(glUniformMatrix4fv(_waterDepthModelViewLocation, 1, GL_FALSE, _viewMatrix));
 			CHECK_GL_CMD(_waterDepthShader->setUniform1f("pointSize", _particleSize));
 			CHECK_GL_CMD(_waterDepthShader->setUniform1f("particleDepth", _particleDepth));
-			//CHECK_GL_CMD(_water->render(PART_COUNT, GL_POINTS, _waterDepthShader));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterDepthShader));
 
 			CHECK_GL_CMD(_waterDepthFrameBuffer->detachTexture2D(GL_DEPTH_ATTACHMENT));
@@ -795,11 +870,9 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterFrameBuffer->getId()));
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-			CHECK_GL_CMD(glUniformMatrix4fv(_waterProjectionLocation, 1, GL_FALSE, _projectionMatrix));
-			CHECK_GL_CMD(glUniformMatrix4fv(_waterModelViewLocation, 1, GL_FALSE, _viewMatrix));
+			CHECK_GL_CMD(_waterShader->setUniformMat4f("projectionMatrix", _projectionMatrix));
+			CHECK_GL_CMD(_waterShader->setUniformMat4f("modelViewMatrix", _viewMatrix));
 			CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
-			CHECK_GL_CMD(_water->updateAttribute("vertex", myFluid->getPositions(), myFluid->getParticlesCount()));
-			CHECK_GL_CMD(_water->updateAttribute("density", myFluid->getDensityAsync(), myFluid->getParticlesCount()));
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
 		}
 	}

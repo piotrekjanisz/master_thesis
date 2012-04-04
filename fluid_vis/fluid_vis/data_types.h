@@ -10,6 +10,7 @@ extern class Texture;
 extern class ScreenQuad;
 extern class SurfaceExtractor;
 extern class MtSurfaceExtractor;
+extern class ParticleRenderer;
 
 typedef boost::shared_ptr<Texture> TexturePtr;
 typedef boost::shared_ptr<ShaderProgram> ShaderProgramPtr;
@@ -19,3 +20,4 @@ typedef boost::shared_ptr<GfxStaticObject> GfxStaticObjectPtr;
 typedef boost::shared_ptr<ScreenQuad> ScreenQuadPtr;
 typedef boost::shared_ptr<SurfaceExtractor> SurfaceExtractorPtr;
 typedef boost::shared_ptr<MtSurfaceExtractor> MtSurfaceExtractorPtr;
+typedef boost::shared_ptr<ParticleRenderer> ParticleRendererPtr;

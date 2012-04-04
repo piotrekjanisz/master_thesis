@@ -3,6 +3,7 @@
 #include <vmmlib\vmmlib.hpp>
 #include <boost\timer.hpp>
 #include "CameraFrame.h"
+#include "SpaceObject.h"
 
 
 class AbstractScene
@@ -38,11 +39,17 @@ protected:
 	void setOrthographicProjectionMatrix(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax);
 
 	void setupMatrixes();
-	
-	vmml::mat3f getNormalMatrix(const vmml::mat4f& modelView);
+
+	vmml::vec4f _lightDirection;
+	vmml::vec4f _lightPosition;
+	SpaceObject _lightController;
 
 public:
-	AbstractScene() : _frameCount(0) {}
+	AbstractScene() 
+		: _frameCount(0), 
+		_lightDirection(-1.0, -1.0, 1.0, 0.0),
+		_lightPosition(50.0f, 50.0f, -50.0f, 1.0f),
+		_lightController(vmml::vec3f(50.0f, 50.0f, -50.0f)) {}
 	virtual ~AbstractScene() {}
 	
 	virtual bool setup();
@@ -66,11 +73,21 @@ public:
 	int getWidth() const { return _width; }
 	int getHeight() const { return _height; }
 
+	vmml::mat4f& getProjectionMatrix() { return _projectionMatrix; } 
+	vmml::mat4f& getInverseProjectionMatrix() { return _inverseProjectionMatrix; }
+	vmml::mat4f& getViewMatrix() { return _viewMatrix; }
+	vmml::mat4f& getModelViewProjectionMatrix() { return _modelViewProjectionMatrix; }
+
+	vmml::vec4f getLightInEyeSpace() { return _viewMatrix * _lightDirection; }
+	vmml::vec4f getLightPositionInEyeSpace() { return _viewMatrix * _lightPosition; }
+
 	CameraFrame& cameraFrame() { return _cameraFrame; }
 	const CameraFrame& cameraFrame() const { return _cameraFrame; }
 
 	void computeFrameRate();
 
 	virtual void displayAdditionalStats() = 0;
+
+	vmml::mat3f getNormalMatrix(const vmml::mat4f& modelView);
 };
 

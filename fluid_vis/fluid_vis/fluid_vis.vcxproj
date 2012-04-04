@@ -79,6 +79,7 @@
     <ClCompile Include="AbstractScene.cpp" />
     <ClCompile Include="BaseException.cpp" />
     <ClCompile Include="CameraFrame.cpp" />
+    <ClCompile Include="CurvatureFlowParticleRenderer.cpp" />
     <ClCompile Include="DebugData.cpp" />
     <ClCompile Include="debug_utils.cpp" />
     <ClCompile Include="ErrorStream.cpp" />
@@ -92,6 +93,7 @@
     <ClCompile Include="physx_utils.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="ScreenQuad.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShapeFactory.cpp" />
@@ -102,6 +104,7 @@
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BaseException.h" />
     <ClInclude Include="CameraFrame.h" />
+    <ClInclude Include="CurvatureFlowParticleRenderer.h" />
     <ClInclude Include="data_types.h" />
     <ClInclude Include="DebugData.h" />
     <ClInclude Include="debug_utils.h" />
@@ -117,6 +120,7 @@
     <ClInclude Include="physx_utils.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene2.h" />
     <ClInclude Include="ScreenQuad.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShapeFactory.h" />

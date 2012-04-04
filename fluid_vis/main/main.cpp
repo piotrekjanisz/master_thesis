@@ -15,17 +15,21 @@
 #include <GL/glus.h>
 #include <iostream>
 #include <boost/make_shared.hpp>
-#include <fluid_vis/Scene.h>
+//#include <fluid_vis/Scene.h>
+#include <fluid_vis/Scene2.h>
 #include <fluid_vis/ErrorStream.h>
 #include <fluid_vis/physx_utils.h>
 #include <fluid_vis/Properties.h>
 #include <fluid_vis/ConfigurationFactory.h>
 #include <fluid_vis/MyFluid.h>
 #include <fluid_vis/debug_utils.h>
+#include <fluid_vis/CurvatureFlowParticleRenderer.h>
 
 using namespace std;
 
-Scene g_scene;
+//Scene g_scene;
+Scene2 g_scene2;
+
 static NxPhysicsSDK* gPhysicsSDK = NULL;
 static NxScene* g_NxScene = NULL;
 static MyFluid* gFluid = NULL;
@@ -159,19 +163,19 @@ void createStaticBox(const NxVec3& pos, const NxVec3& dim)
 
 void createCubeFromEye(float size, float velocity)
 {
-	NxVec3 position(g_scene.cameraFrame().position());
-	NxVec3 initialVelocity((g_scene.cameraFrame().forward() * velocity));
+	NxVec3 position(g_scene2.cameraFrame().position());
+	NxVec3 initialVelocity((g_scene2.cameraFrame().forward() * velocity));
 	createCube(position, size, initialVelocity);
 }
 
 void createCubesFromEye(float size, float velocity, int count)
 {
-	vmml::vec3f position = g_scene.cameraFrame().position();
-	vmml::vec3f xAxis = g_scene.cameraFrame().xAxis();
+	vmml::vec3f position = g_scene2.cameraFrame().position();
+	vmml::vec3f xAxis = g_scene2.cameraFrame().xAxis();
 	for (int i = 0; i < count; i++) {
 		position += xAxis * (size + 0.1);
 		NxVec3 nxPosition(position);
-		NxVec3 initialVelocity((g_scene.cameraFrame().forward() * velocity));
+		NxVec3 initialVelocity((g_scene2.cameraFrame().forward() * velocity));
 		createCube(nxPosition, size, initialVelocity);
 	}
 }
@@ -180,12 +184,13 @@ GLUSboolean init(GLUSvoid)
 {
 	glEnable(GL_CULL_FACE);
 	createFluid();
-	return g_scene.setup();
+	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new CurvatureFlowParticleRenderer(&g_scene2)));
+	return g_scene2.setup();
 }
 
 GLUSvoid reshape(GLUSuint width, GLUSuint height)
 {
-	g_scene.reshape(width, height);
+	g_scene2.reshape(width, height);
 	// http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/viewport.html
 	glViewport(0, 0, width, height);
 }
@@ -194,11 +199,13 @@ GLUSboolean update(GLUSfloat time)
 {
 	g_NxScene->simulate(1.0f / 60.0f);
 	
-	if (g_useSurfaceExtraction)
-		g_scene.renderIsoSurface(g_NxScene);
-	else 
-		g_scene.renderCurvatureFlow(g_NxScene);
-		//g_scene.renderBilateralGauss(g_NxScene);
+	g_scene2.render(g_NxScene);
+	//if (g_useSurfaceExtraction)
+	//	g_scene.renderIsoSurface(g_NxScene);
+	//else 
+	//	g_scene.render(g_NxScene);
+	//	//g_scene.renderCurvatureFlow(g_NxScene);
+	//	//g_scene.renderBilateralGauss(g_NxScene);
 	
 	g_NxScene->flushStream();
 	g_NxScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
@@ -226,60 +233,60 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 		createCubeFromEye(0.5f, 50.0f);
 	} else if (key == 100) {
 		createCubesFromEye(1.0f, 50.0f, 10);
-	} else if (key == KEY_1) {
-		g_scene.changeParticleSize(-1.0f);
-	} else if (key == KEY_2) {
-		g_scene.changeParticleSize(1.0f);
-	} else if (key == KEY_3) {
-		g_scene.changeEdgeTreshold(-1.0f);
-		g_scene.changeBilateralTreshold(-0.0005);
-	} else if (key == KEY_4) {
-		g_scene.changeEdgeTreshold(1.0f);
-		g_scene.changeBilateralTreshold(0.0005);
-	} else if (key == KEY_5) {
-		g_scene.changeGauss(0, -0.5);
-	} else if (key == KEY_6) {
-		g_scene.changeGauss(0,  0.5);
-	} else if (key == KEY_7) {
-		g_scene.changeGauss(-1, 0.0);
-	} else if (key == KEY_8) {
-		g_scene.changeGauss( 1, 0.0);
-	} else if (key == '-') {
-		g_scene.changeAdditionalBlurPhases(-1);
-	} else if (key == '+') {
-		g_scene.changeAdditionalBlurPhases(1);
-	} else if (key == '[') {
-		g_scene.changeDepthGauss(-1, 0);
-	} else if (key == ']') {
-		g_scene.changeDepthGauss(1, 0);
-	} else if (key == 'o') {
-		g_scene.changeDepthGauss(0, -0.5);
-	} else if (key == 'p') {
-		g_scene.changeDepthGauss(0, 0.5);
-	} else if (key == 'k') {
-		g_scene.changeParticleDepth(-0.001);
-	} else if (key == 'l') {
-		g_scene.changeParticleDepth(0.001);
-	} else if (key == 'm') {
-		g_scene.changeFilterSizeMult(-0.05);
-	} else if (key == 'n') {
-		g_scene.changeFilterSizeMult(0.05);
-	} else if (key == '<') {
-		g_scene.changeTimeStep(-1.0f);
-	} else if (key == '>') {
-		g_scene.changeTimeStep(1.0f);
-	} else if (key == 'w') {
-		g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, -0.5f, 0.0f));
-	} else if (key == 's') {
-		g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, 0.5f, 0.0f));
-	} else if (key == 'a') {
-		g_scene.changeLightPosition(vmml::vec4f(-0.5f, 0.0f, 0.0f, 0.0f));
-	} else if (key == 'f') {
-		g_scene.changeLightPosition(vmml::vec4f(0.5f, 0.0f, 0.0f, 0.0f));
-	} else if (key == 'z') {
-		g_scene.changeLightPosition(vmml::vec4f(0.0f, -0.5f, 0.0f, 0.0f));
-	} else if (key == 'x') {
-		g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.5f, 0.0f, 0.0f));
+	//} else if (key == KEY_1) {
+	//	g_scene.changeParticleSize(-1.0f);
+	//} else if (key == KEY_2) {
+	//	g_scene.changeParticleSize(1.0f);
+	//} else if (key == KEY_3) {
+	//	g_scene.changeEdgeTreshold(-1.0f);
+	//	g_scene.changeBilateralTreshold(-0.0005);
+	//} else if (key == KEY_4) {
+	//	g_scene.changeEdgeTreshold(1.0f);
+	//	g_scene.changeBilateralTreshold(0.0005);
+	//} else if (key == KEY_5) {
+	//	g_scene.changeGauss(0, -0.5);
+	//} else if (key == KEY_6) {
+	//	g_scene.changeGauss(0,  0.5);
+	//} else if (key == KEY_7) {
+	//	g_scene.changeGauss(-1, 0.0);
+	//} else if (key == KEY_8) {
+	//	g_scene.changeGauss( 1, 0.0);
+	//} else if (key == '-') {
+	//	g_scene.changeAdditionalBlurPhases(-1);
+	//} else if (key == '+') {
+	//	g_scene.changeAdditionalBlurPhases(1);
+	//} else if (key == '[') {
+	//	g_scene.changeDepthGauss(-1, 0);
+	//} else if (key == ']') {
+	//	g_scene.changeDepthGauss(1, 0);
+	//} else if (key == 'o') {
+	//	g_scene.changeDepthGauss(0, -0.5);
+	//} else if (key == 'p') {
+	//	g_scene.changeDepthGauss(0, 0.5);
+	//} else if (key == 'k') {
+	//	g_scene.changeParticleDepth(-0.001);
+	//} else if (key == 'l') {
+	//	g_scene.changeParticleDepth(0.001);
+	//} else if (key == 'm') {
+	//	g_scene.changeFilterSizeMult(-0.05);
+	//} else if (key == 'n') {
+	//	g_scene.changeFilterSizeMult(0.05);
+	//} else if (key == '<') {
+	//	g_scene.changeTimeStep(-1.0f);
+	//} else if (key == '>') {
+	//	g_scene.changeTimeStep(1.0f);
+	//} else if (key == 'w') {
+	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, -0.5f, 0.0f));
+	//} else if (key == 's') {
+	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, 0.5f, 0.0f));
+	//} else if (key == 'a') {
+	//	g_scene.changeLightPosition(vmml::vec4f(-0.5f, 0.0f, 0.0f, 0.0f));
+	//} else if (key == 'f') {
+	//	g_scene.changeLightPosition(vmml::vec4f(0.5f, 0.0f, 0.0f, 0.0f));
+	//} else if (key == 'z') {
+	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, -0.5f, 0.0f, 0.0f));
+	//} else if (key == 'x') {
+	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.5f, 0.0f, 0.0f));
 	}
 }
 
@@ -388,11 +395,11 @@ void mouseMoveFunc(unsigned int buttons, unsigned int xPos, unsigned int yPos)
 		int deltaY = (int)yPos - (int)g_YPos;
 
 		if (buttons == 1) {			// left button
-			g_scene.rotateX(deltaY * ROT_FACTOR);
-			g_scene.rotateY(-deltaX * ROT_FACTOR);
+			g_scene2.rotateX(deltaY * ROT_FACTOR);
+			g_scene2.rotateY(-deltaX * ROT_FACTOR);
 		} else if (buttons == 2) {	// middle button
 		} else if (buttons == 4) {  // right button
-			g_scene.translate(deltaX * TRANS_FACTOR, deltaY * TRANS_FACTOR, 0.0f);
+			g_scene2.translate(deltaX * TRANS_FACTOR, deltaY * TRANS_FACTOR, 0.0f);
 			//g_scene.rotateLightDir(deltaY * ROT_FACTOR, deltaX * ROT_FACTOR);
 		}
 		g_XPos = xPos;
@@ -403,7 +410,7 @@ void mouseMoveFunc(unsigned int buttons, unsigned int xPos, unsigned int yPos)
 void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned int yPos)
 {
 	const float TICK_FACTOR = 0.5f;
-	g_scene.translate(0.0f, 0.0f, ticks * TICK_FACTOR);
+	g_scene2.translate(0.0f, 0.0f, ticks * TICK_FACTOR);
 }
 
 int main(int argc, char** argv)

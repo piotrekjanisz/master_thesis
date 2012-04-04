@@ -13,6 +13,7 @@
 #include "ShapeFactory.h"
 #include "SpaceObject.h"
 #include "DebugData.h"
+#include "CurvatureFlowParticleRenderer.h"
 #include <surface_extraction/SurfaceExtractor.h>
 #include <surface_extraction/MtSurfaceExtractor.h>
 #include <utils/utils.h>
@@ -138,13 +139,11 @@ private: // fields
 	float _edgeTreshold;
 	float _edgeTresholdChange;
 
-	vmml::vec4f _lightDirection;
 
-	vmml::vec4f _lightPosition;
-
-	SpaceObject _lightController;
 
 	DebugData _debugDataController;
+
+	CurvatureFlowParticleRenderer _particleRenderer;
 
 private: // methods
 	bool setupTextures();
@@ -174,6 +173,7 @@ public:
 	void renderBilateralGauss(NxScene* physicsScene);
 	void renderCurvatureFlow(NxScene* physicsScene);
 	void renderIsoSurface(NxScene* physicsScene);
+	void render(NxScene* physicsScene);
 
 	virtual void reshape(int width, int height);
 
@@ -181,16 +181,6 @@ public:
 
 	void incParticleSize(float val) {
 		_particleSize = max(_particleSize + val, 10.0f);
-	}
-
-	vmml::vec4f getLightInEyeSpace()
-	{
-		return _viewMatrix * _lightDirection;
-	}
-
-	vmml::vec4f getLightPositionInEyeSpace()
-	{
-		return _viewMatrix * _lightPosition;
 	}
 };
 
