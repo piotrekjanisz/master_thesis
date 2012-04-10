@@ -26,6 +26,7 @@ private: // constants
 	static const std::string PARAM_PARTICLE_THICKNESS;
 	static const std::string PARAM_TIME_STEP;
 	static const std::string PARAM_EDGE_TRESHOLD;
+	static const std::string PARAM_THICKNESS_SIZE;
 
 private: // auxiliary functions
 	bool setupShaders();
@@ -47,6 +48,8 @@ private: // rendering parameters
 	float _thicknessGaussSigma;
 	int _thicknessGaussSize;
 
+	float _thicknessSize;
+
 private: // graphic objects
 	AbstractScene* _scene;
 
@@ -63,6 +66,7 @@ private: // graphic objects
 	TexturePtr _smoothedTexture2;
 	TexturePtr _gaussDist1DTexture;
 	TexturePtr _edgeTexture;
+	TexturePtr _thicknessAuxTexture;
 
 	// objects
 	GfxObjectPtr _water;
@@ -72,6 +76,7 @@ private: // graphic objects
 	ScreenQuadPtr _finalQuad;
 	ScreenQuadPtr _edgeQuad;
 	ScreenQuadPtr _curvatureFlowQuad;
+	ScreenQuadPtr _fillDepthBufferQuad;
 
 	// shaders
 	ShaderProgramPtr _waterThicknessShader;
@@ -80,6 +85,11 @@ private: // graphic objects
 	ShaderProgramPtr _finalShader;
 	ShaderProgramPtr _edgeDetectionShader;
 	ShaderProgramPtr _curvatureFlowShader;
+	ShaderProgramPtr _copyTextureToDepthShader;
+
+	// debug stuff
+	ShaderProgramPtr _grayscaleTextureShader;
+	ScreenQuadPtr _grayscaleIntermediateQuad;
 public:
 	CurvatureFlowParticleRenderer(AbstractScene* scene);
 	virtual ~CurvatureFlowParticleRenderer(void);

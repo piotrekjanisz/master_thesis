@@ -30,7 +30,11 @@ void Scene2::reshape(int width, int height)
 {
 	AbstractScene::reshape(width, height);
 
-	// TODO reshape textures;
+	CHECK_GL_CMD(_sceneColorTexture->resize2D(width, height));
+	CHECK_GL_CMD(_sceneDepthTexture->resize2D(width, height));
+	
+	CHECK_GL_CMD(_particleRenderer->resize(width, height));
+	CHECK_GL_CMD(_sceneFrameBuffer->resize(width, height));
 }
 
 bool Scene2::setupTextures()

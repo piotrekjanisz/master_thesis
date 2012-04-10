@@ -133,6 +133,7 @@
     <None Include="resources\config\sample.cfg" />
     <None Include="resources\config\water1.cfg" />
     <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
+    <None Include="resources\shaders\copy_texture_to_depth_fragment.glsl" />
     <None Include="resources\shaders\curvature_flow2.glsl" />
     <None Include="resources\shaders\curvature_flow_fragment.glsl" />
     <None Include="resources\shaders\debug_geometry.glsl" />

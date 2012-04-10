@@ -283,5 +283,8 @@
     <None Include="resources\shaders\debug_geometry.glsl">
       <Filter>shaders\debug</Filter>
     </None>
+    <None Include="resources\shaders\copy_texture_to_depth_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
