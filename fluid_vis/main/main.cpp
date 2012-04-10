@@ -35,6 +35,8 @@ static NxScene* g_NxScene = NULL;
 static MyFluid* gFluid = NULL;
 static ConfigurationFactory configurationFactory("config");
 
+ParameterControllerPtr g_renderingParameterController;
+
 bool g_useSurfaceExtraction = false;
 
 bool g_gpuAccelerationPossible = false;
@@ -180,11 +182,33 @@ void createCubesFromEye(float size, float velocity, int count)
 	}
 }
 
+void initKeyController()
+{
+	vector<pair<unsigned int, unsigned int>> keys;
+	keys.push_back(make_pair('1', '2'));
+	keys.push_back(make_pair('3', '4'));
+	keys.push_back(make_pair('5', '6'));
+	keys.push_back(make_pair('7', '8'));
+	keys.push_back(make_pair('9', '0'));
+	keys.push_back(make_pair('[', ']'));
+	keys.push_back(make_pair(';', '\''));
+	keys.push_back(make_pair('.', '/'));
+	keys.push_back(make_pair('o', 'p'));
+	keys.push_back(make_pair('k', 'l'));
+	keys.push_back(make_pair('-', '+'));
+	keys.push_back(make_pair('n', 'm'));
+
+	g_renderingParameterController = boost::make_shared<ParameterController>(keys, (ParametrizedPtr)&g_scene2);
+
+	g_renderingParameterController->printMappings();
+}
+
 GLUSboolean init(GLUSvoid)
 {
 	glEnable(GL_CULL_FACE);
 	createFluid();
 	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new CurvatureFlowParticleRenderer(&g_scene2)));
+	initKeyController();
 	return g_scene2.setup();
 }
 
@@ -217,6 +241,7 @@ GLUSvoid terminate(GLUSvoid)
 {
 }
 
+
 void keyFunc(GLUSboolean pressed, GLUSuint key)
 {
 	const GLUSuint KEY_F = 102;
@@ -229,10 +254,16 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 	const GLUSuint KEY_7 = 55;
 	const GLUSuint KEY_8 = 56;
 
+	std::cout << key << std::endl;
+
 	if (key == KEY_F) {
 		createCubeFromEye(0.5f, 50.0f);
 	} else if (key == 100) {
 		createCubesFromEye(1.0f, 50.0f, 10);
+	} else if (key == '`') {
+		g_renderingParameterController->printMappings();
+	} else {
+		g_renderingParameterController->keyPressed(key);
 	//} else if (key == KEY_1) {
 	//	g_scene.changeParticleSize(-1.0f);
 	//} else if (key == KEY_2) {
@@ -434,7 +465,6 @@ int main(int argc, char** argv)
 	glusMouseFunc(mouseFunc);
 
 	glusMouseWheelFunc(mouseWheelFunc);
-	
 
 	glusPrepareContext(3, 2, GLUS_FORWARD_COMPATIBLE_BIT);
 

@@ -2,6 +2,11 @@
 
 #include "Texture.h"
 #include "AbstractScene.h"
+#include <utils/ParameterController.h>
+
+#include <vector>
+#include <string>
+#include <set>
 
 struct ParticleData
 {
@@ -10,10 +15,11 @@ struct ParticleData
 	float* particleDensity;
 };
 
-class ParticleRenderer
+class ParticleRenderer : public Parametrized
 {
 private:
 	AbstractScene* _scene;
+
 public:
 	ParticleRenderer(AbstractScene* scene) : _scene(scene){};
 	virtual ~ParticleRenderer(void) {};

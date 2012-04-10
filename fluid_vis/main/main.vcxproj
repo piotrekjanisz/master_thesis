@@ -73,6 +73,9 @@
     <ProjectReference Include="..\fluid_vis\fluid_vis.vcxproj">
       <Project>{2fa25989-a277-4dd4-b399-4cf2f38dc9c7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\utils\utils.vcxproj">
+      <Project>{e0f30d9c-4cb9-407d-acd0-3c88efbe4147}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

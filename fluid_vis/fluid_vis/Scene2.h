@@ -1,6 +1,7 @@
 #pragma once
 
 #include <NxPhysics.h>
+#include <set>
 #include "abstractscene.h"
 #include "ShaderProgram.h"
 #include "data_types.h"
@@ -10,12 +11,15 @@
 #include "ParticleRenderer.h"
 
 
-class Scene2 : public AbstractScene
+class Scene2 : public AbstractScene, Parametrized
 {
 private: // auxiliary parameters
 	int _particleCount;
+	std::set<std::string> _parameters;
+
 private: // rendering parameters
 	ParticleRendererPtr _particleRenderer;
+
 private: // graphic objects
 	// framebuffers
 	FrameBufferPtr _sceneFrameBuffer;
@@ -61,7 +65,18 @@ public:
 public: // setters and getters
 	void setParticleRenderer(ParticleRendererPtr renderer)
 	{
+		if (_particleRenderer) {
+			for (std::set<std::string>::iterator it = _particleRenderer->getParameters().begin(); it != _particleRenderer->getParameters().end(); ++it) {
+				_parameters.erase(*it);
+			}
+		}
+
 		_particleRenderer = renderer;
+		_parameters.insert(renderer->getParameters().begin(), renderer->getParameters().end());
 	}
+
+	const std::set<std::string>& getParameters();
+
+	bool changeParameter(const std::string& parameter, ParamOperation operation);
 };
 

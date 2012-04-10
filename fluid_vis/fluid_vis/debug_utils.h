@@ -36,7 +36,8 @@ void DebugUtils::printArray(T* array, int size, int componentNum)
 
 #endif
 
-
+#define PRINT_VAR(var) \
+	std::cout << #var << ": " << var << std::endl;
 
 #ifdef DEBUG
 #define DEBUG_CODE(code) (code)

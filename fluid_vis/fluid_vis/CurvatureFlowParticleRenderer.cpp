@@ -4,6 +4,15 @@
 #include <vmmlib\vmmlib.hpp>
 #include <iostream>
 
+const std::string CurvatureFlowParticleRenderer::PARAM_PARTICLE_SIZE("particle size");
+const std::string CurvatureFlowParticleRenderer::PARAM_THICKNESS_GAUSS_SIZE("thickness gauss size");
+const std::string CurvatureFlowParticleRenderer::PARAM_THICKNESS_GAUSS_SIGMA("thickness gauss sigma");
+const std::string CurvatureFlowParticleRenderer::PARAM_BLUR_ITERATION_COUNT("blur iteration count");
+const std::string CurvatureFlowParticleRenderer::PARAM_PARTICLE_THICKNESS("particle thickness");
+const std::string CurvatureFlowParticleRenderer::PARAM_TIME_STEP("time step");
+const std::string CurvatureFlowParticleRenderer::PARAM_EDGE_TRESHOLD("edge trehold");
+
+
 CurvatureFlowParticleRenderer::CurvatureFlowParticleRenderer(AbstractScene* scene)
 	: ParticleRenderer(scene), 
 	_scene(scene),
@@ -15,6 +24,48 @@ CurvatureFlowParticleRenderer::CurvatureFlowParticleRenderer(AbstractScene* scen
 	_timeStep(-0.00000005f),
 	_edgeTreshold(0.003f)
 {
+	_parameterNames.insert(PARAM_PARTICLE_SIZE);
+	_parameterNames.insert(PARAM_THICKNESS_GAUSS_SIZE);
+	_parameterNames.insert(PARAM_THICKNESS_GAUSS_SIGMA);
+	_parameterNames.insert(PARAM_BLUR_ITERATION_COUNT);
+	_parameterNames.insert(PARAM_PARTICLE_THICKNESS);
+	_parameterNames.insert(PARAM_EDGE_TRESHOLD);
+	_parameterNames.insert(PARAM_TIME_STEP);
+}
+
+#define PRINT_PARAM(param) std::cout << parameter << ": " << param << std::endl;
+
+bool CurvatureFlowParticleRenderer::changeParameter(const std::string& parameter, ParamOperation operation)
+{
+	int sign = operation == ParamOperation::INC ? 1 : -1;
+
+	if (parameter == PARAM_PARTICLE_SIZE) {
+		_particleSize += sign * 1;
+		PRINT_PARAM(_particleSize);
+	} else if (parameter == PARAM_THICKNESS_GAUSS_SIZE) {
+		_thicknessGaussSize += sign * 2;
+		PRINT_PARAM(_thicknessGaussSigma);
+		setupThicknessGauss();
+	} else if (parameter == PARAM_THICKNESS_GAUSS_SIGMA) {
+		_thicknessGaussSigma += sign * 0.01;
+		PRINT_PARAM(_thicknessGaussSigma);
+	} else if (parameter == PARAM_BLUR_ITERATION_COUNT) {
+		_blurIterationCount += sign * 1;
+		PRINT_PARAM(_blurIterationCount);
+	} else if (parameter == PARAM_PARTICLE_THICKNESS) {
+		_particleDepth += sign * 0.001;
+		PRINT_PARAM(_particleDepth);
+	} else if (parameter == PARAM_EDGE_TRESHOLD) {
+		_edgeTreshold += sign * 0.0001;
+		PRINT_PARAM(_edgeTreshold);
+	} else if (parameter == PARAM_TIME_STEP) {
+		_timeStep += sign * (-0.000000001f);
+		PRINT_PARAM(_timeStep);
+	} else {
+		return false;
+	}
+
+	return true;
 }
 
 
@@ -118,6 +169,14 @@ bool CurvatureFlowParticleRenderer::setupFramebuffers()
 	return true;
 }
 
+void CurvatureFlowParticleRenderer::setupThicknessGauss()
+{
+	float gaussData[64000];
+
+	Filters::createGauss1D(_thicknessGaussSize, 1.0, _thicknessGaussSigma, gaussData);
+	Filters::normalize(gaussData, 1, _thicknessGaussSize);
+	CHECK_GL_CMD(_gaussDist1DTexture->load1DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, _thicknessGaussSize, 0, GL_DEPTH_COMPONENT, gaussData));
+}
 
 bool CurvatureFlowParticleRenderer::setupTextures()
 {
@@ -263,4 +322,10 @@ void CurvatureFlowParticleRenderer::render(TexturePtr& sceneColorTexture, Textur
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / _scene->getWidth(), 1.0f / _scene->getHeight()));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
 	CHECK_GL_CMD(_finalQuad->render());
+}
+
+
+const std::set<std::string>& CurvatureFlowParticleRenderer::getParameters()
+{
+	return _parameterNames;
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utils/ParameterController.h>
 #include "ParticleRenderer.h"
 #include "FrameBuffer.h"
 #include "GfxObject.h"
@@ -8,15 +9,35 @@
 #include "ScreenQuad.h"
 #include "data_types.h"
 
+
+/**
+ TODO:
+	- create ScreenSpaceParticleRenderer class
+	- add virtual method getParameters
+*/
+
 class CurvatureFlowParticleRenderer : public ParticleRenderer
 {
-private:
+private: // constants
+	static const std::string PARAM_PARTICLE_SIZE;
+	static const std::string PARAM_THICKNESS_GAUSS_SIZE;
+	static const std::string PARAM_THICKNESS_GAUSS_SIGMA;
+	static const std::string PARAM_BLUR_ITERATION_COUNT;
+	static const std::string PARAM_PARTICLE_THICKNESS;
+	static const std::string PARAM_TIME_STEP;
+	static const std::string PARAM_EDGE_TRESHOLD;
+
+private: // auxiliary functions
 	bool setupShaders();
 	bool setupObjects();
 	bool setupFramebuffers();
 	bool setupTextures();
 
+	void setupThicknessGauss();
+
 private: // rendering parameters
+	std::set<std::string> _parameterNames;
+
 	float _particleSize;
 	float _particleDepth;
 	float _edgeTreshold;
@@ -66,5 +87,7 @@ public:
 	bool setup();
 	virtual void resize(int width, int height);
 	virtual void render(TexturePtr& sceneColorTexture, TexturePtr& sceneDepthTexture, ParticleData& particleData);
+	virtual const std::set<std::string>& getParameters();
+	virtual bool changeParameter(const std::string& parameter, ParamOperation operation);
 };
 

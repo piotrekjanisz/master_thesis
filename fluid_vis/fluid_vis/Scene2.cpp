@@ -8,11 +8,22 @@
 Scene2::Scene2()
 	: AbstractScene()
 {
+	// no OpenGL code here!!
 }
 
 
 Scene2::~Scene2(void)
 {
+}
+
+const std::set<std::string>& Scene2::getParameters()
+{
+	return _parameters;
+}
+
+bool Scene2::changeParameter(const std::string& parameter, ParamOperation operation)
+{
+	return _particleRenderer->changeParameter(parameter, operation);
 }
 
 void Scene2::reshape(int width, int height)
@@ -144,6 +155,7 @@ void Scene2::render(NxScene* physicsScene)
 	// render scene
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _sceneFrameBuffer->getId()));
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// render skybox
 	CHECK_GL_CMD(_skyBoxShader->useThis());
 	CHECK_GL_CMD(_skyBoxShader->setUniformMat4f("projectionMatrix", _projectionMatrix));
@@ -155,7 +167,6 @@ void Scene2::render(NxScene* physicsScene)
 	CHECK_GL_CMD(_light->getShader()->useThis());
 	CHECK_GL_CMD(_light->getShader()->setUniform4f("color", lightColor));
 	CHECK_GL_CMD(_light->getShader()->setUniformMat4f("modelViewProjectionMatrix", _projectionMatrix * _viewMatrix * _lightController.getModelMatrix()));
-	//CHECK_GL_CMD(_light->getShader()->setUniform4f("translation", _lightPosition));
 	CHECK_GL_CMD(_light->render());
 
 	CHECK_GL_CMD(_plane->getShader()->setUniformMat4f("modelViewMatrix", _viewMatrix));
@@ -202,6 +213,8 @@ void Scene2::render(NxScene* physicsScene)
 		_particleRenderer->render(_sceneColorTexture, _sceneDepthTexture, data);
 
 		_particleCount = data.particleCount;
+	} else {
+		std::cout << "WARNING: no fluid" << std::endl;
 	}
 
 	computeFrameRate();

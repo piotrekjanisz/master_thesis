@@ -75,6 +75,7 @@
     <ClInclude Include="BaseException.h" />
     <ClInclude Include="CommandLine.h" />
     <ClInclude Include="mymath.h" />
+    <ClInclude Include="ParameterController.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
@@ -83,6 +84,7 @@
     <ClCompile Include="BaseException.cpp" />
     <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="mymath.cpp" />
+    <ClCompile Include="ParameterController.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
