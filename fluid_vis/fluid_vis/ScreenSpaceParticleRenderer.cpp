@@ -196,7 +196,7 @@ bool ScreenSpaceParticleRenderer::changeParameter(const std::string& parameter, 
 
 void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TexturePtr& sceneDepthTexture, ParticleData& particleData)
 {
-		CHECK_GL_CMD(_water->updateAttribute("vertex", particleData.particles, particleData.particleCount));
+	CHECK_GL_CMD(_water->updateAttribute("vertex", particleData.particles, particleData.particleCount));
 	CHECK_GL_CMD(_water->updateAttribute("density", particleData.particleDensity, particleData.particleCount));
 
 	// render fluid thickness

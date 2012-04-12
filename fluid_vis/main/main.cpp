@@ -208,7 +208,7 @@ GLUSboolean init(GLUSvoid)
 {
 	glEnable(GL_CULL_FACE);
 	createFluid();
-	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new ScreenSpaceParticleRenderer(&g_scene2)));
+	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new CurvatureFlowParticleRenderer(&g_scene2)));
 	initKeyController();
 	return g_scene2.setup();
 }
