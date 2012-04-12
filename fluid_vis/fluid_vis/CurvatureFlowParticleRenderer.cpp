@@ -16,12 +16,11 @@ const std::string CurvatureFlowParticleRenderer::PARAM_THICKNESS_SIZE("thickness
 
 CurvatureFlowParticleRenderer::CurvatureFlowParticleRenderer(AbstractScene* scene)
 	: ParticleRenderer(scene), 
-	_scene(scene),
 	_particleSize(150.0f), 
 	_thicknessGaussSize(21),
 	_thicknessGaussSigma(40.0),
 	_blurIterationCount(30),
-	_particleDepth(0.05f),
+	_particleThickness(0.05f),
 	_timeStep(-0.00000005f),
 	_edgeTreshold(0.003f),
 	_thicknessSize(0.5f)
@@ -56,8 +55,8 @@ bool CurvatureFlowParticleRenderer::changeParameter(const std::string& parameter
 		_blurIterationCount += sign * 1;
 		PRINT_PARAM(_blurIterationCount);
 	} else if (parameter == PARAM_PARTICLE_THICKNESS) {
-		_particleDepth += sign * 0.001;
-		PRINT_PARAM(_particleDepth);
+		_particleThickness += sign * 0.001;
+		PRINT_PARAM(_particleThickness);
 	} else if (parameter == PARAM_EDGE_TRESHOLD) {
 		_edgeTreshold += sign * 0.0001;
 		PRINT_PARAM(_edgeTreshold);
@@ -260,7 +259,7 @@ void CurvatureFlowParticleRenderer::render(TexturePtr& sceneColorTexture, Textur
 	CHECK_GL_CMD(_waterThicknessShader->setUniformMat4f("projectionMatrix", _scene->getProjectionMatrix()));
 	CHECK_GL_CMD(_waterThicknessShader->setUniformMat4f("modelViewMatrix", _scene->getViewMatrix()));
 	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("pointSize", _particleSize));
-	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("particleDepth", _particleDepth));
+	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("particleDepth", _particleThickness));
 	CHECK_GL_CMD(_water->render(particleData.particleCount, GL_POINTS, _waterThicknessShader));
 
 	CHECK_GL_CMD(_waterThicknessFB->detachTexture2D(GL_DEPTH_ATTACHMENT));
@@ -278,9 +277,9 @@ void CurvatureFlowParticleRenderer::render(TexturePtr& sceneColorTexture, Textur
 	
 	// render fluid into depth texture
 	glViewport(0, 0, _scene->getWidth(), _scene->getHeight());
-	_waterShader->useThis();
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	_waterShader->useThis();	
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _waterFB->getId()));
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	CHECK_GL_CMD(_waterShader->setUniformMat4f("projectionMatrix", _scene->getProjectionMatrix()));

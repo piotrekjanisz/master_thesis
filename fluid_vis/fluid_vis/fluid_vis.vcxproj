@@ -95,6 +95,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="ScreenQuad.cpp" />
+    <ClCompile Include="ScreenSpaceParticleRenderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShapeFactory.cpp" />
     <ClCompile Include="SpaceObject.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="ScreenQuad.h" />
+    <ClInclude Include="ScreenSpaceParticleRenderer.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShapeFactory.h" />
     <ClInclude Include="SpaceObject.h" />

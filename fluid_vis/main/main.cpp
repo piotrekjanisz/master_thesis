@@ -24,6 +24,7 @@
 #include <fluid_vis/MyFluid.h>
 #include <fluid_vis/debug_utils.h>
 #include <fluid_vis/CurvatureFlowParticleRenderer.h>
+#include <fluid_vis/ScreenSpaceParticleRenderer.h>
 
 using namespace std;
 
@@ -207,7 +208,7 @@ GLUSboolean init(GLUSvoid)
 {
 	glEnable(GL_CULL_FACE);
 	createFluid();
-	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new CurvatureFlowParticleRenderer(&g_scene2)));
+	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new ScreenSpaceParticleRenderer(&g_scene2)));
 	initKeyController();
 	return g_scene2.setup();
 }

@@ -17,7 +17,7 @@ struct ParticleData
 
 class ParticleRenderer : public Parametrized
 {
-private:
+protected:
 	AbstractScene* _scene;
 
 public:
@@ -27,7 +27,5 @@ public:
 	virtual bool setup() = 0;
 	virtual void resize(int width, int height) = 0;
 	virtual void render(TexturePtr& sceneColorTexture, TexturePtr& sceneDepthTexture, ParticleData& particleData) = 0;
-
-	AbstractScene* getScene() { return _scene; }
 };
 
