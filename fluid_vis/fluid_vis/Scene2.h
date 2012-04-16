@@ -62,6 +62,8 @@ public:
 
 	virtual void displayAdditionalStats();
 
+	virtual TexturePtr& getEnvironmentTexture();
+
 public: // setters and getters
 	void setParticleRenderer(ParticleRendererPtr renderer)
 	{

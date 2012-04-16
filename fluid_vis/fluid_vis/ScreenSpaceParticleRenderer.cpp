@@ -20,11 +20,11 @@ ScreenSpaceParticleRenderer::ScreenSpaceParticleRenderer(AbstractScene* scene)
 	_maxParticleSize(120.0f),
 	_thicknessGaussSize(21),
 	_thicknessGaussSigma(40.0),
-	_particleThickness(0.05f),
+	_particleThickness(0.01f),
 	_thicknessTextureSize(0.5f),
 	_minDensity(300.0f),
 	_normalDensity(800.0f),
-	_refractionMult(-0.03f),
+	_refractionMult(-0.2f),
 	_particleThicknessExp(1)
 {
 	_parameterNames.insert(PARAM_PARTICLE_SIZE);
@@ -68,6 +68,7 @@ bool ScreenSpaceParticleRenderer::setupShaders()
 		CHECK_GL_CMD(_finalShader->setUniform1i("sceneTexture", 2));
 		CHECK_GL_CMD(_finalShader->setUniform1i("waterDepthTexture", 3));
 		CHECK_GL_CMD(_finalShader->setUniform1i("wTexture", 4));
+		CHECK_GL_CMD(_finalShader->setUniform1i("cubeMap", 5));
 		CHECK_GL_CMD(_finalShader->bindFragDataLocation(0, "frag_color"));
 		
 		_edgeDetectionShader = boost::make_shared<ShaderProgram>();
@@ -305,6 +306,7 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	CHECK_GL_CMD(_finalQuad->attachTexture(sceneColorTexture, GL_TEXTURE2));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_waterThicknessTexture, GL_TEXTURE3));
 	CHECK_GL_CMD(_finalQuad->attachTexture(_waterLinDetphTexture, GL_TEXTURE4));
+	CHECK_GL_CMD(_finalQuad->attachTexture(_scene->getEnvironmentTexture(), GL_TEXTURE5));
 
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_x", _scene->getCtgFovX()));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_y", _scene->getCtgFovY()));

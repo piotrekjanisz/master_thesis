@@ -58,15 +58,36 @@ void main(void)
 		vec3 normal = normalize(cross(ddx, ddy));
 
 		vec3 eye = vec3 (0.0, 0.0, 1.0);
-		vec3 halfVector = normalize(eye - normalize(lightDirection.xyz));
 
-		float fSpec = pow(max(dot(normal, halfVector), 0), 64);
+		//----------------NEW CODE--------------
+		vec4 water_color = vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0);
 
 		float waterDepth = texture(waterDepthTexture, tex_coord).x;
-		
-		frag_color = mix(vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0), texture(sceneTexture, tex_coord + refractionMult * waterDepth * vec2(normal.x, normal.y)), exp(-2 * waterDepth));
-		
-		frag_color.rgb += vec3(fSpec, fSpec, fSpec);
+		vec4 refracted_color = mix(water_color, texture(sceneTexture, tex_coord + refractionMult * waterDepth * vec2(normal.x, normal.y)), exp(-5 * waterDepth));
+
+		vec3 reflection_vector = normalize(reflect(normal, eye));
+		//vec4 reflected_color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		vec4 reflected_color = texture(cubeMap, reflection_vector);
+
+		float r_0 = 0.1;
+		float fresnel = r_0 + (1.0 - r_0) * pow(1 - dot(eye, normal), 5);
+
+		vec3 halfVector = normalize(eye - normalize(lightDirection.xyz));
+		float fSpec = pow(max(dot(normal, halfVector), 0), 64);
+		//float fSpec = 0.0f;
+
+		frag_color = (1.0 - fresnel) * refracted_color + fresnel * reflected_color + vec4(fSpec, fSpec, fSpec, 1.0f);
+		//----------------NEW CODE--------------
+
+		//vec3 halfVector = normalize(eye - normalize(lightDirection.xyz));
+//
+		//float fSpec = pow(max(dot(normal, halfVector), 0), 64);
+//
+		//float waterDepth = texture(waterDepthTexture, tex_coord).x;
+		//
+		//frag_color = mix(vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0), texture(sceneTexture, tex_coord + refractionMult * waterDepth * vec2(normal.x, normal.y)), exp(-2 * waterDepth));
+		//
+		//frag_color.rgb += vec3(fSpec, fSpec, fSpec);
 	} else {
 		frag_color = texture(sceneTexture, tex_coord);
 	}

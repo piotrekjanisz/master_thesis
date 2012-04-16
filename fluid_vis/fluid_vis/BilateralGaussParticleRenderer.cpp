@@ -5,7 +5,7 @@
 BilateralGaussParticleRenderer::BilateralGaussParticleRenderer(AbstractScene* scene)
 	: ScreenSpaceParticleRenderer(scene),
 	 _filterSizeMult(0.5f),
-	 _edgeTreshold(0.002f),
+	 _edgeTreshold(0.003f),
 	 _bilateralGaussSigma(10.0f)
 {
 }

@@ -4,6 +4,7 @@
 #include <boost\timer.hpp>
 #include "CameraFrame.h"
 #include "SpaceObject.h"
+#include "Texture.h"
 
 
 class AbstractScene
@@ -59,6 +60,8 @@ public:
 	virtual void rotateX(float val);
 	virtual void rotateY(float val);
 
+	virtual TexturePtr& getEnvironmentTexture() = 0;
+
 	void setFov(float fov) { _fov = fov; }
 	void setZNear(float zNear) { _zNear = zNear; }
 	void setZFar(float zFar) { _zFar = zFar; }
@@ -87,6 +90,7 @@ public:
 	void computeFrameRate();
 
 	virtual void displayAdditionalStats() = 0;
+
 
 	vmml::mat3f getNormalMatrix(const vmml::mat4f& modelView);
 };

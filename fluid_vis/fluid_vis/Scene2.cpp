@@ -26,6 +26,11 @@ bool Scene2::changeParameter(const std::string& parameter, ParamOperation operat
 	return _particleRenderer->changeParameter(parameter, operation);
 }
 
+TexturePtr& Scene2::getEnvironmentTexture()
+{
+	return _skyBoxTexture;
+}
+
 void Scene2::reshape(int width, int height)
 {
 	AbstractScene::reshape(width, height);

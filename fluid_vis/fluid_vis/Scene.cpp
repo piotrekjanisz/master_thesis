@@ -487,7 +487,6 @@ void Scene::render(NxScene* physicsScene)
 		CHECK_GL_CMD(_box->render());
 	}
 
-
 	NxFluid** fluids = physicsScene->getFluids();
 	NxFluid* fluid = fluids[0];
 	MyFluid* myFluid = (MyFluid*)fluid->userData;
@@ -497,7 +496,6 @@ void Scene::render(NxScene* physicsScene)
 		data.particleCount = myFluid->getParticlesCount();
 		data.particles = myFluid->getPositionsAsync();
 		data.particleDensity = myFluid->getDensityAsync();
-
 		_particleRenderer.render(_sceneTexture, _sceneDepthTexture, data);
 	}
 }
