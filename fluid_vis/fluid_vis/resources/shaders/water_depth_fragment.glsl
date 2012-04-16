@@ -1,6 +1,7 @@
 #version 150
 
-uniform float particleDepth;
+
+in float fragParticleDepth;
 
 out vec4 fragColor;
 
@@ -14,7 +15,7 @@ void main(void)
     if (mag > 1.0f)
         discard;
 
-	float color = particleDepth;
+	float color = fragParticleDepth;
 
 	fragColor = vec4(color, color, color, 1.0);
 }

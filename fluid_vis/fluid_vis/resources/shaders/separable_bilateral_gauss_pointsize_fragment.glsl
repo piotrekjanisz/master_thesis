@@ -23,8 +23,9 @@ void main(void)
 	float center_lin_depth = texture(linearDepth, tex_coord).x;
 
 		
-	if (center_lin_depth > 0.99)
+	if (center_lin_depth > 0.99) {
 		discard;
+	}
 
 	float pointSize = maxPointSize / (center_lin_depth * farDist);	// good approximation when near close to 0.0;
 	int filterIndex = clamp(int(floor((pointSize * filterSizeMult) / 2.0)), 0, maxFilter);

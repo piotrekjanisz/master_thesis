@@ -8,20 +8,35 @@ const std::string ScreenSpaceParticleRenderer::PARAM_THICKNESS_GAUSS_SIZE("thick
 const std::string ScreenSpaceParticleRenderer::PARAM_THICKNESS_GAUSS_SIGMA("thickness gauss sigma");
 const std::string ScreenSpaceParticleRenderer::PARAM_PARTICLE_THICKNESS("particle thickness");
 const std::string ScreenSpaceParticleRenderer::PARAM_THICKNESS_SIZE("thickness texture size");
+const std::string ScreenSpaceParticleRenderer::PARAM_MIN_DENSITY("min density");
+const std::string ScreenSpaceParticleRenderer::PARAM_NORMAL_DENSITY("normal density");
+const std::string ScreenSpaceParticleRenderer::PARAM_MAX_PARTICLE_SIZE("max particle size");
+const std::string ScreenSpaceParticleRenderer::PARAM_REFRACTION_MULT("refraction multiplier");
+const std::string ScreenSpaceParticleRenderer::PARAM_PARTICLE_THICKNESS_EXP("particle thickness exponent");
 
 ScreenSpaceParticleRenderer::ScreenSpaceParticleRenderer(AbstractScene* scene)
 	: ParticleRenderer(scene),
-	_particleSize(150.0f), 
+	_particleSize(120.0f), 
+	_maxParticleSize(120.0f),
 	_thicknessGaussSize(21),
 	_thicknessGaussSigma(40.0),
 	_particleThickness(0.05f),
-	_thicknessTextureSize(0.5f)
+	_thicknessTextureSize(0.5f),
+	_minDensity(300.0f),
+	_normalDensity(800.0f),
+	_refractionMult(-0.03f),
+	_particleThicknessExp(1)
 {
 	_parameterNames.insert(PARAM_PARTICLE_SIZE);
 	_parameterNames.insert(PARAM_THICKNESS_GAUSS_SIZE);
 	_parameterNames.insert(PARAM_THICKNESS_GAUSS_SIGMA);
 	_parameterNames.insert(PARAM_PARTICLE_THICKNESS);
 	_parameterNames.insert(PARAM_THICKNESS_SIZE);
+	_parameterNames.insert(PARAM_MIN_DENSITY);
+	_parameterNames.insert(PARAM_NORMAL_DENSITY);
+	_parameterNames.insert(PARAM_MAX_PARTICLE_SIZE);
+	_parameterNames.insert(PARAM_REFRACTION_MULT);
+	_parameterNames.insert(PARAM_PARTICLE_THICKNESS_EXP);
 }
 
 
@@ -125,6 +140,7 @@ void ScreenSpaceParticleRenderer::setupThicknessGauss()
 
 	Filters::createGauss1D(_thicknessGaussSize, 1.0, _thicknessGaussSigma, gaussData);
 	Filters::normalize(gaussData, 1, _thicknessGaussSize);
+	CHECK_GL_CMD(_gaussDist1DTexture->resize1D(_thicknessGaussSize));
 	CHECK_GL_CMD(_gaussDist1DTexture->load1DFloatDataNoMipMap(GL_DEPTH_COMPONENT32, _thicknessGaussSize, 0, GL_DEPTH_COMPONENT, gaussData));
 }
 
@@ -175,18 +191,33 @@ bool ScreenSpaceParticleRenderer::changeParameter(const std::string& parameter, 
 		PRINT_PARAM(_particleSize);
 	} else if (parameter == PARAM_THICKNESS_GAUSS_SIZE) {
 		_thicknessGaussSize += sign * 2;
-		PRINT_PARAM(_thicknessGaussSigma);
+		PRINT_PARAM(_thicknessGaussSize);
 		setupThicknessGauss();
 	} else if (parameter == PARAM_THICKNESS_GAUSS_SIGMA) {
-		_thicknessGaussSigma += sign * 0.01;
+		_thicknessGaussSigma += sign * 0.5;
 		PRINT_PARAM(_thicknessGaussSigma);
 	} else if (parameter == PARAM_PARTICLE_THICKNESS) {
 		_particleThickness += sign * 0.001;
 		PRINT_PARAM(_particleThickness);
 	} else if (parameter == PARAM_THICKNESS_SIZE) {
-		_thicknessGaussSize += sign * (0.05);
+		_thicknessGaussSize += sign * 0.05;
 		resize(_scene->getWidth(), _scene->getHeight());
 		PRINT_PARAM(_thicknessGaussSize);
+	} else if (parameter == PARAM_MAX_PARTICLE_SIZE) {
+		_maxParticleSize += sign * 1.0;
+		PRINT_PARAM(_maxParticleSize);
+	} else if (parameter == PARAM_MIN_DENSITY) {
+		_minDensity += sign * 1.0;
+		PRINT_PARAM(_minDensity);
+	} else if (parameter == PARAM_NORMAL_DENSITY) {
+		_normalDensity += sign * 1.0;
+		PRINT_PARAM(_normalDensity);
+	} else if (parameter == PARAM_REFRACTION_MULT) {
+		_refractionMult += sign * 0.005;
+		PRINT_PARAM(_refractionMult);
+	} else if (parameter == PARAM_PARTICLE_THICKNESS_EXP) {
+		_particleThicknessExp += sign * 1;
+		PRINT_PARAM(_particleThicknessExp);
 	} else {
 		return false;
 	}
@@ -219,8 +250,12 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	_waterThicknessShader->useThis();
 	CHECK_GL_CMD(_waterThicknessShader->setUniformMat4f("projectionMatrix", _scene->getProjectionMatrix()));
 	CHECK_GL_CMD(_waterThicknessShader->setUniformMat4f("modelViewMatrix", _scene->getViewMatrix()));
-	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("pointSize", _particleSize));
+	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("pointSize", _particleSize * _thicknessTextureSize));
+	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("maxPointSize", _maxParticleSize * _thicknessTextureSize));
 	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("particleDepth", _particleThickness));
+	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("minDensity", _minDensity));
+	CHECK_GL_CMD(_waterThicknessShader->setUniform1f("normalDensity", _normalDensity));	
+	CHECK_GL_CMD(_waterThicknessShader->setUniform1i("particleDepthExp", _particleThicknessExp));
 	CHECK_GL_CMD(_water->render(particleData.particleCount, GL_POINTS, _waterThicknessShader));
 
 	CHECK_GL_CMD(_waterThicknessFB->detachTexture2D(GL_DEPTH_ATTACHMENT));
@@ -246,6 +281,10 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	CHECK_GL_CMD(_waterShader->setUniformMat4f("projectionMatrix", _scene->getProjectionMatrix()));
 	CHECK_GL_CMD(_waterShader->setUniformMat4f("modelViewMatrix", _scene->getViewMatrix()));
 	CHECK_GL_CMD(_waterShader->setUniform1f("pointSize", _particleSize));
+	CHECK_GL_CMD(_waterShader->setUniform1f("minDensity", _minDensity));
+	CHECK_GL_CMD(_waterShader->setUniform1f("normalDensity", _normalDensity));
+	CHECK_GL_CMD(_waterShader->setUniform1f("maxPointSize", _maxParticleSize));
+	CHECK_GL_CMD(_waterShader->setUniform1i("particleDepthExp", _particleThicknessExp));
 	CHECK_GL_CMD(_water->render(particleData.particleCount, GL_POINTS, _waterShader));
 	
 	// smooth water
@@ -258,7 +297,7 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 
-	//CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_thicknessAuxTexture, GL_TEXTURE0));
+	//CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_waterLinDetphTexture, GL_TEXTURE0));
 	//CHECK_GL_CMD(_grayscaleIntermediateQuad->render());
 	
 	CHECK_GL_CMD(_finalQuad->attachTexture(_waterDepthTexture, GL_TEXTURE0));
@@ -272,6 +311,7 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("far", _scene->getZFar()));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform4f("lightDirection", _scene->getLightInEyeSpace()));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / _scene->getWidth(), 1.0f / _scene->getHeight()));
+	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("refractionMult", _refractionMult));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
 	CHECK_GL_CMD(_finalQuad->render());
 }

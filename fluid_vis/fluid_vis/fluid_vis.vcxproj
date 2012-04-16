@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClCompile Include="AbstractScene.cpp" />
     <ClCompile Include="BaseException.cpp" />
+    <ClCompile Include="BilateralGaussParticleRenderer.cpp" />
     <ClCompile Include="CameraFrame.cpp" />
     <ClCompile Include="CurvatureFlowParticleRenderer.cpp" />
     <ClCompile Include="DebugData.cpp" />
@@ -104,6 +105,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BaseException.h" />
+    <ClInclude Include="BilateralGaussParticleRenderer.h" />
     <ClInclude Include="CameraFrame.h" />
     <ClInclude Include="CurvatureFlowParticleRenderer.h" />
     <ClInclude Include="data_types.h" />

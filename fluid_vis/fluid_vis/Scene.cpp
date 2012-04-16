@@ -721,18 +721,6 @@ void Scene::renderBilateralGauss(NxScene* physicsScene)
 	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
 	CHECK_GL_CMD(_screenQuad->render());
 
-	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture, GL_COLOR_ATTACHMENT0));
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);	
-	CHECK_GL_CMD(_screenQuad->attachTexture(_smoothedTexture2, GL_TEXTURE0));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / getWidth(), 0.0));
-	CHECK_GL_CMD(_screenQuad->render());
-
-	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_smoothedTexture2, GL_COLOR_ATTACHMENT0));
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);	
-	CHECK_GL_CMD(_screenQuad->attachTexture(_smoothedTexture, GL_TEXTURE0));
-	CHECK_GL_CMD(_screenQuad->getShaderProgram()->setUniform2f("coordStep", 0.0f, 1.0f / getHeight()));
-	CHECK_GL_CMD(_screenQuad->render());
-
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	
 	// put water together with rest of the scene

@@ -34,5 +34,4 @@ void main(void)
 	gl_FragDepth = depth;
 	//fragColor = (clipSpacePos.z + 1.0) / 100.0;
 	fragColor = (clipSpacePos.w) / 100.0;
-
 }

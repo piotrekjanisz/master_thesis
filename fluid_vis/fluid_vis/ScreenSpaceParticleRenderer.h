@@ -16,6 +16,11 @@ private: // constants
 	static const std::string PARAM_THICKNESS_GAUSS_SIGMA;
 	static const std::string PARAM_PARTICLE_THICKNESS;
 	static const std::string PARAM_THICKNESS_SIZE;
+	static const std::string PARAM_MIN_DENSITY;
+	static const std::string PARAM_NORMAL_DENSITY;
+	static const std::string PARAM_MAX_PARTICLE_SIZE;
+	static const std::string PARAM_REFRACTION_MULT;
+	static const std::string PARAM_PARTICLE_THICKNESS_EXP;
 
 private: // auxiliary functions
 	bool setupShaders();
@@ -31,6 +36,12 @@ protected: // rendering parameters
 	float _thicknessGaussSigma;
 	float _thicknessGaussSize;
 	float _thicknessTextureSize;
+
+	float _minDensity;
+	float _normalDensity;
+	float _maxParticleSize;
+	int _particleThicknessExp;
+	float _refractionMult;
 
 protected: // graphic objects
 	// FrameBuffers
