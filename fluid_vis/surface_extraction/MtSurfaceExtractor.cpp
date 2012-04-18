@@ -3,11 +3,12 @@
 #include <cstdlib>
 #include <boost/make_shared.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
+#include <boost/thread/condition_variable.hpp>
 
 using namespace std;
 
 MtSurfaceExtractor::MtSurfaceExtractor(const SurfaceExtractorDesc& desc)
-	: _desc(desc), _workers(0), _threads(0)
+	: _desc(desc), _workers(0), _threads(0), _running(true)
 {
 	_blocksX = ceil((_desc.xMax - _desc.xMin) / _desc.blockSize);
 	_blocksY = ceil((_desc.yMax - _desc.yMin) / _desc.blockSize);
@@ -42,10 +43,21 @@ MtSurfaceExtractor::MtSurfaceExtractor(const SurfaceExtractorDesc& desc)
 	}
 
 	_threads = new boost::thread[desc.threads];
+	for (int i = 0; i < _desc.threads; i++) {
+		_threads[i] = boost::thread(boost::ref(*_workers[i]));
+	}
 }
 
 MtSurfaceExtractor::~MtSurfaceExtractor()
 {
+	_running = false;
+	_currentBlock = _blocks.size() + 1;
+
+	for (int i = 0; i < _desc.threads; i++) {
+		_workers[i]->start();
+		_threads[i].join();
+	}
+
 	if (_workers)
 		delete [] _workers;
 	if (_threads)
@@ -128,10 +140,15 @@ void MtSurfaceExtractor::extractSurface(float* particles, int particlesCount, in
 
 	_currentBlock = 0;
 
-	// fire threads
+	// fire workers
 	for (int i = 0; i < _desc.threads; i++) {
-		_threads[i] = boost::thread(boost::ref(*_workers[i]));
+		_workers[i]->start();
 	}
+}
+
+bool MtSurfaceExtractor::isRunning()
+{
+	return _running;
 }
 
 Block* MtSurfaceExtractor::getNextBlock()
@@ -157,7 +174,7 @@ void MtSurfaceExtractor::submitMesh(const TriangleMesh& mesh)
 void MtSurfaceExtractor::waitForResults()
 {
 	for (int i = 0; i < _desc.threads; i++) {
-		_threads[i].join();
+		_workers[i]->wait();
 	}
 }
 

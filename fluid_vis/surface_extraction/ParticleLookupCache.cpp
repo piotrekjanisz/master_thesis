@@ -163,6 +163,9 @@ double ParticleLookupCache::getFieldValueAndNormalAt(int x, int y, int z, float*
     double xx = _xMin + x * _cubeSize;
     double yy = _yMin + y * _cubeSize;
     double zz = _zMin + z * _cubeSize;
+
+	double div = 0.0f;
+
 	while (i < column.size() && column[i].midZ <= z + rc_int) {
 		if (column[i].minZ <= z && column[i].maxZ >= z) {
 			float r_vec[3];
@@ -173,17 +176,22 @@ double ParticleLookupCache::getFieldValueAndNormalAt(int x, int y, int z, float*
 			double tmp = r / FAC;
 			double val = tmp*tmp - tmp + 0.25;
 			retVal += val;
+			div += val;
 
 			if (r > 0) {
 				MyMath::vec_normalize(r_vec);
+				if (val == 0.0) {
+					MyMath::vec_add_scaled(normal, r_vec, 0.01);
+					div += 0.01;
+				}
 			}
 			MyMath::vec_add_scaled(normal, r_vec, val);
 		}
 		i++;
 	}
 
-	if (retVal > 0) {
-		MyMath::vec_divide(normal, retVal);
+	if (div > 0) {
+		MyMath::vec_divide(normal, div);
 	}
 
 	return retVal;

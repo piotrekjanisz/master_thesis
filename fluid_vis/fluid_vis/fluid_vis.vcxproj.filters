@@ -99,6 +99,9 @@
     <ClCompile Include="BilateralGaussParticleRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IsosurfaceParticleRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -180,6 +183,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BilateralGaussParticleRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IsosurfaceParticleRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -296,6 +302,9 @@
       <Filter>shaders\debug</Filter>
     </None>
     <None Include="resources\shaders\copy_texture_to_depth_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\copy_color_and_depth_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

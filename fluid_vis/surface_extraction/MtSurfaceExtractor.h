@@ -13,6 +13,7 @@
 #include <set>
 #include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
+#include <boost/thread/condition_variable.hpp>
 
 
 class MtSurfaceExtractor : public IWorkCoordinator
@@ -43,6 +44,7 @@ class MtSurfaceExtractor : public IWorkCoordinator
 	boost::mutex _meshesMutex;
 	boost::mutex _blocksMutex;
 
+	bool _running;
 private: //methods
 	void initNbrs();
 
@@ -73,5 +75,6 @@ public:
 
 	virtual Block* getNextBlock();
 	virtual void submitMesh(const TriangleMesh& mesh);
+	virtual bool isRunning();
 };
 

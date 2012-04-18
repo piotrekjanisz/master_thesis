@@ -4,16 +4,11 @@
 #include "SurfaceExtractor.h"
 #include "data_types.h"
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/mutex.hpp>
 
 class SurfaceExtractorWorker
 {
-public:
-	SurfaceExtractorWorker(const SurfaceExtractorDesc& desc, IWorkCoordinator* coordinator);
-
-	~SurfaceExtractorWorker();
-
-	void operator()();
-
 private: // classes
 	class Buffer
 	{
@@ -87,6 +82,10 @@ private: // methods
 		return _buffers[_currentBuffer];
 	}
 
+	void waitForStart();
+
+	void notifyDone();
+
 private: // fields
 	boost::shared_ptr<Buffer> _buffers[2];
 	int _currentBuffer;
@@ -94,4 +93,19 @@ private: // fields
 	SurfaceExtractor _surfaceExtractor;
 
 	IWorkCoordinator* _coordinator;
+
+	bool _isRunning;
+
+	boost::mutex _isRunningMutex;
+	boost::condition_variable _isRunningCondition;
+
+public:
+	SurfaceExtractorWorker(const SurfaceExtractorDesc& desc, IWorkCoordinator* coordinator);
+
+	~SurfaceExtractorWorker();
+
+	void operator()();
+
+	void wait();
+	void start();
 };

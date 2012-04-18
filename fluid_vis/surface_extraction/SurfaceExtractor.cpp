@@ -26,7 +26,7 @@ SurfaceExtractor::SurfaceExtractor(const SurfaceExtractorDesc& desc)
 {
 	_slabs.resize(_zSize);
 	_slices.resize(_zSize + 1);
-	_sliceAllocator = SliceAllocator::getNewAllocator(_xSize+1, _ySize+1, 10);
+	_sliceAllocator = SliceAllocator::getNewAllocator(_xSize+1, _ySize+1, 20);
 }
 
 SurfaceExtractor::~SurfaceExtractor()

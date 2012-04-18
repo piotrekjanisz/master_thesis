@@ -58,7 +58,7 @@ bool Scene2::setupFramebuffers()
 {
 	_sceneFrameBuffer = boost::make_shared<FrameBuffer>();
 	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneColorTexture, GL_COLOR_ATTACHMENT0));
-	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneDepthTexture, GL_DEPTH_ATTACHMENT))
+	CHECK_GL_CMD(_sceneFrameBuffer->attachTexture2D(_sceneDepthTexture, GL_DEPTH_ATTACHMENT));
 	return true;
 }
 

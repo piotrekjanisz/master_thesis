@@ -97,6 +97,9 @@ float MyMath::vec_angle(const float* v1, const float* v2)
 	return acos(vec_cosinus(v1, v2));
 }
 
+/**
+ * Computes (x1, y1, z1) - (x2, y2, z2) and stores in result
+ */
 void MyMath::vec_create(float* result, float x1, float y1, float z1, float x2, float y2, float z2)
 {
 	result[0] = x1 - x2;

@@ -88,6 +88,7 @@
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GfxObject.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
+    <ClCompile Include="IsosurfaceParticleRenderer.cpp" />
     <ClCompile Include="MyFluid.cpp" />
     <ClCompile Include="ConfigurationFactory.cpp" />
     <ClCompile Include="ParticleRenderer.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GfxObject.h" />
     <ClInclude Include="GfxStaticObject.h" />
+    <ClInclude Include="IsosurfaceParticleRenderer.h" />
     <ClInclude Include="MyFluid.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="ConfigurationFactory.h" />
@@ -137,6 +139,7 @@
     <None Include="resources\config\sample.cfg" />
     <None Include="resources\config\water1.cfg" />
     <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
+    <None Include="resources\shaders\copy_color_and_depth_fragment.glsl" />
     <None Include="resources\shaders\copy_texture_to_depth_fragment.glsl" />
     <None Include="resources\shaders\curvature_flow2.glsl" />
     <None Include="resources\shaders\curvature_flow_fragment.glsl" />

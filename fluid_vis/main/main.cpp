@@ -26,6 +26,7 @@
 #include <fluid_vis/CurvatureFlowParticleRenderer.h>
 #include <fluid_vis/ScreenSpaceParticleRenderer.h>
 #include <fluid_vis/BilateralGaussParticleRenderer.h>
+#include <fluid_vis/IsosurfaceParticleRenderer.h>
 
 using namespace std;
 
@@ -213,7 +214,8 @@ GLUSboolean init(GLUSvoid)
 	glEnable(GL_CULL_FACE);
 	createFluid();
 	//g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new CurvatureFlowParticleRenderer(&g_scene2)));
-	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new BilateralGaussParticleRenderer(&g_scene2)));
+	//g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new BilateralGaussParticleRenderer(&g_scene2)));
+	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new IsosurfaceParticleRenderer(&g_scene2)));
 	initKeyController();
 	return g_scene2.setup();
 }
@@ -230,6 +232,7 @@ GLUSboolean update(GLUSfloat time)
 	g_NxScene->simulate(1.0f / 60.0f);
 	
 	g_scene2.render(g_NxScene);
+	glFlush();
 	//if (g_useSurfaceExtraction)
 	//	g_scene.renderIsoSurface(g_NxScene);
 	//else 
@@ -452,6 +455,7 @@ void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned
 
 int main(int argc, char** argv)
 {
+	try {
 	atexit(releaseNx);
 
 	initNx();
@@ -494,4 +498,14 @@ int main(int argc, char** argv)
 	}
 
 	glusRun();
+	} catch (const std::exception& ex) {
+		std::cerr << "EXCEPTION: " << ex.what() << std::endl;
+		return 1;
+	} catch (const std::string& ex) {
+		std::cerr << "EXCEPTION: " << ex << std::endl;
+	} catch (const char* ex) {
+		std::cerr << "EXCEPTION: " << ex << std::endl;
+	} catch (...) {
+		std::cerr << "UNDEFINED EXCEPTION" << std::endl;
+	}
 }
