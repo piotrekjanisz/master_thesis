@@ -220,9 +220,6 @@
     <None Include="resources\shaders\gaussian_blur_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="resources\shaders\normalization_vertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="resources\shaders\pass_through_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
@@ -305,6 +302,15 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="resources\shaders\copy_color_and_depth_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\clipspace_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\linear_depth_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\water_surface_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

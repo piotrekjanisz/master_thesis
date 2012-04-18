@@ -3,14 +3,11 @@
 in vec3 fNormal;
 in vec3 fEye;
 out vec4 fragColor;
+uniform sampler2D sceneTexture;
+uniform vec2 screenSize;
 
 void main(void)
-{/*
-	float diffuseIntensity = max(0.0f, dot(fNormal, normalize(vec3(1.0f, 1.0f, 1.0f))));
-	vec4 color = vec4(1.0, 0.0, 0.0, 1.0);
-	//fragColor = vec4(0.1f, 0.1f, 0.1f, 1.0f) + vec4(1.0f, 0.0f, 0.0f, 1.0f) * diffuseIntensity;
-	fragColor = color * diffuseIntensity;
-*/
+{
 	float diffuseIntensity;
 	float specularItensity;
 
@@ -20,6 +17,8 @@ void main(void)
 	vec3 eye;
 	
 	vec3 reflection;
+
+	vec2 tex_coord = gl_FragCoord.xy / screenSize;
 
 	light = normalize(vec3(5.0, 5.0, 5.0));
 
@@ -31,5 +30,9 @@ void main(void)
 	reflection = normalize(reflect(-light, normal));
 	specularItensity = pow(clamp(max(dot(reflection, eye), 0.0), 0.0, 1.0), 5.0 );
 
-	fragColor = vec4(0.0, 0.0, 0.0, 1.0) + vec4(0.1, 0.1, 0.1, 1.0) + vec4(1.0, 0.0, 0.0, 1.0)*diffuseIntensity + vec4(1.0, 0.9, 0.9, 1.0)*specularItensity;
+	vec4 water_color = vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0);
+	fragColor = mix(water_color, texture(sceneTexture, 0.1 * normal.xy + tex_coord), 0.9);
+	fragColor +=  vec4(1.0, 0.9, 0.9, 1.0)*specularItensity;
+
+	//fragColor = vec4(0.0, 0.0, 0.0, 1.0) + vec4(0.1, 0.1, 0.1, 1.0) + vec4(1.0, 0.0, 0.0, 1.0)*diffuseIntensity + vec4(1.0, 0.9, 0.9, 1.0)*specularItensity;
 }

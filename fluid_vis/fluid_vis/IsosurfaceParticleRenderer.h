@@ -21,14 +21,12 @@ private:
 	std::set<std::string> _parameters;
 
 private: // graphic objects
-	FrameBufferPtr _frameBuffer;
-
 	ShaderProgramPtr _sceneShader;
 	ShaderProgramPtr _waterShader;
 
 	ScreenQuadPtr _screenQuad;
 
-	GfxObjectPtr _isoWater;
+	GfxObjectPtr _isoWater;	
 public:
 	IsosurfaceParticleRenderer(AbstractScene* scene);
 	~IsosurfaceParticleRenderer(void);

@@ -148,13 +148,15 @@
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
     <None Include="resources\shaders\draw_image_fragment.glsl" />
     <None Include="resources\shaders\edge_detection_fragment.glsl" />
+    <None Include="resources\shaders\clipspace_vertex.glsl" />
     <None Include="resources\shaders\final_stage_fragment.glsl" />
     <None Include="resources\shaders\final_stage_fragment2.glsl" />
     <None Include="resources\shaders\fragment.glsl" />
     <None Include="resources\shaders\gaussian_blur_fragment.glsl" />
     <None Include="resources\shaders\light_source_fragment.glsl" />
     <None Include="resources\shaders\light_source_vertex.glsl" />
-    <None Include="resources\shaders\normalization_vertex.glsl" />
+    <None Include="resources\shaders\linear_depth_fragment.glsl" />
+    <None Include="resources\shaders\water_surface_vertex.glsl" />
     <None Include="resources\shaders\normal_map_fragment.glsl" />
     <None Include="resources\shaders\normal_map_vertex.glsl" />
     <None Include="resources\shaders\pass_through_vertex.glsl" />
