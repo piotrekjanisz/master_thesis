@@ -6,7 +6,8 @@
 #include <iostream>
 
 Scene2::Scene2()
-	: AbstractScene()
+	: AbstractScene(),
+	_particlesToShutDown(0)
 {
 	// no OpenGL code here!!
 }
@@ -125,7 +126,9 @@ bool Scene2::setup()
 		return false;
 	}
 	
-	translate(0.0f, 5.0f, -20.0f);
+	translate(-2.0f, 5.0f, -5.0f);
+	rotateY(-0.5f);
+	rotateX(-0.5f);
 
 	if (! setupTextures())
 		return false;
@@ -232,4 +235,6 @@ void Scene2::render(NxScene* physicsScene)
 void Scene2::displayAdditionalStats()
 {
 	std::cout << "PARTICLE COUNT: " << _particleCount << std::endl;
+	if (_particlesToShutDown > 0 && _particleCount > _particlesToShutDown)
+		exit(0);
 }

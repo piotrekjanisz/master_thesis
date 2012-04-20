@@ -30,6 +30,13 @@
 
 using namespace std;
 
+
+enum RenderingMode {
+	BILATERAL_GAUSS,
+	CURVATURE_FLOW,
+	ISOSURFACE_EXTRACTION
+};
+
 //Scene g_scene;
 Scene2 g_scene2;
 
@@ -40,11 +47,16 @@ static ConfigurationFactory configurationFactory("config");
 
 ParameterControllerPtr g_renderingParameterController;
 
-bool g_useSurfaceExtraction = false;
+RenderingMode g_renderingMode;
 
 bool g_gpuAccelerationPossible = false;
 
 bool g_useGPUAcceleration = true;
+
+int g_screenWidth;
+int g_screenHeight;
+
+int g_maxParticles;
 
 void createFluid() 
 {	
@@ -68,62 +80,6 @@ void createFluid()
 		};
 		emitterDesc.relPose.setRowMajor44(data);
 		gFluid->createEmitter(emitterDesc);
-
-		/*
-		float data2[] = {
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.3f, 
-			1.0f, 1.0f, 0.0f, 0.0f, 
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-		emitterDesc.relPose.setRowMajor44(data2);
-		gFluid->createEmitter(emitterDesc);
-		
-		float data3[] = {
-			1.0f, 0.0f, 0.0f, -0.3f,
-			0.0f, 0.0f, 1.0f, 0.3f, 
-			1.0f, 1.0f, 0.0f, 0.0f, 
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-		emitterDesc.relPose.setRowMajor44(data3);
-		gFluid->createEmitter(emitterDesc);
-		
-		float data4[] = {
-			1.0f, 0.0f, 0.0f, 0.3f,
-			0.0f, 0.0f, 1.0f, 0.3f, 
-			1.0f, 1.0f, 0.0f, -0.3f, 
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-		emitterDesc.relPose.setRowMajor44(data4);
-		gFluid->createEmitter(emitterDesc);
-		
-		float data5[] = {
-			1.0f, 0.0f, 0.0f, 0.3f,
-			0.0f, 0.0f, 1.0f, 0.3f, 
-			1.0f, 1.0f, 0.0f, 0.3f, 
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-		emitterDesc.relPose.setRowMajor44(data5);
-		gFluid->createEmitter(emitterDesc);
-		
-		float data6[] = {
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.3f, 
-			1.0f, 1.0f, 0.0f, 0.3f, 
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-		emitterDesc.relPose.setRowMajor44(data6);
-		gFluid->createEmitter(emitterDesc);
-		
-		float data7[] = {
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.3f, 
-			1.0f, 1.0f, 0.0f, -0.3f, 
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-		emitterDesc.relPose.setRowMajor44(data7);
-		gFluid->createEmitter(emitterDesc);
-		*/
 	} catch (std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 	} catch (...) {
@@ -213,9 +169,23 @@ GLUSboolean init(GLUSvoid)
 {
 	glEnable(GL_CULL_FACE);
 	createFluid();
-	//g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new CurvatureFlowParticleRenderer(&g_scene2)));
-	//g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new BilateralGaussParticleRenderer(&g_scene2)));
-	g_scene2.setParticleRenderer(boost::shared_ptr<ParticleRenderer>(new IsosurfaceParticleRenderer(&g_scene2)));
+
+	boost::shared_ptr<ParticleRenderer> renderer;
+	switch (g_renderingMode) {
+	case BILATERAL_GAUSS:
+		renderer = boost::shared_ptr<ParticleRenderer>(new BilateralGaussParticleRenderer(&g_scene2));
+		break;
+	case CURVATURE_FLOW:
+		renderer = boost::shared_ptr<ParticleRenderer>(new CurvatureFlowParticleRenderer(&g_scene2));
+		break;
+	case ISOSURFACE_EXTRACTION:
+		renderer = boost::shared_ptr<ParticleRenderer>(new IsosurfaceParticleRenderer(&g_scene2));
+		break;
+	}
+
+	g_scene2.setParticleRenderer(renderer);
+	g_scene2.setParticlesToShutDown(g_maxParticles);
+
 	initKeyController();
 	return g_scene2.setup();
 }
@@ -233,13 +203,7 @@ GLUSboolean update(GLUSfloat time)
 	
 	g_scene2.render(g_NxScene);
 	glFlush();
-	//if (g_useSurfaceExtraction)
-	//	g_scene.renderIsoSurface(g_NxScene);
-	//else 
-	//	g_scene.render(g_NxScene);
-	//	//g_scene.renderCurvatureFlow(g_NxScene);
-	//	//g_scene.renderBilateralGauss(g_NxScene);
-	
+
 	g_NxScene->flushStream();
 	g_NxScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 	
@@ -273,60 +237,6 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 		g_renderingParameterController->printMappings();
 	} else {
 		g_renderingParameterController->keyPressed(key);
-	//} else if (key == KEY_1) {
-	//	g_scene.changeParticleSize(-1.0f);
-	//} else if (key == KEY_2) {
-	//	g_scene.changeParticleSize(1.0f);
-	//} else if (key == KEY_3) {
-	//	g_scene.changeEdgeTreshold(-1.0f);
-	//	g_scene.changeBilateralTreshold(-0.0005);
-	//} else if (key == KEY_4) {
-	//	g_scene.changeEdgeTreshold(1.0f);
-	//	g_scene.changeBilateralTreshold(0.0005);
-	//} else if (key == KEY_5) {
-	//	g_scene.changeGauss(0, -0.5);
-	//} else if (key == KEY_6) {
-	//	g_scene.changeGauss(0,  0.5);
-	//} else if (key == KEY_7) {
-	//	g_scene.changeGauss(-1, 0.0);
-	//} else if (key == KEY_8) {
-	//	g_scene.changeGauss( 1, 0.0);
-	//} else if (key == '-') {
-	//	g_scene.changeAdditionalBlurPhases(-1);
-	//} else if (key == '+') {
-	//	g_scene.changeAdditionalBlurPhases(1);
-	//} else if (key == '[') {
-	//	g_scene.changeDepthGauss(-1, 0);
-	//} else if (key == ']') {
-	//	g_scene.changeDepthGauss(1, 0);
-	//} else if (key == 'o') {
-	//	g_scene.changeDepthGauss(0, -0.5);
-	//} else if (key == 'p') {
-	//	g_scene.changeDepthGauss(0, 0.5);
-	//} else if (key == 'k') {
-	//	g_scene.changeParticleDepth(-0.001);
-	//} else if (key == 'l') {
-	//	g_scene.changeParticleDepth(0.001);
-	//} else if (key == 'm') {
-	//	g_scene.changeFilterSizeMult(-0.05);
-	//} else if (key == 'n') {
-	//	g_scene.changeFilterSizeMult(0.05);
-	//} else if (key == '<') {
-	//	g_scene.changeTimeStep(-1.0f);
-	//} else if (key == '>') {
-	//	g_scene.changeTimeStep(1.0f);
-	//} else if (key == 'w') {
-	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, -0.5f, 0.0f));
-	//} else if (key == 's') {
-	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.0f, 0.5f, 0.0f));
-	//} else if (key == 'a') {
-	//	g_scene.changeLightPosition(vmml::vec4f(-0.5f, 0.0f, 0.0f, 0.0f));
-	//} else if (key == 'f') {
-	//	g_scene.changeLightPosition(vmml::vec4f(0.5f, 0.0f, 0.0f, 0.0f));
-	//} else if (key == 'z') {
-	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, -0.5f, 0.0f, 0.0f));
-	//} else if (key == 'x') {
-	//	g_scene.changeLightPosition(vmml::vec4f(0.0f, 0.5f, 0.0f, 0.0f));
 	}
 }
 
@@ -453,51 +363,84 @@ void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned
 	g_scene2.translate(0.0f, 0.0f, ticks * TICK_FACTOR);
 }
 
+void printUsage()
+{
+	std::cout << "main.exe [bilateral_gauss | curvature_flow | isosurface] <screen_width> <screen_height> <max_particles>" << std::endl;
+}
+
+void parseCommandLine(int argc, char** argv)
+{
+	if (argc < 5) {
+		printUsage();
+		exit(1);
+	}
+
+	char* renderingMode = argv[1];
+	if (strcmp(renderingMode, "bilateral_gauss") == 0) {
+		g_renderingMode = RenderingMode::BILATERAL_GAUSS;
+	} else if (strcmp(renderingMode, "curvature_flow") == 0) {
+		g_renderingMode = RenderingMode::CURVATURE_FLOW;
+	} else if (strcmp(renderingMode, "isosurface") == 0) {
+		g_renderingMode = RenderingMode::ISOSURFACE_EXTRACTION;
+	} else {
+		std::cout << "WARNING: rendering mode \"" << renderingMode << "\" not recognized" << std::endl;
+		std::cout << "Using \"bilateral_gauss\"" << std::endl;
+		g_renderingMode = RenderingMode::BILATERAL_GAUSS;
+	}
+
+	g_screenWidth = atoi(argv[2]);
+	g_screenHeight = atoi(argv[3]);
+
+	g_maxParticles = atoi(argv[4]);
+}
+
 int main(int argc, char** argv)
 {
+	parseCommandLine(argc, argv);
+
 	try {
-	atexit(releaseNx);
+		atexit(releaseNx);
 
-	initNx();
+		initNx();
 
-	glusInitFunc(init);
+		glusInitFunc(init);
 
-	glusReshapeFunc(reshape);
+		glusReshapeFunc(reshape);
 
-	glusUpdateFunc(update);
+		glusUpdateFunc(update);
 
-	glusTerminateFunc(terminate);
+		glusTerminateFunc(terminate);
 
-	glusKeyFunc(keyFunc);
+		glusKeyFunc(keyFunc);
 
-	glusMouseMoveFunc(mouseMoveFunc);
+		glusMouseMoveFunc(mouseMoveFunc);
 
-	glusMouseFunc(mouseFunc);
+		glusMouseFunc(mouseFunc);
 
-	glusMouseWheelFunc(mouseWheelFunc);
+		glusMouseWheelFunc(mouseWheelFunc);
 
-	glusPrepareContext(3, 2, GLUS_FORWARD_COMPATIBLE_BIT);
+		glusPrepareContext(3, 2, GLUS_FORWARD_COMPATIBLE_BIT);
 
-	if (!glusCreateWindow("GLUS Example Window", 640, 480, GLUS_FALSE))
-	{
-		cout << "Could not create window!" << endl;
-		return -1;
-	}
+		if (!glusCreateWindow("GLUS Example Window", g_screenWidth, g_screenHeight, GLUS_FALSE))
+		{
+			cout << "Could not create window!" << endl;
+			return -1;
+		}
 
-	// Init GLEW
-	glewExperimental = GL_TRUE;
-	glewInit();
+		// Init GLEW
+		glewExperimental = GL_TRUE;
+		glewInit();
 
-	// continue only if OpenGL 3.3 is supported.
-	if (!glewIsSupported("GL_VERSION_3_2"))
-	{
-		cout << "OpenGL 3.2 not supported." << endl;
+		// continue only if OpenGL 3.3 is supported.
+		if (!glewIsSupported("GL_VERSION_3_2"))
+		{
+			cout << "OpenGL 3.2 not supported." << endl;
 
-		glusDestroyWindow();
-		return -1;
-	}
+			glusDestroyWindow();
+			return -1;
+		}
 
-	glusRun();
+		glusRun();
 	} catch (const std::exception& ex) {
 		std::cerr << "EXCEPTION: " << ex.what() << std::endl;
 		return 1;

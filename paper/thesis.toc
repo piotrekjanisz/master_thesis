@@ -16,7 +16,7 @@
 \contentsline {subsection}{\numberline {3.1.6}Framebuffer Object}{16}{subsection.3.1.6}
 \contentsline {section}{\numberline {3.2}Boost library}{18}{section.3.2}
 \contentsline {section}{\numberline {3.3}PhysX}{18}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Rigid bodies}{20}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.1}Rigid bodies}{19}{subsection.3.3.1}
 \contentsline {subsection}{\numberline {3.3.2}Fluids}{21}{subsection.3.3.2}
 \contentsline {chapter}{\numberline {4}Rendering techniques}{25}{chapter.4}
 \contentsline {section}{\numberline {4.1}Screen space}{25}{section.4.1}
@@ -26,11 +26,15 @@
 \contentsline {subsubsection}{\numberline {4.1.2.2}Curvature flow smoothing}{31}{subsubsection.4.1.2.2}
 \contentsline {subsection}{\numberline {4.1.3}Thickness}{33}{subsection.4.1.3}
 \contentsline {subsection}{\numberline {4.1.4}Rendering}{34}{subsection.4.1.4}
-\contentsline {section}{\numberline {4.2}Isosurface extraction}{34}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Overview}{34}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Block subdivision}{35}{subsection.4.2.2}
+\contentsline {section}{\numberline {4.2}Isosurface extraction}{35}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Overview}{35}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Block subdivision}{36}{subsection.4.2.2}
 \contentsline {subsection}{\numberline {4.2.3}Block processing}{36}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Lookup cache}{37}{subsection.4.2.4}
-\contentsline {subsection}{\numberline {4.2.5}Normals generation}{39}{subsection.4.2.5}
+\contentsline {subsection}{\numberline {4.2.4}Lookup cache}{39}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Normals generation}{40}{subsection.4.2.5}
 \contentsline {subsection}{\numberline {4.2.6}Multithreading}{41}{subsection.4.2.6}
-\contentsline {chapter}{Bibliography}{43}{chapter*.29}
+\contentsline {subsection}{\numberline {4.2.7}Rendering}{43}{subsection.4.2.7}
+\contentsline {chapter}{\numberline {5}Resuts}{45}{chapter.5}
+\contentsline {section}{\numberline {5.1}Visual appearance}{45}{section.5.1}
+\contentsline {section}{\numberline {5.2}Performance}{45}{section.5.2}
+\contentsline {chapter}{Bibliography}{47}{chapter*.29}

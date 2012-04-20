@@ -15,6 +15,7 @@ class Scene2 : public AbstractScene, Parametrized
 {
 private: // auxiliary parameters
 	int _particleCount;
+	int _particlesToShutDown; // number of particles when program exits
 	std::set<std::string> _parameters;
 
 private: // rendering parameters
@@ -63,6 +64,8 @@ public:
 	virtual void displayAdditionalStats();
 
 	virtual TexturePtr& getEnvironmentTexture();
+
+	void setParticlesToShutDown(int particlesToShutDown) { _particlesToShutDown = particlesToShutDown; }
 
 public: // setters and getters
 	void setParticleRenderer(ParticleRendererPtr renderer)

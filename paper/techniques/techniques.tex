@@ -14,7 +14,7 @@ Similar technique is to extract visible surface by rendering each particle as a 
 
 \section{Screen space} \label{sec:screen_space}
 \figuremacroW{screen_space}{Screen Space Fluid Rendering}{The figure shows high level overview of the method, taken from \cite{Green2010}}{0.7}
-As mentioned before this approach extracts visible surface by rendering each particle into depth buffer. High level overview ot this method is presented on figure~\ref{screen_space} and consists of following steps \cite{laanSainz2009}: rendering depth texture (section~\ref{sec:surfacedepth}) and thickness textures (section~\ref{sec:thickness}), depth smoothing (section~\ref{sec:smoothing}) and assembling fluid surface with rest of the scene (section~\ref{sec:rendering}).
+As mentioned before this approach extracts visible surface by rendering each particle into depth buffer. High level overview ot this method is presented on figure~\ref{screen_space} and consists of following steps \cite{laanSainz2009}: rendering depth texture (section~\ref{sec:surfacedepth}) and thickness textures (section~\ref{sec:thickness}), depth smoothing (section~\ref{sec:smoothing}) and assembling fluid surface with rest of the scene (section~\ref{sec:screenspace_rendering}).
 
 \subsection{Surface depth} \label{sec:surfacedepth}
 To obtain fluid surface visible from the viewpoint of camera each particle is rendered as a sphere into depth texture (figure~\ref{sphere_depth}). At each pixel only closest value is kept using hardware depth test. 
@@ -170,10 +170,37 @@ To modify z values in each iteration Euler integration of equation~\ref{eq:curva
 \subsection{Thickness} \label{sec:thickness}
 This step is computed to determine how opaque is surface in given point. It is achieved by rendering particles as circles into depth buffer with additive blending enabled. Resulting thickness texture is then smoothed with Gaussian filter (this time regular one). In order to speed up rendering process this texture can be rendered with lower resolution and then applied with linear interpolation. 
 
-\subsection{Rendering} \label{sec:rendering}
+\subsection{Rendering} \label{sec:screenspace_rendering}
 Last step assembles fluid surface with background image. As an input it takes smoothed fluid depth texture, thickness texture and texture with rest of the scene rendered. 
+
 First normal vectors have to be computed from smoothed depth texture using finite differences of surface depth $d(x, y)$. This is done as in equation~\ref{eq:view_space_normal}. Finite differences are computed in one direction, except edges to avoid undesirable smoothing (figure TODO). 
-[TODO normal reconstruction, refraction, reflection, thickness]
+
+Shading is done using Fresnel equation and a Phong specular highlight. Output color $C_{out}$ is given by:
+
+\begin{equation}
+\label{shading_equation}
+C_{out} = a (1 - F(n \cdot v)) + b F(n \cdot v) + k_s (n \cdot h)^{\alpha}
+\end{equation}
+
+where $\alpha$ is refracted fluid color, $\beta$ is reflected color, $k_s$ and $\alpha$ are constants for Phong specular highlight, $n$ is a normal vector of the fluid surface, $v$ is view vector (from surface to camera), $h$ is the half vector between light vector and the view vector and $F(n \cdot v)$ is Fresnel function. 
+$F(n \cdot v))$ is computed using Schlick's approximation:
+\begin{equation}
+F(n \cdot v)) = F_0 + (1 - R_0)(1 - n \cdot v)^5
+\end{equation}
+where $F_0$ is the value of reflectance when angle between normal vector and view vector is 0. 
+
+Refracted fluid color $a$ is given by:
+\begin{equation}
+\label{refracted_color}
+a = lerp(C_{fluid}, S(x + \beta n_x, y + \beta n_y), e^{-k T(x, y)})
+\end{equation}
+where $S(x, y)$ texture with rest of the scene, $\beta$ is the parameter which controls how much background scene is refracted, $C_fluid$ is the color of the fluid itself and k is given constant. As can be seen thickness texture is used to control fluid opacity - the thicker fluid is the less opaque it is. Refraction is approximated sampling underlying scene texture $S(x, y)$ with texture coordinates perturbed by normal of the surface. Amount of perturbation is controlled by $\beta$ parameter which depends on thickness:
+\begin{equation}
+\beta = T(x, y) \gamma
+\end{equation}
+where $\gamma$ is a constant which depends on the kind of fluid. 
+
+Reflected color $b$ is computed using environmental mapping. 
 
 \section{Isosurface extraction} \label{sec:isosurfaceextraction}
 Classic algorithm for isosurface extraction is marching cubes (see \cite{LorensenCline1987}). It takes 3d array with scalar field values as an input and produces list of triangles. Algorithm divides space into cubes, and proceeds through scalar field taking one cube at a time (each cube consists of 8 vertices with scalar field values). Field value at each cube vertex is tested to be above or under given threshold and then appropriate triangle configuration is taken from lookup table (there are 256 triangle configurations).
@@ -271,6 +298,14 @@ As mentioned before processing of block is independent of one another. The algor
 
 \figuremacroW{threading_architecture}{Threading architecture}{architecture diagram of parallelization of surface extraction algorithm}{0.7}
 
+\subsection{Rendering}
+Rendering fluid as a mesh is a simpler task since we already have surface and normals. Only one problem arises when fluid has to be rendered with opacity. Traditionally it would require rendering graphic primitives in back to front order with alpha blending enabled. However algorithm used for surface extraction doesn't produce primitives in such order.  \cite{RosenbergBirdwell2008} noted that this algorithm can be transformed to produce primitives with required ordering. Since this modification produces some extra overhead I used different approach - similar to one used in section \ref{sec:screenspace_rendering}.
+
+First background scene is rendered into texture $S(x, y)$. Then when fluid meshes are rendered this texture is sampled with texture coordinates perturbed using normal of the surface. This computation is done in fragment shader. As scene texture cannot be applied to meshes itself but it should be applied to the whole screen texture coordinates are computed in fragment shader based on screen coordinates of fragment:
+\begin{equation}
+(x, y) = (\frac{p_x}{width}, \frac{p_y}{height})
+\end{equation}
+where $(p_x, p_y)$ are screen coordinates of fragment, $width$ and $height$ are dimensions of the screen. 
 % ---------------------------------------------------------------------------
 % ----------------------- end of thesis sub-document ------------------------
 % ---------------------------------------------------------------------------

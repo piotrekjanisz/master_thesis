@@ -133,7 +133,7 @@ void AbstractScene::rotateY(float val)
 void AbstractScene::computeFrameRate()
 {
 	_frameCount++;
-	if (_timer.elapsed() > 5.0) {
+	if (_timer.elapsed() > 1.0) {
 		double frameRate = _frameCount / _timer.elapsed();
 		std::cout << frameRate << "fps" << std::endl;
 		_timer.restart();
