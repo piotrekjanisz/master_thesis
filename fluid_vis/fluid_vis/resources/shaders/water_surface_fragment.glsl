@@ -31,7 +31,7 @@ void main(void)
 	specularItensity = pow(clamp(max(dot(reflection, eye), 0.0), 0.0, 1.0), 5.0 );
 
 	vec4 water_color = vec4(0.0, 10.0/255.0, 79.0/255.0, 1.0);
-	fragColor = mix(water_color, texture(sceneTexture, 0.1 * normal.xy + tex_coord), 0.9);
+	fragColor = mix(water_color, texture(sceneTexture, 0.05 * normal.xy + tex_coord), 0.9);
 	fragColor +=  vec4(1.0, 0.9, 0.9, 1.0)*specularItensity;
 
 	//fragColor = vec4(0.0, 0.0, 0.0, 1.0) + vec4(0.1, 0.1, 0.1, 1.0) + vec4(1.0, 0.0, 0.0, 1.0)*diffuseIntensity + vec4(1.0, 0.9, 0.9, 1.0)*specularItensity;

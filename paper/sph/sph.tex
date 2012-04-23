@@ -15,7 +15,6 @@ This chapter will provide brief introduction to modeling method used in my proje
 %      INTRODUCTION
 \section{Introduction}
 To perform numerical simulation of natural phenomena several steps have to be performed (see \cite[section 1.1.2]{Liu}). First the mathematical model has to be obtained from observation of physical phenomena. The mathematical model consists of a set of governing equations, boundary conditions and initial conditions. Next governing equations have to be discretized in order to solve them with a numerical algorithm.
-For describing physical governing equations two basic techniques exists: Eulerian description and Lagrarian description.
 
 For describing governing equations of fluid flows two basic techniques exists: Lagrarian and Eulerian. In the first one we look at the fluid as a set of parcels which moves though space and time. Each fluid parcel has it's own mass which is fixed, and is identified by it's position $x_0$ at time $t = 0$. We also assume that we can obtain a function of fluid parcels position $x = x(t, x_0)$. This is demonstrated on figure~\ref{eulerian_lagrarian}.
 Eulerian description assumes that we observe fluid that moves through fixed spatial points. Thus we are given velocity field $v$ at every spatial point $x$ and time $t$ - $v = v(x, t)$ (figure~\ref{eulerian_lagrarian}). 
@@ -24,23 +23,23 @@ More on fluid field description can be found in \cite[section 2.1]{Hauke2008} an
 \figuremacro{eulerian_lagrarian}{Different fluid observation techniques}{on the left we can see Eulerian velocity field, on the right Lagrarian pathlines.}
 
 For discretization there are several approaches: grid based (lagrarian grid and eulerian grid) and meshfree methods (SPH, particle in cell).
-Lagrarian grid is attached to material and moves with it. Each mesh cell represents one fluid parcel from Lagrarian description. The advantages of this method are simpler equations given by lagrarian description, less memory usage (as the mesh is specified only where fluid or other material is present), easiness of tracking movement of fluid parcels. However this method does not handle large material deformations over time (like for instance water splashes) well. In such cases mesh must be recomputed and it an expensive procedure.
+Lagrarian grid is attached to material and moves with it. Each mesh cell represents one fluid parcel from Lagrarian description. The advantages of this method are simpler equations given by lagrarian description, less memory usage (as the mesh is specified only where fluid or other material is present), easiness of tracking movement of fluid parcels. However this method does not handle large material deformations well (like for instance water splashes). In such cases mesh must be recomputed periodically and it is an expensive procedure.
 
-Eulerian grid, on the other hand, is fixed in space, and covers entire domain in which fluid can move. In each grid node we calculate mass momentum and energy flux. This method handles large deformations of material easily but its computional complexity is large, especially in three dimensions. The amount of memory require is also large as whole domain must be covered with grid. 
+Eulerian grid, on the other hand, is fixed in space and covers entire domain in which fluid can move. In each grid node we calculate mass momentum and energy flux. This method handles large deformations of material easily but its computional complexity is large, especially in three dimensions. The amount of memory require is also large as whole domain must be covered with grid. 
 
-Third way of discretization are mesh free method. The idea of them is to combine strong points of both eulerian and lagrarian grids, but without using a grid or a mesh. This is done usually by discretizing material as a set of particles. At each particle values of functions, derivatives and integrals are approximated with particle approximations. An example of mesh free method is SPH which will be further described in this chapter. 
+Third way of discretization are mesh free methods. The idea of them is to combine strong points of both eulerian and lagrarian grids, but without using a grid or a mesh. This is done usually by discretizing material as a set of particles. At each particle values of functions, derivatives and integrals are approximated with particle approximations. An example of mesh free method is SPH which will be further described in this chapter. 
 Lagrarian and Eulerian grids as well as meshfree methods are described in more details in \cite[chapter 1]{Liu}
 
 %     FUNDAMENTALS OF SPH
 \section{Fundamentals of SPH}
 
-The main idea of SPH is to replace given field A with it's integral interpolant (or kernel interpolant):
+The main idea of SPH is to replace given field $A$ with it's integral interpolant (or kernel interpolant):
 \begin{equation}
 \label{eq:sph_kernel_interpolant}
 A_I(r) = \int A(r')W(r - r', h)dr'
 \end{equation}
 
-Where W is a smoothing kernel and has following properties:
+Where $W$ is a smoothing kernel and has following properties:
 
 \begin{equation}
 \label{eq:sph_kernel_property_1}
@@ -64,7 +63,7 @@ Integral interpolant \ref{eq:sph_kernel_interpolant} can be further approximated
 A_s(r) = \sum_{b}m_b\frac{A_b}{\rho_b}W(r-r_b,h)
 \end{equation}
 
-where $\frac{m_b}{\rho_b}$ is a volume of particle $b$. What SPH does is it divides space into set of particles, each particle has it's own mass and density. Mass is fixed and density can change thus changing particle's volume. When we want to compute value of A in some point in space $r$ we compute weighted average of A at neighboring particles. Weight depends on distance of particle's center form $r$ and on particles volume. 
+where $\frac{m_b}{\rho_b}$ is a volume of particle $b$. What SPH does is it divides space into set of particles, each particle has it's own mass and density. Mass is fixed and density can change thus changing particle's volume. When we want to compute value of $A$ in some point in space $r$ we compute weighted average of $A$ at neighboring particles. Weight depends on distance of particle's center form $r$ and on particles volume. 
 
 It's also worth noting that \ref{eq:compact_condition} defines finite domain in which smoothing kernel is non-zero. This allows to speed up computations by summing over particles in nearest neighborhood.
 
@@ -76,7 +75,7 @@ Density - $\rho$ - that appears in sumation interpolant \ref{eq:sumation_interpo
 \rho(r) = \sum_{b}m_b\frac{\rho_j}{\rho_j}W(r-r_b, h) = \sum_{b}m_b W(r-r_b, h)
 \end{equation}
 
-In many physical simulations we need to compute gradient of some field A. It turns out that using integral interpolant \ref{eq:sph_kernel_interpolant} we only need to compute gradient of smoothing kernel $W$ (\cite[section 2.2.2]{Liu}):
+In many physical simulations we need to compute gradient of some field $A$. It turns out that using integral interpolant \ref{eq:sph_kernel_interpolant} we only need to compute gradient of smoothing kernel $W$ (\cite[section 2.2.2]{Liu}):
 
 \begin{equation}
 \label{eq:integral_interpolant_gradient}
@@ -91,7 +90,7 @@ As earlier we can aproximate integral with sumation:
 \end{equation}
 This simplifies computations as $W$ is known and it's gradient can be given analitically. 
 
-SPH gives a flexibility in choosing smoothing kernel.Gaussian function would be preferable however it doesn't meet compact condition \ref{eq:compact_condition}. Thus Gaussian-like functions are usually constructed, although any function that satisfies \ref{eq:sph_kernel_property_1}, \ref{eq:sph_kernel_property_2} and \ref{eq:compact_condition} can be used. It is even possible to utilize variable width kernels \cite[section 6]{Monaghan1992} which can be useful in case of large fluctuations in particles distributions. Chapter 3 of \cite{Liu} is entirely devoted to smoothing kernels and their construction, \cite[section 3.5]{Muller2003} discuss usage of different kernels. 
+SPH gives a flexibility in choosing smoothing kernel.Gaussian function would be preferable however it doesn't meet compact condition \ref{eq:compact_condition}. Thus Gaussian-like functions are usually constructed, although any function that satisfies \ref{eq:sph_kernel_property_1}, \ref{eq:sph_kernel_property_2} and \ref{eq:compact_condition} can be used. It is even possible to utilize variable width kernels \cite[section 6]{Monaghan1992} which can be useful in case of large fluctuations in particles distributions. \cite[chapter 3]{Liu} is entirely devoted to smoothing kernels and their construction, \cite[section 3.5]{Muller2003} discuss usage of different kernels. 
 
 
 % SPH FOR FLUIDS
@@ -107,19 +106,19 @@ second one is Navier-Stokes conservation of momentum equation:
 \rho \frac{Dv}{Dt} = -\triangledown p + \mu \triangledown^2v + f^{surface} +  f^{external}
 \end{equation}
 
-Both equations are presented in Lagrarian form. $\frac{D}{Dt}$ is a material derivative (see \cite[section 2.2]{Hauke2008}), $p$ is the pressure, $\mu$ is fluid viscosity, $f^{surface}$ represents surface tension force and $f^{external}$ represents external forces acting on the fluid. Usually external forces consists only of gravity giving $f^{external} = \rho g$
-When using SPH conservation of mass is guaranteed by particles - as mass of the particles does not change. 
+Both equations are presented in Lagrarian form. $\frac{D}{Dt}$ is a material derivative (see \cite[section 2.2]{Hauke2008}), $p$ is the pressure, $\mu$ is fluid viscosity, $f^{surface}$ represents surface tension force and $f^{external}$ represents external forces acting on the fluid. Usually external forces consists only of gravity giving $f^{external} = \rho g$.
+When using SPH, conservation of mass is guaranteed by particles, as mass of the particles does not change. 
 Pressure term $-\triangledown p$  at particle $i$ can be estimated using \ref{eq:sumation_interpolant} as follows:
 \begin{equation}
 \label{eq:sph_pressure_force1}
 -\triangledown p_i = -\sum_{j}m_j \frac{p_j}{\rho_j}\triangledown W(r_i - r_j, h) 
 \end{equation}
-Pressure force computed as above is not symmetric which can be seen when two particles interacts. Gradient of the kernel $W$ is zero at particle's center and thus only particle j contributes to compute pressure of particle i. As densities of particles can be different this may lead to pressure forces will not be symmetric. Many ways of symmetrizing equation \ref{eq:sph_pressure_force1} are proposed in literature (see \cite[section 3.1]{Monaghan1992}, \cite[section 4.3.2]{Liu}). Very simple one was used by \cite{Muller2003}:
+Pressure force computed as above is not symmetric which can be seen when only two particles interact. Gradient of the kernel $W$ is zero at particle's center and thus only particle j contributes to the pressure of particle $i$. As density differs between particles, this may leed to pressure forces not being symmetric. Many ways of symmetrizing equation~\ref{eq:sph_pressure_force1} are proposed in literature (see \cite[section 3.1]{Monaghan1992}, \cite[section 4.3.2]{Liu}). Very simple one was used by \cite{Muller2003}:
 \begin{equation}
 \label{eq:sph_pressure_force_muller}
 -\triangledown p(r_i) = -\sum_{j}m_j \frac{p_j + p_i}{2\rho_j}\triangledown W(r_i - r_j, h) 
 \end{equation}
-Pressure at particle i is defined as:
+Pressure at particle $i$ is defined as:
 \begin{equation}
 \label{eq:pressure}
 p_i = k(\rho_i - \rho_0)

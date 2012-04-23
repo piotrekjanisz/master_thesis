@@ -66,11 +66,14 @@ void IsosurfaceParticleRenderer::resize(int width, int height)
 
 void IsosurfaceParticleRenderer::render(TexturePtr& sceneColorTexture, TexturePtr& sceneDepthTexture, ParticleData& particleData)
 {	
+	boost::timer t;
 	// extract surface
 	_outputs[_currentOutput].clear();
 	_surfaceExtractor->extractSurface(particleData.particles, particleData.particleCount, 4, &_outputs[_currentOutput]);
-	_surfaceExtractor->waitForResults();
-
+	_surfaceExtractor->waitForResults();	
+	double extractionTime = t.elapsed();
+	
+	startTimeQuery();
 	// render surface
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -93,4 +96,5 @@ void IsosurfaceParticleRenderer::render(TexturePtr& sceneColorTexture, TexturePt
 		CHECK_GL_CMD(_isoWater->updateAttribute("normal", it->normals, it->verticesCount));
 		CHECK_GL_CMD(_isoWater->renderElements(_waterShader, GL_TRIANGLES, it->trianglesCount*3, it->indices));	
 	}
+	endTimeQuery(extractionTime);
 }

@@ -33,7 +33,7 @@
 \contentsline {subsection}{\numberline {4.2.4}Lookup cache}{39}{subsection.4.2.4}
 \contentsline {subsection}{\numberline {4.2.5}Normals generation}{40}{subsection.4.2.5}
 \contentsline {subsection}{\numberline {4.2.6}Multithreading}{41}{subsection.4.2.6}
-\contentsline {subsection}{\numberline {4.2.7}Rendering}{43}{subsection.4.2.7}
+\contentsline {subsection}{\numberline {4.2.7}Rendering}{42}{subsection.4.2.7}
 \contentsline {chapter}{\numberline {5}Resuts}{45}{chapter.5}
 \contentsline {section}{\numberline {5.1}Visual appearance}{45}{section.5.1}
 \contentsline {section}{\numberline {5.2}Performance}{45}{section.5.2}

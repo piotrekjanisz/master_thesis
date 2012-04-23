@@ -75,7 +75,6 @@ bool Scene2::setupShaders()
 		CHECK_GL_CMD(_normalMapShader->load("shaders/normal_map_vertex.glsl", "shaders/normal_map_fragment.glsl"));
 		CHECK_GL_CMD(_normalMapShader->setUniform1i("tex", 0));
 		CHECK_GL_CMD(_normalMapShader->setUniform1i("normal_map", 1));
-		_normalMapShader->printParameters();
 
 		_skyBoxShader = boost::make_shared<ShaderProgram>();
 		CHECK_GL_CMD(_skyBoxShader->load("shaders/skybox_vertex.glsl", "shaders/skybox_fragment.glsl"));
@@ -234,7 +233,7 @@ void Scene2::render(NxScene* physicsScene)
 
 void Scene2::displayAdditionalStats()
 {
-	std::cout << "PARTICLE COUNT: " << _particleCount << std::endl;
+	std::cout << "\t" << _particleCount << "\t" << _particleRenderer->getRenderingTime();
 	if (_particlesToShutDown > 0 && _particleCount > _particlesToShutDown)
 		exit(0);
 }

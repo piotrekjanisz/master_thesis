@@ -228,6 +228,8 @@ bool ScreenSpaceParticleRenderer::changeParameter(const std::string& parameter, 
 
 void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TexturePtr& sceneDepthTexture, ParticleData& particleData)
 {
+	startTimeQuery();
+
 	CHECK_GL_CMD(_water->updateAttribute("vertex", particleData.particles, particleData.particleCount));
 	CHECK_GL_CMD(_water->updateAttribute("density", particleData.particleDensity, particleData.particleCount));
 
@@ -316,6 +318,8 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("refractionMult", _refractionMult));
 	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
 	CHECK_GL_CMD(_finalQuad->render());
+
+	endTimeQuery();
 }
 
 

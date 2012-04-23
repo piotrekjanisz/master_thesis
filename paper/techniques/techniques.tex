@@ -7,9 +7,10 @@
 
 % ----------------------- contents from here ------------------------
 
-Output from particle base simulations is list of particles containing positions. It can also contain additional parameters - for example PhysX fluid simulation returns velocity, lifetime and density in addition to position for each particle. 
+Output from particle base simulations is a list of particles containing positions. It can also contain additional parameters - for example PhysX fluid simulation returns velocity, lifetime and density, in addition to position, for each particle. 
+
 Traditionally triangle meshes are used for rendering objects. Using this approach requires constructing fluid's triangle mesh for given particle positions. This method is called isosurface extraction and will be described in section~\ref{sec:isosurfaceextraction}.
-Another possibility is to render each particle as a point (or a billboard in general) with opacity so that when large amount of particles is rendered the result would give illusion of a smooth surface. Such technique has one major drawback - it does not produces surface prevents us from adding effects of reflection and refraction.
+Another possibility is to render each particle as a point (or a billboard in general) with opacity so that when large amount of particles is rendered the result would give illusion of a smooth surface. Such technique has one major drawback - it does not produces surface preventing us from adding effects of reflection and refraction.
 Similar technique is to extract visible surface by rendering each particle as a sphere into depth buffer. This will be described in section~\ref{sec:screen_space}.
 
 \section{Screen space} \label{sec:screen_space}
@@ -17,7 +18,7 @@ Similar technique is to extract visible surface by rendering each particle as a 
 As mentioned before this approach extracts visible surface by rendering each particle into depth buffer. High level overview ot this method is presented on figure~\ref{screen_space} and consists of following steps \cite{laanSainz2009}: rendering depth texture (section~\ref{sec:surfacedepth}) and thickness textures (section~\ref{sec:thickness}), depth smoothing (section~\ref{sec:smoothing}) and assembling fluid surface with rest of the scene (section~\ref{sec:screenspace_rendering}).
 
 \subsection{Surface depth} \label{sec:surfacedepth}
-To obtain fluid surface visible from the viewpoint of camera each particle is rendered as a sphere into depth texture (figure~\ref{sphere_depth}). At each pixel only closest value is kept using hardware depth test. 
+To obtain fluid's surface visible from the viewpoint of camera each particle is rendered as a sphere into depth texture (figure~\ref{sphere_depth}). At each pixel only closest value is kept using hardware depth test. 
 \figuremacroW{sphere_depth}{Particles rendered as spheres into depth texture}{}{0.7}
 In order to avoid rendering large amount of geometry each particle is rendered as a point sprite and it's depth is generated in fragment shader. This common technique speeds up rendering process significantly as well as improves quality of rendered spheres (as can be seen on figure~\ref{spheres}). Rendering spheres as point sprites is 10 to 100 times faster comparing to rendering them as triangle meshes (see table~\ref{sphere_speed_comp}).
 \figuremacroW{spheres}{Spheres rendered with different methods}{1 - mesh with 128 triangles, 2 - mesh with 512 triangles, 3 - mesh with 2048 triangles, 4 - point sprite with normals generated in fragment shader}{0.5}
@@ -37,13 +38,13 @@ Point Sprites & 200 \\
 
 \subsection{Smoothing} 
 \label{sec:smoothing}
-Although previous step produces surface it's quality is not sufficient. As can be seen on figure~\ref{spheres_no_smoothing} individual spheres can be seen giving fluid surface gelly-like appearance. To remove this artifact some kind of smoothing has to be applied. Section~\ref{sec:gaussiansmoothing} will describe gaussian smoothing and section~\ref{sec:curvatureflowsmoothing} curvature flow smoothing.
+Although previous step produces surface, its quality is not sufficient. As can be seen on figure~\ref{spheres_no_smoothing} individual spheres can be seen giving fluid's surface unnatural appearance. To remove this artifact some kind of smoothing has to be applied. Section~\ref{sec:gaussiansmoothing} will describe gaussian smoothing and section~\ref{sec:curvatureflowsmoothing} curvature flow smoothing.
 \figuremacroW{spheres_no_smoothing}{Fluid surface rendered without smoothing phase}{Individual spheres can be seen, giving surface unnatural appearance}{0.7}
 
 \subsubsection{Gaussian smoothing} \label{sec:gaussiansmoothing}
-Most obvious way to smooth values in depth texture is to apply gaussian filter. It's easy to implement and can be computed fast due to it's linear separability. However this filter produces undesired effect of blending drops of fluid with background surfaces (see figure~\ref{gaussian_filter_img}). 
-\figuremacroW{gaussian_filter_img}{Fluid surface rendered with Gaussian smoothing}{it can be seen that different part of fluid are blended together creating undesired effect of one big surface.}{0.7}
-Thus edge-preserving filters needs to be used which are also called bilateral filters. Bilateral Gaussian filter is a modification that changes wages of pixels depending on difference between their tonal value ($I(s)$) and tonal value of central pixel ($I(s_0)$). This can be described by following formula (from~\cite{PhamVliet2005}): 
+Most obvious way to smooth values in depth texture is to apply gaussian filter. It's easy to implement and can be computed fast due to its linear separability. However this filter produces undesired effect of blending drops of fluid with background surfaces (see figure~\ref{gaussian_filter_img}). 
+\figuremacroW{gaussian_filter_img}{Fluid surface rendered with Gaussian smoothing}{it can be seen that different parts of fluid are blended together creating undesired effect of one big surface.}{0.7}
+Thus edge-preserving filters (also called bilateral filters) needs to be used. Bilateral Gaussian filter is a modification that changes wages of pixels depending on difference between their tonal value $I(s)$ and tonal value of central pixel $I(s_0)$. This can be described by following formula (from~\cite{PhamVliet2005}): 
 \begin{equation}
 \label{bilateral_equation}
 O(s_0) = \frac{\sum_{s \in S}f(s, s_0)I(s)}{\sum_{s \in S}f(s, s_0)}
@@ -53,19 +54,20 @@ where
 \label{bilateral_weights_equation}
 f(s, s_0) = g_s(s-s_0)g_t(I(s)-I(s_0))
 \end{equation}
-is the bilateral filter for the neighborhood around $s_0$. $g_s$ is a spatial weight, $g_t$ is a tonal weight and they both are Gaussian functions:
+is the bilateral filter for the neighborhood around $s_0$, $g_s$ is a spatial weight, $g_t$ is a tonal weight and they both are Gaussian functions:
 \begin{equation}
 \label{bilateral_dist_equation}
 g_s(s) = g(x, \sigma_S)g(y, \sigma_S)  \quad   g_t(I) = g(I, \sigma_t)
 \end{equation}
+
 As can be seen in equation~\ref{bilateral_weights_equation} only change in bilateral filter (in comparison to regular bilateral filter) is introduction of tonal weight $g_t$. This change makes filter space-variant - that means it can't be computed as a product of two one dimensional filters ($g_s$ in equation~\ref{bilateral_dist_equation}). 
-Computional complexity of space-variant filters is $O(Nm^d)$ comparing to only $O(Nmd)$ for space-invariant (d is image dimensionality, m is the size of filtering kernel and N is the number of pixels in the image). For smoothing fluid surface kernel with $m = 20$ must be used, which gives for 2 dimensional image about 400 operations for each pixel when using bilateral filtering. In comparison separable implementation requires 40 operations. It turns out however that computing bilateral filter as it was a space-invariant gives good approximation for real time applications (see figure~\ref{bilateral_comp}). Approximation gives some artifacts but they are not visible when fluid is moving and other effects (reflection and refraction) are applied.
+Computional complexity of space-variant filters is $O(Nm^d)$ comparing to only $O(Nmd)$ for space-invariant (d is image dimensionality, m is the size of filtering kernel and N is the number of pixels in the image). For smoothing fluid surface kernel with $m = 20$ must be used, which, when using bilateral filtering on 2 dimensional image, gives about 400 operations for each pixel. In comparison separable implementation requires only 40 operations. It turns out however that computing bilateral filter as if it was space-invariant gives good approximation for real time applications (see figure~\ref{bilateral_comp}). Approximation gives some artifacts but they are not visible when fluid is moving and other effects (reflection and refraction) are applied.
 \figuremacroW{bilateral_comp}{Comparision of normal bilateral filter with it's separable approximation}{Upper row presents images for bilateral filter and bottom row presents separable approximation.}{0.7}
 
-Bilateral filter has some undesired effect when applied on z-buffer output. The problem is that depth values are not evenly distributed. This mean that difference between two fragments depth values is dependent on their distance to the viewer. As can be seen on equation~\ref{bilateral_weights_equation} bilateral weights takes into account difference between depth values. In result the further surface lies from camera the less edges are preserved (see figure~\ref{edge_preservation}). Alternative technique to Z-buffering is W-buffering which offers better distribution of depth values \cite{Gregory2009}. Some hardware supports W-buffering but most of it doesn't and it doesn't seems to be supported in future. A workaround to this problem was presented in \cite{Dunlop2006}. It customizes projection transformation in vertex shader in way that depth buffer values have linear distribution at the end. 
+Bilateral filter has some undesired effect when applied on z-buffer output. The problem is that depth values are not evenly distributed. This means that difference between two fragments depth values is dependent on their distance to the viewer. As can be seen on equation~\ref{bilateral_weights_equation} bilateral weights takes into account difference between depth values. As a result the further surface lies from camera the less edges are preserved (see figure~\ref{edge_preservation}). In that situation linear depth values have to be generated in fragment shader as described in section~\ref{sec:depth_buffer}. To produce linearly distributed depth values I am using equation~\ref{eq:linear_depth}.
 \figuremacroW{edge_preservation}{Bilateral filtering results for different distances to camera}{The more distant fluid is from viewer the more smoothed its surface is. Also less edges are preserved due to z-buffer used resulting in more particles got blended into background surfaces}{0.7}
 
-Another issue with smoothing using fixed kernel size filter is that further surfaces are more smoothed than closer surfaces (see figure~\ref{edge_preservation}). Solving that problem would require using filter with variable kernel size, depending on fragment distance from viewer. As implementing this efficiently on graphic hardware is hard and the effect is not so irritating this won't be considered any more. Section~\ref{sec:curvatureflowsmoothing} will describe another smoothing technique that doesn't suffer from this problem. 
+Another issue is that when using fixed kernel size filter. As particles are rendered smaller with the distance to the viewer further surfaces will be more smooth than closer surfaces (see figure~\ref{edge_preservation}). Solving that problem requires using filter with variable kernel size, depending on fragment distance from viewer. This is implemented using several precomputed kernels which are passed as array of 1D textures into shader. Section~\ref{sec:curvatureflowsmoothing} will describe another smoothing technique that doesn't suffer from this problem. 
 
 \subsubsection{Curvature flow smoothing} \label{sec:curvatureflowsmoothing}
 This technique was presented in \cite{laanSainz2009}. It utilizes curvature flow to smooth surface. Curvature is a differential geometry concept which measures how geometric object deviates from being flat. Curvature flow evolves surface by moving it's points with velocity given by:
@@ -78,7 +80,7 @@ We can then write equation of motion under mean curvature for surface $u$:
 \label{eq:curvature_flow}
 \frac{du}{dt} = -\kappa \vec{n}
 \end{equation}
-Since we are working with depth texture ($z(x, y)$) we only move surface in direction of $z$ axis. Thus we can omit surface normal:
+Since we are working with depth texture ($z(x, y)$) we only move surface in direction of $z$ axis. This allows to omit surface normal:
 \begin{equation}
 \label{eq:curvature_flow_z}
 \frac{dz}{dt} = -\kappa
@@ -164,16 +166,16 @@ E_x = \frac{1}{2} \frac{\partial z}{\partial x} \frac{\partial D}{\partial x} - 
 E_y = \frac{1}{2} \frac{\partial z}{\partial y} \frac{\partial D}{\partial y} - \frac{\partial^2 z}{\partial y^2}D
 \end{equation}
 
-To modify z values in each iteration Euler integration of equation~\ref{eq:curvature_flow_z} is used. Amount of smoothing can be controlled by number of iterations - the more iterations the smoother surface will be. Since equation is stiff, integration time step has to be quite small to retain stability. If it is too large undesirable visual artifacts appears (figure~\ref{curvature_instabilities}). My experiments shown that time step should have order of magnitude $10^{-7}$ or lower.
+To modify z values in each iteration Euler integration of equation~\ref{eq:curvature_flow_z} is used. Amount of smoothing can be controlled by number of iterations - the more iterations the smoother surface will be. Since equation~\ref{eq:curvature_flow_z} is stiff, integration time step has to be very small to retain stability. If it is too large undesirable visual artifacts appears (figure~\ref{curvature_instabilities}). My experiments shown that time step should be less than $10^{-7}$.
 \figuremacroW{curvature_instabilities}{Curvature flow smoothing artifacts}{artifacts occurs when integration time step is too big}{0.7}
 
 \subsection{Thickness} \label{sec:thickness}
-This step is computed to determine how opaque is surface in given point. It is achieved by rendering particles as circles into depth buffer with additive blending enabled. Resulting thickness texture is then smoothed with Gaussian filter (this time regular one). In order to speed up rendering process this texture can be rendered with lower resolution and then applied with linear interpolation. 
+This step is performed to determine how opaque is surface in given point. It is done by rendering particles as circles into depth buffer with additive blending enabled. Resulting thickness texture is then smoothed with Gaussian filter (this time regular one). In order to speed up rendering process this texture can be rendered with lower resolution and then applied with linear interpolation. 
 
 \subsection{Rendering} \label{sec:screenspace_rendering}
-Last step assembles fluid surface with background image. As an input it takes smoothed fluid depth texture, thickness texture and texture with rest of the scene rendered. 
+Last step assembles fluid surface with background image. As an input it takes smoothed fluid's depth texture, thickness texture and texture with rest of the scene rendered. 
 
-First normal vectors have to be computed from smoothed depth texture using finite differences of surface depth $d(x, y)$. This is done as in equation~\ref{eq:view_space_normal}. Finite differences are computed in one direction, except edges to avoid undesirable smoothing (figure TODO). 
+First normal vectors have to be computed using finite differences of surface depth $d(x, y)$. This is done as in equation~\ref{eq:view_space_normal}. Finite differences are computed in one direction, except edges to avoid undesirable smoothing (figure TODO). 
 
 Shading is done using Fresnel equation and a Phong specular highlight. Output color $C_{out}$ is given by:
 
@@ -194,7 +196,7 @@ Refracted fluid color $a$ is given by:
 \label{refracted_color}
 a = lerp(C_{fluid}, S(x + \beta n_x, y + \beta n_y), e^{-k T(x, y)})
 \end{equation}
-where $S(x, y)$ texture with rest of the scene, $\beta$ is the parameter which controls how much background scene is refracted, $C_fluid$ is the color of the fluid itself and k is given constant. As can be seen thickness texture is used to control fluid opacity - the thicker fluid is the less opaque it is. Refraction is approximated sampling underlying scene texture $S(x, y)$ with texture coordinates perturbed by normal of the surface. Amount of perturbation is controlled by $\beta$ parameter which depends on thickness:
+where $S(x, y)$ texture with rest of the scene, $\beta$ is the parameter which controls how much background scene is refracted, $C_fluid$ is the color of the fluid itself and $k$ is a given constant. As can be seen thickness texture is used to control fluid opacity - the thicker fluid is the less opaque it is. Refraction is approximated by sampling underlying scene texture $S(x, y)$ with texture coordinates perturbed by normal of the surface. Amount of perturbation is controlled by $\beta$ parameter which depends on thickness:
 \begin{equation}
 \beta = T(x, y) \gamma
 \end{equation}
@@ -208,12 +210,12 @@ Classic algorithm for isosurface extraction is marching cubes (see \cite{Lorense
 This method is not suitable for extraction surface from particles. Firstly scalar field values at cube corners are not given. Secondly visiting each cube is not efficient as most of cubes doesn't contain surface. Several variations of marching cube algorithm were created to overcome those problems. The algorithm used is a multithreaded version of the one presented in \cite{RosenbergBirdwell2008}. This is a surface following version of marching cubes with a fast particle lookup cache technique. 
 
 \subsection{Overview} \label{sec:iso_overview}
-Algorithm takes as an input a list of particles positions, particle radius of influence ($R_c$), isosurface threshold and produces list of triangles. Particle radius of influence is something different than particle size (or simply particle radius - $R$), because its value is usually greater. Every particle produces a field that has non-zero values within $R_c$ from particle center. The field value in given point of space~(p) is a sum of field values generated by all particles within $R_c$. This can be represented by:
+Algorithm takes as an input a list of particles positions, particle's radius of influence ($R_c$), isosurface threshold and produces list of triangles. Particle's radius of influence is something different than particle size (or simply particle radius - $R$), because its value is usually greater. Every particle produces a field that has non-zero values within $R_c$ from particle center. The field value in given point of space $p$ is a sum of field values generated by all particles within $R_c$. This can be represented by:
 \begin{equation}
 \label{eq:field_equation}
-F(p) = \sum_{s~\epsilon~D_{R_c}(p)} f(dst(s, p))
+F(p) = \sum_{s~\epsilon~S_{R_c}(p)} f(dst(s, p))
 \end{equation}
-where $s$ is a center of particle, $D_{R_c}(p)$ is a disc with p as a center and radius $R_c$. $f(r)$ is a field function of single particle. It can be any function that is radially monotonic, continuous and has non-zero values within $R_c$ from particle center. Following function is often used as it can be computed efficiently with a few operations:
+where $s$ is a center of particle, $S_{R_c}(p)$ is a sphere with $p$ as a center and radius of $R_c$. $f(r)$ is a field function of single particle. It can be any function that is radially monotonic, continuous and has non-zero values within $R_c$ from particle center. Following function is often used as it can be computed efficiently using few operations:
 \begin{equation}
 \label{eq:single_field_equation}
 f(r) = \left\{ \begin{array}{ll}
@@ -230,24 +232,24 @@ When $R_c > R$ neighboring particles combines into one smooth surface  (figure~\
 Space is divided into blocks containing cubes (figure~\ref{block_subdivision}). Such division aims for:
 \begin{itemize}
 \item Reduce memory consumption - smaller blocks contains less particles and cubes. 
-\item Allowing for parallelize algorithm in an easy way - because processing one block is an independent of processing other blocks. 
+\item Allowing easy way of parallelization of algorithm - because processing one block is independent of processing other blocks. 
 \end{itemize}
-Blocks are expanded to contain also particles that lies outside them but may influence the field values inside block. That means the block must also contain particles lying within $R_c$ distance from it - this area is called margin and has special treatment, which will be described in next section. Expanding blocks makes parallel processing very easy as there are no dependencies between them.
+Blocks are expanded to contain also particles that lies outside them but may influence the field values inside block. That means the block must also contain particles lying within $R_c$ distance from it - this area is called margin and has special treatment, which will be described in next section. Expanding blocks makes parallel processing very easy as dependencies between block disappear.
 
 \figuremacroW{block_subdivision}{Block subdivision}{space is divided into blocks which overlaps. Each block is divided into cubes of size S.}{0.7}
 
-Block subdivision is a first step of the algorithm. For every particle containing blocks are computed. One particle can be contained in at most 8 blocks due to blocks overlapping. Each block has a list of particles lying within its boundary. 
+Block subdivision is a first step of the algorithm. For every particle containing blocks are determined. One particle can be contained in at most 8 blocks due to blocks overlapping. Each block has a list of particles lying within its boundary. 
 
 \subsection{Block processing} \label{sec:block_processing}
-Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next surface following marching cube algorithm is run inside block. The algorithm is named marching slices in \cite{RosenbergBirdwell2008}. Block containing $n \times n \times n$ cubes is divided to n slabs and n+1 slices (figure~\ref{block_image}). Division is made in parallel to XY plane. Each slab contains $n \times n \times 1$ cubes and each slice contains $(n+1) \times (n+1) \times 1$ cube corners. Slices lies between slabs and serves as a cache for field values computed at corners. In addition neighboring slabs share slices that lies between them. Each slab has a list of cubes lying within it that should be visited - a todo list.
+Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next, surface following marching cube algorithm is run inside block. The algorithm is named \textit{marching slices} in \cite{RosenbergBirdwell2008}. Block containing $n \times n \times n$ cubes is divided to n slabs and n+1 slices (figure~\ref{block_image}). Division is made in parallel to XY plane. Each slab contains $n \times n \times 1$ cubes and each slice contains $(n+1) \times (n+1) \times 1$ cube corners. Slices lies between slabs and serves as a cache for field values computed at corners. In addition neighboring slabs share slices that lies between them. Each slab has a list of cubes, lying within it, that should be visited - a \textit{todo list}.
 
-\figuremacroW{block_image}{Structure of block}{}{0.7}
+\figuremacroW{block_image}{Structure of a block}{}{0.7}
 
-To speed up a marching cubes algorithm we would like to traverse only cubes that contains surface. This requires finding so called seeding cubes - initial cubes at which algorithm will start traversing block. We then choose one slab tat contains one or more seed cubes and pick up one cube. Field values at cube corners are calculated and put into slice caches, surface is polygonized and neighboring cubes that contain surface are added to todo lists of corresponding slabs. 
+To speed up a marching cubes algorithm we would like to traverse only cubes that contains surface. This requires finding so called \textit{seed cubes} - initial cubes at which algorithm will start traversing block. We then choose one of the slabs that contains one or more seed cubes and pick up one cube. Field values at cube corners are calculated and put into slice caches, surface is polygonized and neighboring cubes that contain surface are added to a \textit{todo lists} of corresponding slabs. 
 
-If we pick up a random slabs and cubes each time then we have to keep all cached values in slices while processing a cube. The idea of marching slices is to decrease memory used by cache by traversing cubes slice by slice and deallocate caches as soon as possible. This can be done by always picking the lowest slab with not empty $todo list$ and finding seeding cubes in the lowest possible slabs. 
+If we picked up a random slabs and cubes each time then we would have to keep all cached values in slices while processing a cube. The idea of marching slices is to decrease memory, that cache consumes, by traversing cubes slice by slice and deallocate caches as soon as possible. This can be done by always picking the lowest slab with not empty \textit{todo list} and finding seeding cubes in the lowest possible slabs. 
 
-The optimum would be to find surfaces all local minimas - then we would have to store only cache in slices below and above current slab. However this is approach would be time consuming. \cite{RosenbergBirdwell2008} used heuristic approach with complexity O(P) where P is a number of particles. The algorithm is as follows:
+The optimum for finding seed cubes would be to find surface's all local minimas - then we would only have to store cache in slices below and above current slab. However this approach would be time consuming. \cite{RosenbergBirdwell2008} used heuristic approach with complexity O(P) where P is a number of particles. The algorithm is as follows:
 \begin{verbatim}
 for every particle:
         take a corner closest to particle center
@@ -257,25 +259,25 @@ for every particle:
                 add cube to it's slab todo list
 \end{verbatim}
 
-This method will not find local minimas every time as it always goes down from the center of a particle. Figure~\ref{fig_local_minima} shows the case when algorithm fails to find a local minimum. 
+This method will not find local minimas every time as it always goes down from the center of a particle (see figure~\ref{fig_local_minima}).
 
 \figuremacroW{fig_local_minima}{Finding local minima}{In this example algorithm fails to find local minimum}{0.7}
 
 \subsection{Lookup cache}\label{sec:lookupcache}
-To compute field value for a given corner all particles that lies within $r_c$ from it have to be found. This task can be accomplished by building space partitioning data structure like octtree or kdtree \cite{Bentley1975}. However costs of building spatial data structures are relatively high, and the nearest neighbor finding algorithm requires floating point computations. \cite{RosenbergBirdwell2008} presented another to accomplish this task. Presented method does use only integer comparison. The main observation is that we are looking nearest particles in discrete points. Thus obvious approach would be to create a linked list for all corners containing all particles lying within $r_c$ from it. So for every particle we would traverse all corners lying inside a sphere of radius $r_c$ and update their particles list by inserting the current one.  The main disadvantage of this approach is that we have to store a information for each corner, and for every corner we have to store separate list. This can be improved by using more sparse data structure. For a block we can store only one slice (so called projection slice) as a 2D array of $N+1$ by $N+1$. Element (x, y) of the array represents a column (x, y) and stores a linked list of particles that have influence in that column (figure~\ref{particle_lookup_cache}). To make particle lookup procedure more efficient each list is sorted by particles z coordinate. Each element of the list contains three integer values - $min_z$, $max_z$, $mid_z$ and a pointer to particle. $min_z$ and $max_z$ specifies range of slices in which particle has influence and $mid_z$ is a slab that contains center of the particle. 
+To compute field value for a given corner all particles that lies within $r_c$ from it have to be found. This task can be accomplished by building space partitioning data structure like octtree or kdtree \cite{Bentley1975}. However costs of building spatial data structures are relatively high, and the nearest neighbor finding algorithm requires floating point computations. \cite{RosenbergBirdwell2008} presented another way to accomplish this task. Presented method uses only integer comparison. The main observation is that we are looking nearest particles in discrete points. Thus obvious approach would be to create a linked list for every corner containing all particles lying within $r_c$ from it. So for every particle we would traverse all corners lying inside a sphere of radius $r_c$ and update their particles list by inserting the current one.  The main disadvantage of this approach is that we would have to store that information for each corner, and for every corner we would have to store a separate list. This can be improved by using more sparse data structure. For a block we can store only one slice (so called projection slice) as a 2D array of $N+1$ by $N+1$. Element (x, y) of the array represents a column (x, y) of corners and stores a linked list of particles that have an influence in that column (figure~\ref{particle_lookup_cache}). To make particle lookup procedure more efficient each list is sorted by particles z coordinate. Each element of the list contains three integer values - $min_z$, $max_z$, $mid_z$ and a pointer to particle. $min_z$ and $max_z$ specifies range of slices in which particle has influence and $mid_z$ is a slab that contains center of the particle. 
 
 \figuremacroW{particle_lookup_cache}{Particle lookup cache}{each cell of projection slice represents a column in block and stores linked list of particles that have influence in that column.}{0.7}
 
 Initialization of cache starts with sorting all particles by z coordinate. Then we iterate over sorted particles and each particle is inserted into all columns in which it have an influence. 
 
-To lookup particles that have influence in given corner at location (x, y, z) we have to check all columns from projection slice that lies within $R_c$ radius from that corner. This narrows search to cylinder of radius $\left \lceil \frac{R_c}{S} \right \rceil$ and height equal to height of block. Next each column is iterated from begin to search for first element (element $E_f$) with $mid_z \geq z - \left \lceil \frac{R_c}{S} \right \rceil$. Then iteration is continued until topmost entry (element $E_l$) with $mid_z \leq  z + \left \lceil \frac{R_c}{S} \right \rceil$. This narrows height of searching cylinder to $2R_c$. In order to further narrow this into sphere of radius $R_c$  every element between $E_f$ and $E_l$ is tested for having $min_z \leq z$ and $max_z \geq z$. Such a procedure return only particles that have influence in given corner. 
+To lookup particles that have influence in given corner at location (x, y, z) we have to check all columns from projection slice that lies within $R_c$ radius from that corner. This narrows search to cylinder of radius $\left \lceil \frac{R_c}{S} \right \rceil$ and height equal to height of block. Next each column is iterated from begin to search for first element ($E_f$) with $mid_z \geq z - \left \lceil \frac{R_c}{S} \right \rceil$. Then iteration is continued until topmost element ($E_l$) with $mid_z \leq  z + \left \lceil \frac{R_c}{S} \right \rceil$. This narrows height of searching cylinder to $2R_c$. In order to further narrow this into sphere of radius $R_c$  every element between $E_f$ and $E_l$ is tested for having $min_z \leq z$ and $max_z \geq z$. Such a procedure return only particles that have influence in given corner. 
 
-Further discussion concerning performance and memory consumption of this lookup technique can be found in \cite{RosenbergBirdwell2008}. Authors also provide comparison between other lookup methods. 
+Further discussion concerning performance and memory consumption of this lookup technique can be found in \cite{RosenbergBirdwell2008}. Authors also provide comparison with other lookup methods. 
 
 \subsection{Normals generation}\label{sec:normals}
-In order to properly shade extracted surface normal vevtors have to be computed for every vertex. The simplest approach is to generate one normal for each triangle, perpendicular to its surface and assign it to all three triangle vertices. This requires that vertices are not shared between triangles thus it's not applicable with surface extraction method used. 
+In order to properly shade extracted surface normal vectors have to be computed for each vertex. The simplest approach is to generate one normal for each triangle, perpendicular to its surface and assign it to all three triangle vertices. This requires that vertices are not shared between triangles thus it's not applicable with surface extraction method used. 
 
-Another approach is to compute normal at corners of grid as a gradient of scalar field: 
+Another approach is to compute normals at corners of a grid as a gradient of scalar field: 
 \begin{equation}
 	\vec{n}_{i,j,k} = 
 	\begin{bmatrix}
@@ -285,23 +287,23 @@ Another approach is to compute normal at corners of grid as a gradient of scalar
 	\end{bmatrix}
 \end{equation}
 where W, H and D are dimensions of cube, $\vec{n}_{i, j, k}$ is normal at corner (i, j, k) and $F_{i, j, k}$ is value of scalar field at corner (i, j, k).
-As values of field are given only in corners and vertices mostly lies between them the interpolation is required. Also this increases amount of corners at which scalar field value must be computed. Another disadvantage is that in order to speed up process of normal generation in this case, normals can't be generated after extracting isosurface. This is due to clearing caches, and thus normals have to be computed in the same time vertex are added to todo list. This results in more complicated code.
+As values of field are given only at corners and vertices in most cases lies between them the interpolation is required. Also this increases amount of corners at which scalar field value must be computed. Another disadvantage is that in order to speed up process of normal generation in this case, normals can't be generated after extracting isosurface. This is due to clearing caches, and thus normals have to be computed in the same time vertex are added to \textit{todo list}. This results in more complicated code.
 
 \figuremacroW{normal_generation}{Different approaches to normal generation}{gradient, average, weighted average based on triangle area, weighted average based on incident angle}{1.0}
 
-Yet another approach is to compute normal for every triangle that includes given vertex and use a average or weighted average as a vertex normal. Simple average can be computed effectively however it produces visible artifacts for sparse grids. This is because some triangles are long and narrow and should not have so much impact on final normal. To solve this weighted average can be used. Weights can be the area of triangle or an angle by given vertex. In my algorithm weight are the angles because with area long and narrow triangles with will still can have much impact on normal. 
+Yet another approach is to compute normal for every triangle that includes given vertex and take an average or weighted average as a vertex normal. Simple average can be computed effectively however it produces visible artifacts for sparse grids. This is because some triangles are long and narrow and should not have so much impact on final normal. To solve this weighted average can be used. Weights can be the area of triangle or an angle by given vertex. 
 
 \subsection{Multithreading}
-\cite{RosenbergBirdwell2008} presented algorithm that run in one thread. However algorithm has a potential of parallelization due to block processing. Parallelization of this algorithm is even more desired as nowadays CPU manufacturers increase performance by multiplying CPU cores instead of increasing clock frequency of single core. 
+\cite{RosenbergBirdwell2008} presented algorithm that runs in one thread. However algorithm has a potential of parallelization due to independence of block processing. Parallelization of this algorithm is even more desired as nowadays CPU manufacturers increase performance by multiplying CPU cores instead of increasing clock frequency of a single core. 
 
-As mentioned before processing of block is independent of one another. The algorithm uses thread pool which size can be configured and the single task is a single block. The architecture is illustrated on figure~\ref{threading_architecture}. The single thread checks if there are still blocks to process in blocks queue, takes one and extracts surface in this block. Result of extracting surface in one block is put into results list. Thread stops when there are no more task in queue. As the main thread doesn't take part in surface extraction there is possibility of working asynchronously. Main thread can render surface extracted in previous frame while working threads are extracting surface for current frame. This increases latency but it is not visible when frame rate is high. 
+As mentioned before processing of block is independent of one another. The algorithm uses thread pool which size can be configured and the single task is a single block. The architecture is illustrated on figure~\ref{threading_architecture}. The single thread checks if there are still blocks to process in blocks queue, takes one and extracts surface in this block. Result of extracting surface in one block is put into results list. Thread stops when there are no more task in queue. As the main thread doesn't take part in surface extraction there is possibility of working asynchronously. Main thread can render surface extracted in previous frame while working threads are extracting surface for the current frame.
 
 \figuremacroW{threading_architecture}{Threading architecture}{architecture diagram of parallelization of surface extraction algorithm}{0.7}
 
 \subsection{Rendering}
-Rendering fluid as a mesh is a simpler task since we already have surface and normals. Only one problem arises when fluid has to be rendered with opacity. Traditionally it would require rendering graphic primitives in back to front order with alpha blending enabled. However algorithm used for surface extraction doesn't produce primitives in such order.  \cite{RosenbergBirdwell2008} noted that this algorithm can be transformed to produce primitives with required ordering. Since this modification produces some extra overhead I used different approach - similar to one used in section \ref{sec:screenspace_rendering}.
+Rendering fluid as a mesh is a simpler task since we already have surface and normals. Only one problem arises when fluid has to be rendered with opacity. Traditionally it would require rendering graphic primitives in back to front order with alpha blending enabled. However algorithm used for surface extraction doesn't produce primitives in such order.  \cite{RosenbergBirdwell2008} noted that this algorithm can be transformed to produce primitives with desired ordering. Since this modification produces some extra overhead I used different approach - similar to one used in section \ref{sec:screenspace_rendering}.
 
-First background scene is rendered into texture $S(x, y)$. Then when fluid meshes are rendered this texture is sampled with texture coordinates perturbed using normal of the surface. This computation is done in fragment shader. As scene texture cannot be applied to meshes itself but it should be applied to the whole screen texture coordinates are computed in fragment shader based on screen coordinates of fragment:
+First background scene is rendered into texture $S(x, y)$. Then when fluid meshes are rendered this texture is sampled with texture coordinates perturbed using normals of the surface. This computation is done in fragment shader. As scene texture cannot be applied to meshes itself but it should be applied to the whole screen texture coordinates are computed in fragment shader based on screen coordinates of fragment:
 \begin{equation}
 (x, y) = (\frac{p_x}{width}, \frac{p_y}{height})
 \end{equation}

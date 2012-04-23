@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.10.29)  20 APR 2012 20:39
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2011.10.29)  21 APR 2012 19:21
 entering extended mode
 **D:/studia/magisterka/code/master_thesis/paper/thesis.tex
 (D:/studia/magisterka/code/master_thesis/paper/thesis.tex
@@ -549,10 +549,10 @@ File: sph/figures/eulerian_lagrarian.png Graphic file (type png)
 
 <use sph/figures/eulerian_lagrarian.png>
 Package pdftex.def Info: sph/figures/eulerian_lagrarian.png used on input line 
-24.
+23.
 (pdftex.def)             Requested size: 412.56496pt x 156.66817pt.
  [3]
-Underfull \vbox (badness 2384) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4 <D:/studia/magisterka/code/master_thesis/paper/sph/figures/eulerian_lagrari
 an.png>]
@@ -589,14 +589,14 @@ Package pdftex.def Info: tools/figures/homogenous_space.png used on input line
  [13 <D:/studia/magisterka/code/master_thesis/paper/tools/figures/perspective_p
 rojection.png>] [14 <D:/studia/magisterka/code/master_thesis/paper/tools/figure
 s/homogenous_space.png>] [15]
-<tools/figures/z_fighting.png, id=399, 432.11438pt x 221.32687pt>
+<tools/figures/z_fighting.png, id=398, 432.11438pt x 221.32687pt>
 File: tools/figures/z_fighting.png Graphic file (type png)
 
 <use tools/figures/z_fighting.png>
 Package pdftex.def Info: tools/figures/z_fighting.png used on input line 109.
 (pdftex.def)             Requested size: 412.56496pt x 211.32312pt.
 
-<tools/figures/z_buffer_dist.png, id=400, 1027.84pt x 770.88pt>
+<tools/figures/z_buffer_dist.png, id=399, 1027.84pt x 770.88pt>
 File: tools/figures/z_buffer_dist.png Graphic file (type png)
 
 <use tools/figures/z_buffer_dist.png>
@@ -654,7 +654,7 @@ File: techniques/figures/screen_space.png Graphic file (type png)
 
 <use techniques/figures/screen_space.png>
 Package pdftex.def Info: techniques/figures/screen_space.png used on input line
- 16.
+ 17.
 (pdftex.def)             Requested size: 288.7942pt x 213.57628pt.
 
 <techniques/figures/sphere_depth.png, id=490, 339.51843pt x 191.9672pt>
@@ -662,28 +662,24 @@ File: techniques/figures/sphere_depth.png Graphic file (type png)
 
 <use techniques/figures/sphere_depth.png>
 Package pdftex.def Info: techniques/figures/sphere_depth.png used on input line
- 21.
+ 22.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
 
 <techniques/figures/spheres.png, id=493, 336.50719pt x 335.75438pt>
 File: techniques/figures/spheres.png Graphic file (type png)
 
 <use techniques/figures/spheres.png>
-Package pdftex.def Info: techniques/figures/spheres.png used on input line 23.
+Package pdftex.def Info: techniques/figures/spheres.png used on input line 24.
 (pdftex.def)             Requested size: 206.28247pt x 205.82426pt.
-
-Underfull \vbox (badness 1728) has occurred while \output is active []
-
- [25]
-[26 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/screen_sp
-ace.png> <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/sphe
-re_depth.png>]
+ [25] [26 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/scr
+een_space.png> <D:/studia/magisterka/code/master_thesis/paper/techniques/figure
+s/sphere_depth.png>]
 <techniques/figures/spheres_no_smoothing.png, id=509, 481.8pt x 360.59718pt>
 File: techniques/figures/spheres_no_smoothing.png Graphic file (type png)
 
 <use techniques/figures/spheres_no_smoothing.png>
 Package pdftex.def Info: techniques/figures/spheres_no_smoothing.png used on in
-put line 41.
+put line 42.
 (pdftex.def)             Requested size: 288.7942pt x 216.15088pt.
 
 <techniques/figures/gaussian_filter_img.png, id=511, 339.51843pt x 191.9672pt>
@@ -691,7 +687,7 @@ File: techniques/figures/gaussian_filter_img.png Graphic file (type png)
 
 <use techniques/figures/gaussian_filter_img.png>
 Package pdftex.def Info: techniques/figures/gaussian_filter_img.png used on inp
-ut line 45.
+ut line 46.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [27 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/spheres.
 png>]
@@ -700,7 +696,7 @@ File: techniques/figures/bilateral_comp.png Graphic file (type png)
 
 <use techniques/figures/bilateral_comp.png>
 Package pdftex.def Info: techniques/figures/bilateral_comp.png used on input li
-ne 63.
+ne 65.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [28 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/spheres_
 no_smoothing.png>]
@@ -709,7 +705,7 @@ File: techniques/figures/edge_preservation.png Graphic file (type png)
 
 <use techniques/figures/edge_preservation.png>
 Package pdftex.def Info: techniques/figures/edge_preservation.png used on input
- line 66.
+ line 68.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [29 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/gaussian
 _filter_img.png>] [30 <D:/studia/magisterka/code/master_thesis/paper/techniques
@@ -720,92 +716,90 @@ File: techniques/figures/sudden_changes.png Graphic file (type png)
 
 <use techniques/figures/sudden_changes.png>
 Package pdftex.def Info: techniques/figures/sudden_changes.png used on input li
-ne 89.
+ne 91.
 (pdftex.def)             Requested size: 412.56496pt x 136.41768pt.
- [31 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/sudden_c
-hanges.png>]
-<techniques/figures/curvature_instabilities.png, id=570, 467.49657pt x 455.4515
+ [31] [32 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/sud
+den_changes.png>]
+<techniques/figures/curvature_instabilities.png, id=581, 467.49657pt x 455.4515
 7pt>
 File: techniques/figures/curvature_instabilities.png Graphic file (type png)
  <use techniques/figures/curvature_instabilities.png>
 Package pdftex.def Info: techniques/figures/curvature_instabilities.png used on
- input line 168.
+ input line 170.
 (pdftex.def)             Requested size: 288.7942pt x 281.36935pt.
- [32] [33 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/cur
-vature_instabilities.png>] [34]
+ [33 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/curvatur
+e_instabilities.png>]
+[34]
 
 Package amsmath Warning: Foreign command \over;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 220.
+(amsmath)                 on input line 222.
 
-<techniques/figures/metaballs.png, id=602, 702.625pt x 200.75pt>
+[35] <techniques/figures/metaballs.png, id=610, 702.625pt x 200.75pt>
 File: techniques/figures/metaballs.png Graphic file (type png)
 
 <use techniques/figures/metaballs.png>
 Package pdftex.def Info: techniques/figures/metaballs.png used on input line 22
-7.
+9.
 (pdftex.def)             Requested size: 412.56496pt x 117.87784pt.
- [35]
-<techniques/figures/block_subdivision.png, id=613, 339.51843pt x 191.9672pt>
+
+<techniques/figures/block_subdivision.png, id=612, 339.51843pt x 191.9672pt>
 File: techniques/figures/block_subdivision.png Graphic file (type png)
 
 <use techniques/figures/block_subdivision.png>
 Package pdftex.def Info: techniques/figures/block_subdivision.png used on input
- line 237.
+ line 239.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [36 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/metaball
 s.png (PNG copy)>]
-<techniques/figures/block_image.png, id=622, 339.51843pt x 191.9672pt>
+<techniques/figures/block_image.png, id=623, 339.51843pt x 191.9672pt>
 File: techniques/figures/block_image.png Graphic file (type png)
 
 <use techniques/figures/block_image.png>
 Package pdftex.def Info: techniques/figures/block_image.png used on input line 
-244.
+246.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [37 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/block_su
 bdivision.png> <D:/studia/magisterka/code/master_thesis/paper/techniques/figure
 s/block_image.png>]
-<techniques/figures/fig_local_minima.png, id=630, 339.51843pt x 191.9672pt>
+<techniques/figures/fig_local_minima.png, id=631, 339.51843pt x 191.9672pt>
 File: techniques/figures/fig_local_minima.png Graphic file (type png)
 
 <use techniques/figures/fig_local_minima.png>
 Package pdftex.def Info: techniques/figures/fig_local_minima.png used on input 
-line 262.
+line 264.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [38 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/fig_loca
 l_minima.png>]
-<techniques/figures/particle_lookup_cache.png, id=640, 339.51843pt x 191.9672pt
+<techniques/figures/particle_lookup_cache.png, id=641, 339.51843pt x 191.9672pt
 >
 File: techniques/figures/particle_lookup_cache.png Graphic file (type png)
  <use techniques/figures/particle_lookup_cache.png>
 Package pdftex.def Info: techniques/figures/particle_lookup_cache.png used on i
-nput line 267.
+nput line 269.
 (pdftex.def)             Requested size: 288.7942pt x 163.29297pt.
  [39 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/particle
 _lookup_cache.png>]
-[40]
-<techniques/figures/normal_generation.png, id=655, 339.51843pt x 191.9672pt>
+<techniques/figures/normal_generation.png, id=650, 339.51843pt x 191.9672pt>
 File: techniques/figures/normal_generation.png Graphic file (type png)
 
 <use techniques/figures/normal_generation.png>
 Package pdftex.def Info: techniques/figures/normal_generation.png used on input
- line 290.
+ line 292.
 (pdftex.def)             Requested size: 412.56496pt x 233.27986pt.
- [41 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/normal_g
-eneration.png>]
-<techniques/figures/threading_architecture.png, id=663, 542.2659pt x 628.0263pt
+ [40] [41 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/nor
+mal_generation.png>]
+<techniques/figures/threading_architecture.png, id=664, 542.2659pt x 628.0263pt
 >
 File: techniques/figures/threading_architecture.png Graphic file (type png)
  <use techniques/figures/threading_architecture.png>
 Package pdftex.def Info: techniques/figures/threading_architecture.png used on 
-input line 299.
+input line 301.
 (pdftex.def)             Requested size: 288.7942pt x 334.47186pt.
-
-Underfull \vbox (badness 4291) has occurred while \output is active []
-
  [42 <D:/studia/magisterka/code/master_thesis/paper/techniques/figures/threadin
-g_architecture.png>]) [43]
-(D:\studia\magisterka\code\master_thesis\paper\results/results.tex [44
+g_architecture.png>])
+[43] (D:\studia\magisterka\code\master_thesis\paper\results/results.tex
+[44
 
 
 
@@ -838,20 +832,20 @@ Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 197.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
 (rerunfilecheck)             Checksum: EF65B3B04E633E1D46CC0328C6BC644D;2640.
 Package rerunfilecheck Info: File `thesis.brf' has not changed.
-(rerunfilecheck)             Checksum: 7F08A54D1FF9A10007DDE0F712182EE8;2841.
+(rerunfilecheck)             Checksum: F99B4B64F57738BB79381A027EAAAC51;2724.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8881 strings out of 494045
- 136517 string characters out of 3145962
- 234449 words of memory out of 3000000
- 11768 multiletter control sequences out of 15000+200000
+ 8882 strings out of 494045
+ 136535 string characters out of 3145962
+ 230499 words of memory out of 3000000
+ 11769 multiletter control sequences out of 15000+200000
  15016 words of font info for 57 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 43i,14n,48p,1814b,458s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,14n,48p,1846b,458s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C
 :/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx6.pfb><C:/P
@@ -874,9 +868,9 @@ ype1/public/amsfonts/cm/cmti7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
 public/amsfonts/cm/cmtt8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pub
 lic/amsfonts/symbols/msam10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/
 public/amsfonts/symbols/msbm10.pfb>
-Output written on thesis.pdf (51 pages, 2868107 bytes).
+Output written on thesis.pdf (51 pages, 2868613 bytes).
 PDF statistics:
- 859 PDF objects out of 1000 (max. 8388607)
+ 858 PDF objects out of 1000 (max. 8388607)
  188 named destinations out of 1000 (max. 500000)
  443 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -18,6 +18,8 @@ bool AbstractScene::setup()
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	
+	_timer.restart();
+
 	return true;
 }
 
@@ -135,9 +137,10 @@ void AbstractScene::computeFrameRate()
 	_frameCount++;
 	if (_timer.elapsed() > 1.0) {
 		double frameRate = _frameCount / _timer.elapsed();
-		std::cout << frameRate << "fps" << std::endl;
-		_timer.restart();
+		std::cout << frameRate;		
 		_frameCount = 0;
 		displayAdditionalStats();
+		std::cout << std::endl;
+		_timer.restart();
 	}
 }

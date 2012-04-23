@@ -161,8 +161,6 @@ void initKeyController()
 	keys.push_back(make_pair('(', ')'));
 
 	g_renderingParameterController = boost::make_shared<ParameterController>(keys, (ParametrizedPtr)&g_scene2);
-
-	g_renderingParameterController->printMappings();
 }
 
 GLUSboolean init(GLUSvoid)
@@ -227,8 +225,6 @@ void keyFunc(GLUSboolean pressed, GLUSuint key)
 	const GLUSuint KEY_7 = 55;
 	const GLUSuint KEY_8 = 56;
 
-	std::cout << key << std::endl;
-
 	if (key == KEY_F) {
 		createCubeFromEye(0.5f, 50.0f);
 	} else if (key == 100) {
@@ -244,19 +240,20 @@ bool initNx()
 {
 	NxSDKCreateError error;
 	NxPhysicsSDKDesc desc;
+	desc.gpuHeapSize = 128;
 	desc.flags &= ~NX_SDKF_NO_HARDWARE;
 	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, NULL, new ErrorStream(), desc, &error);
 	if (gPhysicsSDK == NULL) {
-		cout << "Physics SDK creation failed: " << PhysXUtils::getErrorString(error) << endl;
+		std::cerr << "Physics SDK creation failed: " << PhysXUtils::getErrorString(error) << endl;
 		return false;
 	}
 
 	NxHWVersion hwCheck = gPhysicsSDK->getHWVersion();
 	if (hwCheck == NX_HW_VERSION_NONE) {
-		std::cout << "WARN: No PhysX hardware found. Fluid simulated on CPU" << std::endl;
+		std::cerr << "WARN: No PhysX hardware found. Fluid simulated on CPU" << std::endl;
 		g_gpuAccelerationPossible = false;
 	} else {
-		std::cout << "INFO: PhysX hardware acceleration possible. Fluid simulated on GPU" << std::endl;
+		std::cerr << "INFO: PhysX hardware acceleration possible. Fluid simulated on GPU" << std::endl;
 		g_gpuAccelerationPossible = true;
 	}
 	
@@ -267,7 +264,7 @@ bool initNx()
 	g_NxScene = gPhysicsSDK->createScene(sceneDesc);
 
 	if (g_NxScene == NULL) {
-		cout << "ERROR: unable to create PhysX scene" << endl;
+		std::cerr << "ERROR: unable to create PhysX scene" << endl;
 		return false;
 	}
 
@@ -365,7 +362,7 @@ void mouseWheelFunc(unsigned int buttons, int ticks, unsigned int xPos, unsigned
 
 void printUsage()
 {
-	std::cout << "main.exe [bilateral_gauss | curvature_flow | isosurface] <screen_width> <screen_height> <max_particles>" << std::endl;
+	std::cerr << "main.exe [bilateral_gauss | curvature_flow | isosurface] <screen_width> <screen_height> <max_particles>" << std::endl;
 }
 
 void parseCommandLine(int argc, char** argv)
@@ -383,8 +380,8 @@ void parseCommandLine(int argc, char** argv)
 	} else if (strcmp(renderingMode, "isosurface") == 0) {
 		g_renderingMode = RenderingMode::ISOSURFACE_EXTRACTION;
 	} else {
-		std::cout << "WARNING: rendering mode \"" << renderingMode << "\" not recognized" << std::endl;
-		std::cout << "Using \"bilateral_gauss\"" << std::endl;
+		std::cerr << "WARNING: rendering mode \"" << renderingMode << "\" not recognized" << std::endl;
+		std::cerr << "Using \"bilateral_gauss\"" << std::endl;
 		g_renderingMode = RenderingMode::BILATERAL_GAUSS;
 	}
 
@@ -423,7 +420,7 @@ int main(int argc, char** argv)
 
 		if (!glusCreateWindow("GLUS Example Window", g_screenWidth, g_screenHeight, GLUS_FALSE))
 		{
-			cout << "Could not create window!" << endl;
+			std::cerr << "Could not create window!" << endl;
 			return -1;
 		}
 
@@ -434,7 +431,7 @@ int main(int argc, char** argv)
 		// continue only if OpenGL 3.3 is supported.
 		if (!glewIsSupported("GL_VERSION_3_2"))
 		{
-			cout << "OpenGL 3.2 not supported." << endl;
+			std::cerr << "OpenGL 3.2 not supported." << endl;
 
 			glusDestroyWindow();
 			return -1;
@@ -443,12 +440,16 @@ int main(int argc, char** argv)
 		glusRun();
 	} catch (const std::exception& ex) {
 		std::cerr << "EXCEPTION: " << ex.what() << std::endl;
+		fgetc(stdin);
 		return 1;
 	} catch (const std::string& ex) {
 		std::cerr << "EXCEPTION: " << ex << std::endl;
+		fgetc(stdin);
 	} catch (const char* ex) {
 		std::cerr << "EXCEPTION: " << ex << std::endl;
+		fgetc(stdin);
 	} catch (...) {
 		std::cerr << "UNDEFINED EXCEPTION" << std::endl;
+		fgetc(stdin);
 	}
 }
