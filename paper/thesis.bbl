@@ -6,6 +6,11 @@
 \newblock {\em Proceedings of the 2008 symposium on Interactive 3D graphics and
   games}, 2008.
 
+\bibitem{directx11water}
+\href{http://developer.download.nvidia.com/assets/gamedev/files/sdk/11/OceanCS_Slides.pdf}{{\bf
+  Ocean surface simulation}}.
+\newblock http://developer.nvidia.com/nvidia-graphics-sdk-11-direct3d, 2010.
+
 \bibitem{Liu}
 {\sc M.~B.~Liu G.~R.~Liu}.
 \newblock {\em Smoothed Particle Hydrodynamics a meshfree particle method}.

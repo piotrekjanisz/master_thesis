@@ -862,7 +862,6 @@ void Scene::renderCurvatureFlow(NxScene* physicsScene)
 			CHECK_GL_CMD(_water->render(myFluid->getParticlesCount(), GL_POINTS, _waterShader));
 		}
 	}
-
 	
 	CHECK_GL_CMD(glBindFramebuffer(GL_FRAMEBUFFER, _smoothFrameBuffer->getId()));
 	CHECK_GL_CMD(_smoothFrameBuffer->attachTexture2D(_edgeTexture, GL_COLOR_ATTACHMENT0));

@@ -18,6 +18,11 @@ public:
 	FrameBuffer(void);
 	~FrameBuffer(void);
 
+	static FrameBufferPtr create()
+	{
+		return boost::make_shared<FrameBuffer>();
+	}
+
 	/**
 	 * format - format of buffer data (ie. GL_RGBA8, GL_DEPTH_COMPONENT)
 	 * target - what will be drawn to this renderbuffer (ie DEPTH_ATTACHMENT, GL_COLOR_ATTACHMENT0)
@@ -42,6 +47,31 @@ public:
 	{		
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fboName);
 		glDrawBuffers(_renderTargets.size(), _renderTargets.data());
+	}
+
+	void bind()
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, getId());
+	}
+
+	void mapDefaultOutputs(int outputNum)
+	{
+		GLenum fboBufs[] = {
+			GL_COLOR_ATTACHMENT0,
+			GL_COLOR_ATTACHMENT1,
+			GL_COLOR_ATTACHMENT2,
+			GL_COLOR_ATTACHMENT3,
+			GL_COLOR_ATTACHMENT4,
+			GL_COLOR_ATTACHMENT5,
+			GL_COLOR_ATTACHMENT6,
+			GL_COLOR_ATTACHMENT7,
+			GL_COLOR_ATTACHMENT8,
+			GL_COLOR_ATTACHMENT9,
+			GL_COLOR_ATTACHMENT10,
+			GL_COLOR_ATTACHMENT11,
+		};
+
+		glDrawBuffers(outputNum, fboBufs);
 	}
 
 	static void bindDefaultForReading() 

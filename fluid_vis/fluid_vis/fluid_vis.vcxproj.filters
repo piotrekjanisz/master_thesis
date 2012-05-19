@@ -102,6 +102,15 @@
     <ClCompile Include="IsosurfaceParticleRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PhysXSceneBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BasinSceneBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FountainSceneBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -186,6 +195,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IsosurfaceParticleRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXSceneBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasinSceneBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FountainSceneBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -312,6 +330,18 @@
     </None>
     <None Include="resources\shaders\water_surface_vertex.glsl">
       <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\config\ScreenSpaceRenderer.cfg">
+      <Filter>config</Filter>
+    </None>
+    <None Include="resources\shaders\derivative_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="resources\shaders\curvature_flow_fragment3.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\fluid_old\master_thesis\fluid_vis\fluid_vis\copy_resources.ps1">
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
 </Project>

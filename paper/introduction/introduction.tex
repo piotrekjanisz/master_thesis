@@ -13,7 +13,54 @@
 
 \section{Motivation}
 
-\section{State of the art}
+Simulation of reality have always been very important part of computer games. Ambition of developers is to make virtual worlds more and more realistic. This is however a very difficult task, as games are interactive and requires real-time simulations. That prevents from using state of the art models of reality as they are designed for off-line simulations on large computer clusters. New algorithms have to be developed or some simplifications in existing models have to be made to fit them into limited computational resources and time constraints. Over the years tremendous progress have been made in computer games realism. Continuous growth of computer's hardware computational power enabled to perform real time simulations that were unthinkable 10 years ago. 
+
+Simulating fluids is an important part of reality simulation. It is also very expensive to run physically accurate simulations of fluid on todays hardware. To overcome that, various efforts have been made. First of them is to decrease simulation dimensionality from 3 to 2 - thus treating water surface as a function of two variables - $f(x, y)$. This approach allows to achieve realistic oceans, lakes etc. (see figure~\ref{directx11ocean}), however it can't be used to simulate splashes or breaking waves. It is also hard to incorporate interactions with other object (like rigid bodies). For achieving such effect particle based simulations can be used. They approximate fluid as a large number of particles which interact with each other and with other objects. This is better than Eurlerian approaches as we can only focus on areas where fluid is present and don't have to cover entire domain with grid. Eulerian, Lagrarian and particle base approaches will be further described in chapter~\ref{chap:sph}.  
+
+\figuremacro{directx11ocean}{Ocean surface simulation}{Procedural approach to simulate ocean surface. Image taken from \cite{directx11water}}
+% Ocean simulation http://developer.download.nvidia.com/assets/gamedev/files/sdk/11/OceanCS_Slides.pdf
+
+One of particle base methods is SPH (see chapter~\ref{chap:sph}). It produces realistic fluid simulations with effects that are unavailable for procedural or height-field models. What is more it is based on a set of simple rules and governing equations. Realistic simulations using this method requires tens of thousands particles to be used. This cannot be done in real time using CPU, however it can be efficiently implemented on modern GPUs. Their massively parallel architecture allow to simulate over 100 thousands of particles in real time. 
+
+Although fluid simulation using particle based approach is easy, rendering output from the simulation is harder. Unlike height field based approach this does not produce triangle mesh. Some effort is required to make the output from simulation look like a water surface instead of bunch of spheres. The fluid surface has to be extracted somehow each time. 
+
+The goal of this paper is to investigate latest rendering techniques for fluids. I will also compare performance of those techniques on latest hardware. PhysX physics engine will be used to perform SPH simulation of fluid and OpenGL to render the results. 
+
+%- hardware improvement and better and complex algorithms
+%- fluids (and in particular water) are one of the key elements of surrounding world.
+%- different scale of water simulations - large oceans, ponds, waterfalls, small water bodies (glass of water, tap, blood)
+%- for different scales different techniques with different amount of interaction and supported effects.
+%- SPH one of them it can offer complete interaction and realism but it's expensive.
+%- if more enough particles simulated larger water bodies can be simulated.
+%- latest GPUs allows to quickly simulate large number of particles.
+%- Simulation is one thing but the output from simulation have to be rendered to look like water / fluid not a bunch of spheres.
+%- GOAL: to investigate performance of latest rendering techniques for particle fluids, on todays hardware. Will use PhysX and OpenGL.
+
+% \section{State of the art}
+
+
+
+%GPU Gems 3 - chapter 7
+
+%Marching cubes (Lorenson & Cline 1987)
+
+%Ray tracing (Parker et al. 1998)
+
+%Adaptive sampling and rendering of fluids on GPU (Yanci Zhang et al.)
+
+%GPU Gems chapter 30
+
+%Fluid surface reconstruction from particles offline rendering method
+
+%Instant liquids poster (proceedings of ACM sgigraph /eurographics symposium on computer animation 2008)
+
+%Van der Laan - screen space fluid rendering with curvature flow
+
+%Rosenberg - marching slices
+
+%Muller - GPU fluid
+
+% Reconstructing Surfaces of Particle-Based Fluids Using Anisotropic Kernels
 
 % ----------------------------------------------------------------------
 

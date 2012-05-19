@@ -8,6 +8,25 @@
 #include "ScreenQuad.h"
 #include "data_types.h"
 
+struct ScreenSpaceRendererDesc
+{
+	float particleSize;
+	float particleThickness;
+	float thicknessGaussSigma;
+	float thicknessGaussSize;
+	float thicknessTextureSize;
+
+	float minDensity;
+	float normalDensity;
+	float maxParticleSize;
+	int particleThicknessExp;
+	float refractionMult;
+
+	float timeStep;
+	int blurIterations;
+	float edgeTreshold;
+};
+
 class ScreenSpaceParticleRenderer : public ParticleRenderer
 {
 private: // constants
@@ -42,6 +61,8 @@ protected: // rendering parameters
 	float _maxParticleSize;
 	int _particleThicknessExp;
 	float _refractionMult;
+
+	ScreenSpaceRendererDesc _description;
 
 protected: // graphic objects
 	// FrameBuffers

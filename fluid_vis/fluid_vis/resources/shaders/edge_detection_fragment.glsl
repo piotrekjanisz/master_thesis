@@ -18,6 +18,11 @@ void main()
 	float rightValue = texture(inputImage, tex_coord + vec2(coordStep.x, 0.0)).x;
 	float leftValue = texture(inputImage, tex_coord + vec2(-coordStep.x, 0.0)).x;
 
+	float upValue2 = texture(inputImage, tex_coord + 2*vec2(0.0, coordStep.y)).x;
+	float downValue2 = texture(inputImage, tex_coord + 2*vec2(0.0, -coordStep.y)).x;
+	float rightValue2 = texture(inputImage, tex_coord + 2*vec2(coordStep.x, 0.0)).x;
+	float leftValue2 = texture(inputImage, tex_coord + 2*vec2(-coordStep.x, 0.0)).x;
+
 	float upRightValue = texture(inputImage, tex_coord + vec2(coordStep.x, coordStep.y)).x;
 	float upLeftValue = texture(inputImage, tex_coord + vec2(-coordStep.x, coordStep.y)).x;
 	float downRightValue = texture(inputImage, tex_coord + vec2(coordStep.x, -coordStep.y)).x;
@@ -28,6 +33,12 @@ void main()
 	max_diff = max(max_diff, abs(sampleValue - downValue));
 	max_diff = max(max_diff, abs(sampleValue - rightValue));
 	max_diff = max(max_diff, abs(sampleValue - leftValue));
+
+	max_diff = max(max_diff, abs(sampleValue - upValue2));
+	max_diff = max(max_diff, abs(sampleValue - downValue2));
+	max_diff = max(max_diff, abs(sampleValue - rightValue2));
+	max_diff = max(max_diff, abs(sampleValue - leftValue2));
+
 	max_diff = max(max_diff, abs(sampleValue - upRightValue));
 	max_diff = max(max_diff, abs(sampleValue - upLeftValue));
 	max_diff = max(max_diff, abs(sampleValue - downRightValue));

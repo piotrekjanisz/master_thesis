@@ -3,7 +3,7 @@
 % content in this file will be fed into the main document
 
 %: ----------------------- introduction file header -----------------------
-\chapter{Resuts}
+\chapter{Results and conclusions}
 
 \graphicspath{{results/figures/}}
 
@@ -11,9 +11,83 @@
 %: ----------------------- introduction content ----------------------- 
 % ----------------------------------------------------------------------
 
+\section{Performance}
+
+% table with machine configurations
+
+Performance test were performed on two machines which configuration is presented in table~\ref{tab:test_configuration}. PhysX scene with one emitter was used. Results were rendered in two resolutions - 640~x~480 and 1280~x~960. 
+
+%Present graphs with frame rate depending on number of particle simulated. Note that decrease in performance comes also from simulation cost, not only from rendering.
+
+%Show second set of graphs showing time to render one frame depending on number of particles. 
+
+%Show table showing how resolution affects performance of algorithms when number of particles is kept constant.
+
+%Show table showing speedup of isosurface algorithm.
+
+\begin{table}   
+    \caption[Configuration of test machines]{\textbf{Configuration of test machines}}
+    \centering
+    \begin{tabular}{ l | p{4.5cm} | p{4.5cm} }
+                                         & machine 1                                             & machine 2 \\ \hline
+        CPU                           & Intel Core i7 2600k 3.4 GHz, 4 cores  & Inte Core i7 2630M 2.0 GHz, 4 cores \\ \hline
+        GPU                           & Nvidia GeForce GTX 560 Titanium        &  Nvidia GeForce GT 540M \\ \hline
+        Physical memory       & 8 GB                                                      & 6GB \\
+    \end{tabular}
+    \label{tab:test_configuration}
+\end{table}
+
+\begin{table}
+   \caption[Performance comparison]{\textbf{Performance comparison} of all rendering algorithms. Screen space methods ran with 60000 particles, isosurface extraction run with 20000 particles using 3 threads.}
+   \centering
+   \begin{tabular} { l | r | c | r }
+      Algorithm                                       &            resolution              &          machine           &          Frame (ms)      \\ \hline \hline
+      Bilateral Gaussian smoothing        &           640x480                &              1                  &           10.0                    \\ \hline
+      Bilateral Gaussian smoothing        &           1280x960              &              1                  &           13.8                    \\ \hline
+      Bilateral Gaussian smoothing        &           640x480                &              2                  &           51.9                    \\ \hline
+      Bilateral Gaussian smoothing        &           1280x960              &              2                  &           63.5                    \\ \hline \hline
+
+      Curvature flow smoothing 100 it. &           640x480                &              1                  &           15.6                    \\ \hline
+      Curvature flow smoothing 100 it. &          1280x960               &              1                  &           27.8                    \\ \hline
+      Curvature flow smoothing 100 it. &           640x480                &              2                  &           73.1                    \\ \hline
+      Curvature flow smoothing 100 it. &          1280x960               &              2                  &           134.1                  \\ \hline \hline
+
+      Curvature flow smoothing 60 it.   &           640x480                &              1                  &           13.7                \\ \hline
+      Curvature flow smoothing 60 it.   &          1280x960               &              1                  &           22.0                \\ \hline
+      Curvature flow smoothing 60 it.   &           640x480                &              2                  &           65.7                    \\ \hline
+      Curvature flow smoothing 60 it.   &          1280x960               &              2                  &           104.5               \\ \hline \hline
+
+      Isosurface extraction                    &          640x480                &              1                  &            60.4                    \\ \hline     
+      Isosurface extraction                    &          1280x960               &              1                  &           63.1                   \\ \hline      
+      Isosurface extraction                    &          640x480                &              2                  &            104.8               \\ \hline
+      Isosurface extraction                    &          1280x960               &              2                  &           120.5               \\ 
+   \end{tabular}
+\end{table}
+
+\figuremacro{curvature_640_480}{Performance of screen space rendering with curvature flow at 640x480}{Some description}
+\figuremacro{curvature_1280_960}{Performance of screen space rendering with curvature flow at 1280x960}{Some description}
+\figuremacro{bilateral}{Performance of screen space rendering with bilateral Gaussian smoothing}{Some description}
+\figuremacro{curvature_100it}{Performance of screen space rendering curvature flow smoothing}{100 iterations were performed for each frame.}
+
+%CONCLUSIONS:
+%- increasing resolution affects screen space rendering much more than increasing number of particles
+%  - curvature flow affected much more by increasing resolution than Gaussian smoothing
+%- isosurface extraction behaves in opposite way
+
 \section{Visual appearance}
 
-\section{Performance}
+Describe what features algorithms include. Show some images. 
+
+- isosurface extraction looks good but it's really slow, loads CPU and does not include depth.
+- curvature flow produces better smoothed surface but it comes with a cost of greater complexity (computational)
+- isosurface produces fluids that is more gelly like than screen space rendering
+
+
+FINAL CONCLUSIONS:
+- Isosurface is sufficient for small particle systems (up to ~3k - 6k particles) like blood, small fountains.
+- Screen space rendering can be used to simulate bigger systems - water flooding some areas, ponds. 
+   - can run bilateral gauss on lower performance hardware and curvature flow on higher.
+
 
 % ----------------------------------------------------------------------
 

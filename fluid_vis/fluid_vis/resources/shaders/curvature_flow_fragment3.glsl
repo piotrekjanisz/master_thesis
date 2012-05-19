@@ -1,10 +1,10 @@
-	#version 330
-	precision highp float;
-
-in vec2 tex_coord;
+#version 330
+precision highp float;
 
 uniform sampler2D depthTexture;
 uniform sampler2D edgeTexture;
+uniform sampler2D dxTexture;
+uniform sampler2D dyTexture;
 
 uniform float Cx;
 uniform float Cy;
@@ -15,24 +15,21 @@ uniform float timeStep;
 uniform vec2 coordStep;
 uniform vec2 coordStepInv; // = vec2(width, height)
 
+input vec2 tex_coord;
+
 out float frag_color;
 
-void main()
+void main(void)
 {
 	float z_dep = texture(depthTexture, tex_coord).x;
 	float z = z_dep * 100.0;
 	float edge = texture(edgeTexture, tex_coord).x;
 
-	float z_top = texture(depthTexture, tex_coord + vec2(0.0, coordStep.y)).x * 100.0;
-	float z_bot = texture(depthTexture, tex_coord + vec2(0.0, -coordStep.y)).x * 100.0;
-	float z_left = texture(depthTexture, tex_coord + vec2(-coordStep.x, 0.0)).x * 100.0;
-	float z_right = texture(depthTexture, tex_coord + vec2(coordStep.x, 0.0)).x * 100.0;
+	float dzx = texture(dxTexture, tex_coord).x;
+	float dzy = texture(dyTexture, tex_coord).x;
 
-	float dzx = (z_right - z) * coordStepInv.x;
-	float dzy = (z_top - z) * coordStepInv.y;
-
-	float ddzx = (z_right - 2*z + z_left) * (coordStepInv.x * coordStepInv.x);
-	float ddzy = (z_top - 2*z + z_bot) * (coordStepInv.y * coordStepInv.y);
+	float ddzx = dFdx(dzx) * coordStepInv.x;
+	float ddzy = dFdy(dzy) * coordStepInv.y;
 
 	float D = Cy_square*dzx*dzx + Cx_square*dzy*dzy + Cx_square*Cy_square*z*z;
 	

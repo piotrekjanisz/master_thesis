@@ -2,6 +2,7 @@
 
 #include "BaseException.h"
 #include "Properties.h"
+#include "ScreenSpaceParticleRenderer.h"
 #include <surface_extraction\data_types.h>
 #include <utils/BaseConfigurationFactory.h>
 #include <NxPhysics.h>
@@ -63,6 +64,24 @@ public:
 		INT_MEMBER(maxTrianglesPerThread);
 		INT_MEMBER(maxVerticesPerThread);
 		INT_MEMBER(threads);
+	AUTO_GET_END()
+
+	AUTO_GET_START_NAME(ScreenSpaceRendererDesc, createScreenSpaceRendererDesc)
+		FLOAT_MEMBER(particleSize);
+		FLOAT_MEMBER(particleThickness);
+		FLOAT_MEMBER(thicknessGaussSigma);
+		INT_MEMBER(thicknessGaussSize);
+		FLOAT_MEMBER(thicknessTextureSize);
+
+		FLOAT_MEMBER(minDensity);
+		FLOAT_MEMBER(normalDensity);
+		FLOAT_MEMBER(maxParticleSize);
+		INT_MEMBER(particleThicknessExp);
+		FLOAT_MEMBER(refractionMult);
+
+		FLOAT_MEMBER(timeStep);
+		INT_MEMBER(blurIterations);
+		FLOAT_MEMBER(edgeTreshold);
 	AUTO_GET_END()
 };
 

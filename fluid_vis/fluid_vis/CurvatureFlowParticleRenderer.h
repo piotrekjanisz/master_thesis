@@ -43,6 +43,13 @@ private: // graphic objects
 	ScreenQuadPtr _edgeQuad;
 	ScreenQuadPtr _curvatureFlowQuad;
 
+	ScreenQuadPtr _curvatureFlowQuad2;
+	ScreenQuadPtr _derivativeQuad;
+	ShaderProgramPtr _derivativeShader;
+	ShaderProgramPtr _curvatureFlowShader2;
+	TexturePtr _dxTexture;
+	TexturePtr _dyTexture;
+
 	// shaders
 	ShaderProgramPtr _edgeDetectionShader;
 	ShaderProgramPtr _curvatureFlowShader;

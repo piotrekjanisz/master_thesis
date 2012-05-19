@@ -1,39 +1,38 @@
 \BOOKMARK [0][]{chapter.1}{1 Introduction}{}% 1
 \BOOKMARK [1][]{section.1.1}{1.1 Motivation}{chapter.1}% 2
-\BOOKMARK [1][]{section.1.2}{1.2 State of the art}{chapter.1}% 3
-\BOOKMARK [0][]{chapter.2}{2 SPH}{}% 4
-\BOOKMARK [1][]{section.2.1}{2.1 Introduction}{chapter.2}% 5
-\BOOKMARK [1][]{section.2.2}{2.2 Fundamentals of SPH}{chapter.2}% 6
-\BOOKMARK [1][]{section.2.3}{2.3 SPH for fluids}{chapter.2}% 7
-\BOOKMARK [0][]{chapter.3}{3 Tools}{}% 8
-\BOOKMARK [1][]{section.3.1}{3.1 Opengl}{chapter.3}% 9
-\BOOKMARK [2][]{subsection.3.1.1}{3.1.1 Vertex Shader}{section.3.1}% 10
-\BOOKMARK [2][]{subsection.3.1.2}{3.1.2 Geometry Shader}{section.3.1}% 11
-\BOOKMARK [2][]{subsection.3.1.3}{3.1.3 Fragment Shader}{section.3.1}% 12
-\BOOKMARK [2][]{subsection.3.1.4}{3.1.4 Perspective projection and homogeneous space}{section.3.1}% 13
-\BOOKMARK [2][]{subsection.3.1.5}{3.1.5 Depth buffer}{section.3.1}% 14
-\BOOKMARK [2][]{subsection.3.1.6}{3.1.6 Framebuffer Object}{section.3.1}% 15
-\BOOKMARK [1][]{section.3.2}{3.2 Boost library}{chapter.3}% 16
-\BOOKMARK [1][]{section.3.3}{3.3 PhysX}{chapter.3}% 17
-\BOOKMARK [2][]{subsection.3.3.1}{3.3.1 Rigid bodies}{section.3.3}% 18
-\BOOKMARK [2][]{subsection.3.3.2}{3.3.2 Fluids}{section.3.3}% 19
-\BOOKMARK [0][]{chapter.4}{4 Rendering techniques}{}% 20
-\BOOKMARK [1][]{section.4.1}{4.1 Screen space}{chapter.4}% 21
-\BOOKMARK [2][]{subsection.4.1.1}{4.1.1 Surface depth}{section.4.1}% 22
-\BOOKMARK [2][]{subsection.4.1.2}{4.1.2 Smoothing}{section.4.1}% 23
-\BOOKMARK [3][]{subsubsection.4.1.2.1}{4.1.2.1 Gaussian smoothing}{subsection.4.1.2}% 24
-\BOOKMARK [3][]{subsubsection.4.1.2.2}{4.1.2.2 Curvature flow smoothing}{subsection.4.1.2}% 25
-\BOOKMARK [2][]{subsection.4.1.3}{4.1.3 Thickness}{section.4.1}% 26
-\BOOKMARK [2][]{subsection.4.1.4}{4.1.4 Rendering}{section.4.1}% 27
-\BOOKMARK [1][]{section.4.2}{4.2 Isosurface extraction}{chapter.4}% 28
-\BOOKMARK [2][]{subsection.4.2.1}{4.2.1 Overview}{section.4.2}% 29
-\BOOKMARK [2][]{subsection.4.2.2}{4.2.2 Block subdivision}{section.4.2}% 30
-\BOOKMARK [2][]{subsection.4.2.3}{4.2.3 Block processing}{section.4.2}% 31
-\BOOKMARK [2][]{subsection.4.2.4}{4.2.4 Lookup cache}{section.4.2}% 32
-\BOOKMARK [2][]{subsection.4.2.5}{4.2.5 Normals generation}{section.4.2}% 33
-\BOOKMARK [2][]{subsection.4.2.6}{4.2.6 Multithreading}{section.4.2}% 34
-\BOOKMARK [2][]{subsection.4.2.7}{4.2.7 Rendering}{section.4.2}% 35
-\BOOKMARK [0][]{chapter.5}{5 Resuts}{}% 36
-\BOOKMARK [1][]{section.5.1}{5.1 Visual appearance}{chapter.5}% 37
-\BOOKMARK [1][]{section.5.2}{5.2 Performance}{chapter.5}% 38
-\BOOKMARK [0][]{chapter*.29}{Bibliography}{}% 39
+\BOOKMARK [0][]{chapter.2}{2 SPH}{}% 3
+\BOOKMARK [1][]{section.2.1}{2.1 Introduction}{chapter.2}% 4
+\BOOKMARK [1][]{section.2.2}{2.2 Fundamentals of SPH}{chapter.2}% 5
+\BOOKMARK [1][]{section.2.3}{2.3 SPH for fluids}{chapter.2}% 6
+\BOOKMARK [0][]{chapter.3}{3 Tools}{}% 7
+\BOOKMARK [1][]{section.3.1}{3.1 OpenGL}{chapter.3}% 8
+\BOOKMARK [2][]{subsection.3.1.1}{3.1.1 Vertex Shader}{section.3.1}% 9
+\BOOKMARK [2][]{subsection.3.1.2}{3.1.2 Geometry Shader}{section.3.1}% 10
+\BOOKMARK [2][]{subsection.3.1.3}{3.1.3 Fragment Shader}{section.3.1}% 11
+\BOOKMARK [2][]{subsection.3.1.4}{3.1.4 Perspective projection and homogeneous space}{section.3.1}% 12
+\BOOKMARK [2][]{subsection.3.1.5}{3.1.5 Depth buffer}{section.3.1}% 13
+\BOOKMARK [2][]{subsection.3.1.6}{3.1.6 Framebuffer Object}{section.3.1}% 14
+\BOOKMARK [1][]{section.3.2}{3.2 Boost library}{chapter.3}% 15
+\BOOKMARK [1][]{section.3.3}{3.3 PhysX}{chapter.3}% 16
+\BOOKMARK [2][]{subsection.3.3.1}{3.3.1 Rigid bodies}{section.3.3}% 17
+\BOOKMARK [2][]{subsection.3.3.2}{3.3.2 Fluids}{section.3.3}% 18
+\BOOKMARK [0][]{chapter.4}{4 Rendering techniques}{}% 19
+\BOOKMARK [1][]{section.4.1}{4.1 Screen space}{chapter.4}% 20
+\BOOKMARK [2][]{subsection.4.1.1}{4.1.1 Surface depth}{section.4.1}% 21
+\BOOKMARK [2][]{subsection.4.1.2}{4.1.2 Smoothing}{section.4.1}% 22
+\BOOKMARK [3][]{subsubsection.4.1.2.1}{4.1.2.1 Gaussian smoothing}{subsection.4.1.2}% 23
+\BOOKMARK [3][]{subsubsection.4.1.2.2}{4.1.2.2 Curvature flow smoothing}{subsection.4.1.2}% 24
+\BOOKMARK [2][]{subsection.4.1.3}{4.1.3 Thickness}{section.4.1}% 25
+\BOOKMARK [2][]{subsection.4.1.4}{4.1.4 Rendering}{section.4.1}% 26
+\BOOKMARK [1][]{section.4.2}{4.2 Isosurface extraction}{chapter.4}% 27
+\BOOKMARK [2][]{subsection.4.2.1}{4.2.1 Overview}{section.4.2}% 28
+\BOOKMARK [2][]{subsection.4.2.2}{4.2.2 Block subdivision}{section.4.2}% 29
+\BOOKMARK [2][]{subsection.4.2.3}{4.2.3 Block processing}{section.4.2}% 30
+\BOOKMARK [2][]{subsection.4.2.4}{4.2.4 Lookup cache}{section.4.2}% 31
+\BOOKMARK [2][]{subsection.4.2.5}{4.2.5 Normals generation}{section.4.2}% 32
+\BOOKMARK [2][]{subsection.4.2.6}{4.2.6 Multithreading}{section.4.2}% 33
+\BOOKMARK [2][]{subsection.4.2.7}{4.2.7 Rendering}{section.4.2}% 34
+\BOOKMARK [0][]{chapter.5}{5 Results and conclusions}{}% 35
+\BOOKMARK [1][]{section.5.1}{5.1 Performance}{chapter.5}% 36
+\BOOKMARK [1][]{section.5.2}{5.2 Visual appearance}{chapter.5}% 37
+\BOOKMARK [0][]{chapter*.36}{Bibliography}{}% 38

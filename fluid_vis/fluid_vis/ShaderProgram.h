@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include "BaseException.h"
 #include "NonCopyable.h"
+#include "data_types.h"
 
 class ShaderException : public BaseException
 {
@@ -28,6 +29,11 @@ public:
     void load(const std::string& vertexSource, const std::string& fragmentSource) throw(ShaderException);
     void load(const std::string& vertexSource, const std::string& fragmentSource, const std::string& geometrySource) throw(ShaderException);
     virtual ~ShaderProgram();
+
+	static ShaderProgramPtr create()
+	{
+		return boost::make_shared<ShaderProgram>();
+	}
 
     /**
      * @return opengl shader program id

@@ -11,6 +11,11 @@ public:
 	ScreenQuad(const ShaderProgramPtr& shaderProgram);
 	~ScreenQuad(void);
 
+	static ScreenQuadPtr create(const ShaderProgramPtr& shaderProgram)
+	{
+		return boost::make_shared<ScreenQuad>(shaderProgram);
+	}
+
 	void render();
 
 	void attachTexture(const TexturePtr& texture, GLenum textureAttachement);

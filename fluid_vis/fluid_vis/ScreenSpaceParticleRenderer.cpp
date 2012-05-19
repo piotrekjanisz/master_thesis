@@ -1,6 +1,7 @@
 #include "ScreenSpaceParticleRenderer.h"
 #include "debug_utils.h"
 #include "filters.h"
+#include "ConfigurationFactory.h"
 
 
 const std::string ScreenSpaceParticleRenderer::PARAM_PARTICLE_SIZE("particle size");
@@ -37,6 +38,19 @@ ScreenSpaceParticleRenderer::ScreenSpaceParticleRenderer(AbstractScene* scene)
 	_parameterNames.insert(PARAM_MAX_PARTICLE_SIZE);
 	_parameterNames.insert(PARAM_REFRACTION_MULT);
 	_parameterNames.insert(PARAM_PARTICLE_THICKNESS_EXP);
+
+	ConfigurationFactory configurationFactory("config");
+	_description = configurationFactory.createScreenSpaceRendererDesc("ScreenSpaceRenderer");
+	_particleSize = _description.particleSize; 
+	_maxParticleSize = _description.maxParticleSize;
+	_thicknessGaussSize = _description.thicknessGaussSize;
+	_thicknessGaussSigma = _description.thicknessGaussSigma;
+	_particleThickness = _description.particleThickness;
+	_thicknessTextureSize = _description.thicknessTextureSize;
+	_minDensity = _description.minDensity;
+	_normalDensity = _description.normalDensity;
+	_refractionMult = _description.refractionMult;
+	_particleThicknessExp = _description.particleThicknessExp;
 }
 
 

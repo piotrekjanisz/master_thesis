@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="AbstractScene.cpp" />
     <ClCompile Include="BaseException.cpp" />
+    <ClCompile Include="BasinSceneBuilder.cpp" />
     <ClCompile Include="BilateralGaussParticleRenderer.cpp" />
     <ClCompile Include="CameraFrame.cpp" />
     <ClCompile Include="CurvatureFlowParticleRenderer.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="debug_utils.cpp" />
     <ClCompile Include="ErrorStream.cpp" />
     <ClCompile Include="filters.cpp" />
+    <ClCompile Include="FountainSceneBuilder.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GfxObject.cpp" />
     <ClCompile Include="GfxStaticObject.cpp" />
@@ -156,6 +158,7 @@
     <ClCompile Include="MyFluid.cpp" />
     <ClCompile Include="ConfigurationFactory.cpp" />
     <ClCompile Include="ParticleRenderer.cpp" />
+    <ClCompile Include="PhysXSceneBuilder.cpp" />
     <ClCompile Include="physx_utils.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -170,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BaseException.h" />
+    <ClInclude Include="BasinSceneBuilder.h" />
     <ClInclude Include="BilateralGaussParticleRenderer.h" />
     <ClInclude Include="CameraFrame.h" />
     <ClInclude Include="CurvatureFlowParticleRenderer.h" />
@@ -178,6 +182,7 @@
     <ClInclude Include="debug_utils.h" />
     <ClInclude Include="ErrorStream.h" />
     <ClInclude Include="filters.h" />
+    <ClInclude Include="FountainSceneBuilder.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GfxObject.h" />
     <ClInclude Include="GfxStaticObject.h" />
@@ -186,6 +191,7 @@
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="ConfigurationFactory.h" />
     <ClInclude Include="ParticleRenderer.h" />
+    <ClInclude Include="PhysXSceneBuilder.h" />
     <ClInclude Include="physx_utils.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="Scene.h" />
@@ -198,17 +204,21 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\fluid_old\master_thesis\fluid_vis\fluid_vis\copy_resources.ps1" />
     <None Include="resources\config\emitter1.cfg" />
     <None Include="resources\config\extractor.cfg" />
     <None Include="resources\config\sample.cfg" />
+    <None Include="resources\config\ScreenSpaceRenderer.cfg" />
     <None Include="resources\config\water1.cfg" />
     <None Include="resources\shaders\bilateral_gauss_fragment.glsl" />
     <None Include="resources\shaders\copy_color_and_depth_fragment.glsl" />
     <None Include="resources\shaders\copy_texture_to_depth_fragment.glsl" />
     <None Include="resources\shaders\curvature_flow2.glsl" />
     <None Include="resources\shaders\curvature_flow_fragment.glsl" />
+    <None Include="resources\shaders\curvature_flow_fragment3.glsl" />
     <None Include="resources\shaders\debug_geometry.glsl" />
     <None Include="resources\shaders\debug_light_vertex.glsl" />
+    <None Include="resources\shaders\derivative_fragment.glsl" />
     <None Include="resources\shaders\draw_image2_fragment.glsl" />
     <None Include="resources\shaders\draw_image_fragment.glsl" />
     <None Include="resources\shaders\edge_detection_fragment.glsl" />
