@@ -43,7 +43,22 @@ Although previous step produces surface, its quality is not sufficient. As can b
 
 \subsubsection{Gaussian smoothing} \label{sec:gaussiansmoothing}
 Most obvious way to smooth values in depth texture is to apply Gaussian filter. It's easy to implement and can be computed fast due to its linear separability. However this filter produces undesired effect of blending drops of fluid with background surfaces (see figure~\ref{gaussian_filter_img}). 
-\figuremacroW{gaussian_filter_img}{Fluid surface rendered with Gaussian smoothing}{it can be seen that different parts of fluid are blended together creating undesired effect of one big surface.}{0.7}
+%\figuremacroW{gaussian_filter_img}{Fluid surface rendered with Gaussian smoothing}{it can be seen that different parts of fluid are blended together creating undesired effect of one big surface.}{0.7}
+\begin{figure}[ht]
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{nonbilateral_filter}
+(a) Gaussian smoothing
+\end{minipage}
+\hspace{0.2cm}
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{bilateral_filter}
+(b) Bilateral Gaussian smoothing
+\end{minipage}
+\caption{\textbf{Bilateral smoothing vs regular smoothing} - (a) Regular Gaussian smoothing it can be seen that surface of fountain is blended with fluid that lies on the ground, (b) bilateral filtering does not produce this undesired effect. }
+\label{gaussian_filter_img}
+\end{figure}
 Thus edge-preserving filters (also called bilateral filters) needs to be used. Bilateral Gaussian filter is a modification that changes wages of pixels depending on difference between their tonal value $I(s)$ and tonal value of central pixel $I(s_0)$. This can be described by following formula (from~\cite{PhamVliet2005}): 
 \begin{equation}
 \label{bilateral_equation}
@@ -62,10 +77,41 @@ g_s(s) = g(x, \sigma_S)g(y, \sigma_S)  \quad   g_t(I) = g(I, \sigma_t)
 
 As can be seen in equation~\ref{bilateral_weights_equation} only change in bilateral filter (in comparison to regular bilateral filter) is introduction of tonal weight $g_t$. This change makes filter space-variant - that means it can't be computed as a product of two one-dimensional filters ($g_s$ in equation~\ref{bilateral_dist_equation}). 
 Computational complexity of space-variant filters is $O(Nm^d)$ comparing to only $O(Nmd)$ for space-invariant (d is image dimensionality, m is the size of filtering kernel and N is the number of pixels in the image). For smoothing fluid surface kernel with $m = 20$ must be used, which, when using bilateral filtering on 2 dimensional image, gives about 400 operations for each pixel. In comparison separable implementation requires only 40 operations. It turns out however that computing bilateral filter as if it was space-invariant gives good approximation for real time applications (see figure~\ref{bilateral_comp}). Approximation gives some artifacts but they are not visible when fluid is moving and other effects (reflection and refraction) are applied.
-\figuremacroW{bilateral_comp}{Comparision of normal bilateral filter with it's separable approximation}{Upper row presents images for bilateral filter and bottom row presents separable approximation.}{0.7}
+
+%\figuremacroW{bilateral_comp}{Comparision of normal bilateral filter with it's separable approximation}{Upper row presents images for bilateral filter and bottom row presents separable approximation.}{0.7}
+\begin{figure}[ht]
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{cmp_bilateral}
+(a) Bilateral Gaussian smoothing
+\end{minipage}
+\hspace{0.2cm}
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{cmp_bilateral_separable}
+(b) Bilateral Gaussian smoothing computed as if it was separable
+\end{minipage}
+\caption{\textbf{Comparision of normal bilateral filter with it's separable approximation} -  Computing bilateral Gaussian filter as if it was separable produces some artifacts on edges (b), however they are not very disturbing.}
+\label{bilateral_comp}
+\end{figure}
 
 Bilateral filter has some undesired effect when applied on z-buffer output. The problem is that depth values are not evenly distributed. This means that difference between two fragments depth values is dependent on their distance to the viewer. As can be seen on equation~\ref{bilateral_weights_equation} bilateral weights takes into account difference between depth values. As a result the further surface lies from camera the less edges are preserved (see figure~\ref{edge_preservation}). In that situation linear depth values have to be generated in fragment shader as described in section~\ref{sec:depth_buffer}. To produce linearly distributed depth values I am using equation~\ref{eq:linear_depth}.
-\figuremacroW{edge_preservation}{Bilateral filtering results for different distances to camera}{The more distant fluid is from viewer the more smoothed its surface is. Also less edges are preserved due to z-buffer used resulting in more particles got blended into background surfaces}{0.7}
+\begin{figure}[ht]
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{gauss_fixed_close}
+(a) Closer to camera
+\end{minipage}
+\hspace{0.2cm}
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{gauss_fixed_far}
+(b) Farther from camera
+\end{minipage}
+\caption{\textbf{Bilateral filtering results for different distances to camera} - The more distant fluid is from viewer the more smoothed its surface is. Also less edges are preserved due to z-buffer used resulting in more particles got blended into background surfaces. }
+\label{edge_preservation}
+\end{figure}
+%\figuremacroW{edge_preservation}{Bilateral filtering results for different distances to camera}{The more distant fluid is from viewer the more smoothed its surface is. Also less edges are preserved due to z-buffer used resulting in more particles got blended into background surfaces}{0.7}
 
 Another issue is that when using fixed kernel size filter. As particles are rendered smaller with the distance to the viewer further surfaces will be more smooth than closer surfaces (see figure~\ref{edge_preservation}). Solving that problem requires using filter with variable kernel size, depending on fragment distance from viewer. This is implemented using several precomputed kernels which are passed as array of 1D textures into shader. Section~\ref{sec:curvatureflowsmoothing} will describe another smoothing technique that doesn't suffer from this problem. 
 
@@ -225,8 +271,51 @@ f(r) = \left\{ \begin{array}{ll}
 \end{equation}
 
 When $R_c > R$ neighboring particles combines into one smooth surface  (figure~\ref{metaballs}). This is a common technique known as metaballs \cite{Blinn1982}. The biggest problem here is to efficiently compute field values at corners and to traverse space in the most optimal way. Those topics will be described in following subsections.
- 
-\figuremacroW{metaballs}{Metaballs}{ilustrates how particles combines into one surface as their approach closer and closer together.}{1.0}
+
+\begin{figure}[ht]
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta1}
+Step 1
+\end{minipage}
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta2}
+Step 2
+\end{minipage}
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta3}
+Step 3
+\end{minipage}
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta4}
+Step 4
+\end{minipage}
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta5}
+Step 5
+\end{minipage}
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta6}
+Step 6
+\end{minipage}
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta7}
+Step 7
+\end{minipage}
+\begin{minipage}[b]{0.24\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{meta8}
+Step 8
+\end{minipage}
+\caption{\textbf{Metaballs} - illustrates how particles combines into one surface as their approach closer and closer together. }
+\label{metaballs}
+\end{figure}
 
 \subsection{Block subdivision} \label{sec:block_subdivision}
 Space is divided into blocks containing cubes (figure~\ref{block_subdivision}). Such division aims for:
@@ -236,14 +325,14 @@ Space is divided into blocks containing cubes (figure~\ref{block_subdivision}). 
 \end{itemize}
 Blocks are expanded to contain also particles that lies outside them but may influence the field values inside block. That means the block must also contain particles lying within $R_c$ distance from it - this area is called margin and has special treatment, which will be described in next section. Expanding blocks makes parallel processing very easy as dependencies between block disappear.
 
-\figuremacroW{block_subdivision}{Block subdivision}{space is divided into blocks which overlaps. Each block is divided into cubes of size S.}{0.7}
+\figuremacroW{block_subdivision}{Block subdivision}{space is divided into blocks which overlaps. Each block is divided into cubes of size S.  Image taken from~\cite{RosenbergBirdwell2008}}{0.7}
 
 Block subdivision is a first step of the algorithm. For every particle containing blocks are determined. One particle can be contained in at most 8 blocks due to blocks overlapping. Each block has a list of particles lying within its boundary. 
 
 \subsection{Block processing} \label{sec:block_processing}
 Processing of block starts from building a particle lookup cache which will be described in section \ref{sec:lookupcache}. Next, surface following marching cube algorithm is run inside block. The algorithm is named \textit{marching slices} in \cite{RosenbergBirdwell2008}. Block containing $n \times n \times n$ cubes is divided to n slabs and n+1 slices (figure~\ref{block_image}). Division is made in parallel to XY plane. Each slab contains $n \times n \times 1$ cubes and each slice contains $(n+1) \times (n+1) \times 1$ cube corners. Slices lies between slabs and serves as a cache for field values computed at corners. In addition neighboring slabs share slices that lies between them. Each slab has a list of cubes, lying within it, that should be visited - a \textit{todo list}.
 
-\figuremacroW{block_image}{Structure of a block}{}{0.7}
+\figuremacroW{block_image}{Structure of a block.  Image taken from~\cite{RosenbergBirdwell2008}}{}{1.0}
 
 To speed up a marching cubes algorithm we would like to traverse only cubes that contains surface. This requires finding so called \textit{seed cubes} - initial cubes at which algorithm will start traversing block. We then choose one of the slabs that contains one or more seed cubes and pick up one cube. Field values at cube corners are calculated and put into slice caches, surface is polygonized and neighboring cubes that contain surface are added to a \textit{todo lists} of corresponding slabs. 
 
@@ -261,12 +350,12 @@ for every particle:
 
 This method will not find local minimas every time as it always goes down from the center of a particle (see figure~\ref{fig_local_minima}).
 
-\figuremacroW{fig_local_minima}{Finding local minima}{In this example algorithm fails to find local minimum}{0.7}
+\figuremacroW{fig_local_minima}{Finding local minimum}{In this example algorithm fails to find local minimum. We have two particles forming metaball. Seeding cubes and paths to find them are marked blue, actual local minimum is marked in red circle}{0.7}
 
 \subsection{Lookup cache}\label{sec:lookupcache}
 To compute field value for a given corner all particles that lies within $r_c$ from it has to be found. This task can be accomplished by building space partitioning data structure like octtree or kdtree \cite{Bentley1975}. However costs of building spatial data structures are relatively high, and the nearest neighbor finding algorithm requires floating point computations. \cite{RosenbergBirdwell2008} presented another way to accomplish this task. Presented method uses only integer comparison. The main observation is that we are looking nearest particles in discrete points. Thus obvious approach would be to create a linked list for every corner containing all particles lying within $r_c$ from it. So for every particle we would traverse all corners lying inside a sphere of radius $r_c$ and update their particles list by inserting the current one.  The main disadvantage of this approach is that we would have to store that information for each corner, and for every corner we would have to store a separate list. This can be improved by using more sparse data structure. For a block we can store only one slice (so called projection slice) as a 2D array of $N+1$ by $N+1$. Element (x, y) of the array represents a column (x, y) of corners and stores a linked list of particles that have an influence in that column (figure~\ref{particle_lookup_cache}). To make particle lookup procedure more efficient each list is sorted by particles z coordinate. Each element of the list contains three integer values - $min_z$, $max_z$, $mid_z$ and a pointer to particle. $min_z$ and $max_z$ specifies range of slices in which particle has influence and $mid_z$ is a slab that contains center of the particle. 
 
-\figuremacroW{particle_lookup_cache}{Particle lookup cache}{each cell of projection slice represents a column in block and stores linked list of particles that have influence in that column.}{0.7}
+\figuremacroW{particle_lookup_cache}{Particle lookup cache}{Each cell of projection slice represents a column in block and stores linked list of particles that have influence in that column. Image taken from~\cite{RosenbergBirdwell2008}}{0.7}
 
 Initialization of cache starts with sorting all particles by z coordinate. Then we iterate over sorted particles and each particle is inserted into all columns in which it has an influence. 
 
@@ -289,9 +378,27 @@ Another approach is to compute normals at corners of a grid as a gradient of sca
 where W, H and D are dimensions of cube, $\vec{n}_{i, j, k}$ is normal at corner (i, j, k) and $F_{i, j, k}$ is value of scalar field at corner (i, j, k).
 As values of field are given only at corners and vertices in most cases lies between them the interpolation is required. Also this increases amount of corners at which scalar field value must be computed. Another disadvantage is that in order to speed up process of normal generation in this case, normals can't be generated after extracting isosurface. This is due to clearing caches, and thus normals have to be computed in the same time vertex are added to \textit{todo list}. This results in more complicated code.
 
-\figuremacroW{normal_generation}{Different approaches to normal generation}{gradient, average, weighted average based on triangle area, weighted average based on incident angle}{1.0}
-
 Yet another approach is to compute normal for every triangle that includes given vertex and take an average or weighted average as a vertex normal. Simple average can be computed effectively however it produces visible artifacts for sparse grids. This is because some triangles are long and narrow and should not have so much impact on final normal. To solve this weighted average can be used. Weights can be the area of triangle or an angle by given vertex. 
+
+\figuremacro{fig_normal_approx}{Normal vector computation for corner}{ $ \vec{n} = f(|\vec{v1}|) \frac{\vec{v1}}{|\vec{v1}|} +  f(|\vec{v2}|) \frac{\vec{v2}}{|\vec{v2}|}$}
+
+As approximating surface normal at given vertex as weighted average of adjacent triangles normals doesn't give satisfying results I have used different approach. It is illustrated on figure~\ref{fig_normal_approx}. For every visited corner normal vector is computed as a weighted average of vectors pointing from particle centers to this corner. The weights are field values generated by each particle in this corner. When vertex is generated between corners normal vector is computed as weighted average of corners normals. Figure~\ref{normal_generation} shows comparison between two last normal generation algorithms
+
+\begin{figure}[ht]
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{normal_vec_cross}
+(a) Weighted average based on length
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=1\textwidth]{normal_vec_improved}
+(b) Vectors computed at each visited corner
+\end{minipage}
+\caption{\textbf{Comparison of normal generation techniques} - (a) - weighted average of normals of adjacent triangles, (b) - weighted average of normals computed for corners. }
+\label{normal_generation}
+\end{figure}
 
 \subsection{Multithreading}
 \cite{RosenbergBirdwell2008} presented algorithm that runs in one thread. However algorithm has a potential of parallelization due to independence of block processing. Parallelization of this algorithm is even more desired as nowadays CPU manufacturers increase performance by multiplying CPU cores instead of increasing clock frequency of a single core. 

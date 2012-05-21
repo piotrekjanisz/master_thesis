@@ -305,7 +305,7 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	CHECK_GL_CMD(_water->render(particleData.particleCount, GL_POINTS, _waterShader));
 	
 	// smooth water
-	smoothWaterTexture();
+	//smoothWaterTexture();
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	
@@ -314,24 +314,24 @@ void ScreenSpaceParticleRenderer::render(TexturePtr& sceneColorTexture, TextureP
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 
-	//CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_waterLinDetphTexture, GL_TEXTURE0));
-	//CHECK_GL_CMD(_grayscaleIntermediateQuad->render());
+	CHECK_GL_CMD(_grayscaleIntermediateQuad->attachTexture(_waterDepthTexture, GL_TEXTURE0));
+	CHECK_GL_CMD(_grayscaleIntermediateQuad->render());
 	
-	CHECK_GL_CMD(_finalQuad->attachTexture(_waterDepthTexture, GL_TEXTURE0));
-	CHECK_GL_CMD(_finalQuad->attachTexture(sceneDepthTexture, GL_TEXTURE1));
-	CHECK_GL_CMD(_finalQuad->attachTexture(sceneColorTexture, GL_TEXTURE2));
-	CHECK_GL_CMD(_finalQuad->attachTexture(_waterThicknessTexture, GL_TEXTURE3));
-	CHECK_GL_CMD(_finalQuad->attachTexture(_waterLinDetphTexture, GL_TEXTURE4));
-	CHECK_GL_CMD(_finalQuad->attachTexture(_scene->getEnvironmentTexture(), GL_TEXTURE5));
+	//CHECK_GL_CMD(_finalQuad->attachTexture(_waterDepthTexture, GL_TEXTURE0));
+	//CHECK_GL_CMD(_finalQuad->attachTexture(sceneDepthTexture, GL_TEXTURE1));
+	//CHECK_GL_CMD(_finalQuad->attachTexture(sceneColorTexture, GL_TEXTURE2));
+	//CHECK_GL_CMD(_finalQuad->attachTexture(_waterThicknessTexture, GL_TEXTURE3));
+	//CHECK_GL_CMD(_finalQuad->attachTexture(_waterLinDetphTexture, GL_TEXTURE4));
+	//CHECK_GL_CMD(_finalQuad->attachTexture(_scene->getEnvironmentTexture(), GL_TEXTURE5));
 
-	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_x", _scene->getCtgFovX()));
-	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_y", _scene->getCtgFovY()));
-	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("far", _scene->getZFar()));
-	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform4f("lightDirection", _scene->getLightInEyeSpace()));
-	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / _scene->getWidth(), 1.0f / _scene->getHeight()));
-	CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("refractionMult", _refractionMult));
-	CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
-	CHECK_GL_CMD(_finalQuad->render());
+	//CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_x", _scene->getCtgFovX()));
+	//CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("ctg_fov_y", _scene->getCtgFovY()));
+	//CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("far", _scene->getZFar()));
+	//CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform4f("lightDirection", _scene->getLightInEyeSpace()));
+	//CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform2f("coordStep", 1.0f / _scene->getWidth(), 1.0f / _scene->getHeight()));
+	//CHECK_GL_CMD(_finalQuad->getShaderProgram()->setUniform1f("refractionMult", _refractionMult));
+	//CHECK_GL_CMD(_finalQuad->getShaderProgram()->useThis());
+	//CHECK_GL_CMD(_finalQuad->render());
 
 	endTimeQuery();
 }

@@ -12,7 +12,7 @@
 %: Style file for Latex
 % Most style definitions are in the external file PhDthesisPSnPDF.
 % In this template package, it can be found in ./Latex/Classes/
-\documentclass[twoside,11pt]{Latex/Classes/PhDthesisPSnPDF}
+\documentclass[a4paper, openright,11pt]{Latex/Classes/PhDthesisPSnPDF}
 
 %: Macro file for \LaTeX
 % Macros help you summarise frequently repeated Latex commands.
@@ -24,6 +24,10 @@
 \usepackage{verbatim} 
 \usepackage{amsmath}
 \usepackage{array}
+\usepackage{graphics}
+\usepackage{subfigure}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
 
 %: ----------------------------------------------------------------------
 %:                  TITLE PAGE: name, degree,..
@@ -45,37 +49,37 @@
 \fi
 
 
-\title{Wykorzystanie środowiska PhysX do modelowania przepływów}
-
-
-
-% ----------------------------------------------------------------------
-% The section below defines www links/email for author and institutions
-% They will appear on the title page of the PDF and can be clicked
-\ifpdf
-  \author{\href{mailto:piotrjanisz@gmail.com}{Piotr Janisz}}
-%  \cityofbirth{born in XYZ} % uncomment this if your university requires this
-%  % If city of birth is required, also uncomment 2 sections in PhDthesisPSnPDF
-%  % Just search for the "city" and you'll find them.
-  \collegeordept{\href{http://www.something.net}{Faculty of Electrical Engineering, Automatics, Computer Science and Electronics}}
-  \university{\href{http://www.something.net}{AGH}}
-
-  % The crest is a graphics file of the logo of your research institution.
-  % Place it in ./0_frontmatter/figures and specify the width
-  \crest{\includegraphics[width=4cm]{logo}}
-  
-% If you are not creating a PDF then use the following. The default is PDF.
-\else
-  \author{YourName}
-%  \cityofbirth{born in XYZ}
-  \collegeordept{CollegeOrDept}
-  \university{University}
-  \crest{\includegraphics[width=4cm]{logo}}
-\fi
-
-%\renewcommand{\submittedtext}{change the default text here if needed}
-\degree{M.Sc.}
-\degreedate{2012}
+%\title{Wykorzystanie środowiska PhysX do modelowania przepływów}
+%
+%
+%
+%% ----------------------------------------------------------------------
+%% The section below defines www links/email for author and institutions
+%% They will appear on the title page of the PDF and can be clicked
+%\ifpdf
+%  \author{\href{mailto:piotrjanisz@gmail.com}{Piotr Janisz}}
+%%  \cityofbirth{born in XYZ} % uncomment this if your university requires this
+%%  % If city of birth is required, also uncomment 2 sections in PhDthesisPSnPDF
+%%  % Just search for the "city" and you'll find them.
+%  \collegeordept{\href{http://www.something.net}{Faculty of Electrical Engineering, Automatics, Computer Science and Electronics}}
+%  \university{\href{http://www.something.net}{AGH}}
+%
+%  % The crest is a graphics file of the logo of your research institution.
+%  % Place it in ./0_frontmatter/figures and specify the width
+%  \crest{\includegraphics[width=0.2\textwidth]{logo}}
+%  
+%% If you are not creating a PDF then use the following. The default is PDF.
+%\else
+%  \author{YourName}
+%%  \cityofbirth{born in XYZ}
+%  \collegeordept{CollegeOrDept}
+%  \university{University}
+%  \crest{\includegraphics[width=4cm]{logo}}
+%\fi
+%
+%%\renewcommand{\submittedtext}{change the default text here if needed}
+%\degree{M.Sc.}
+%\degreedate{2012}
 
 
 % ----------------------------------------------------------------------
@@ -100,8 +104,49 @@
 
 %: ----------------------- generate cover page ------------------------
 
-\maketitle  % command to print the title page with above variables
+%\maketitle  % command to print the title page with above variables
+\thispagestyle{empty}
 
+\begin{center}
+Akademia Górniczo - Hutnicza im. Stanisława Staszica w Krakowie \\
+Wydział Elektrotechniki, Automatyki, Informatyki i Elektroniki \\
+Katedra Informatyki
+% \\ Akademii Górniczo Hutniczej w Krakowie
+\rule{\textwidth}{.1mm}
+\end{center}
+
+\begin{figure}[hkp!]
+ \centering
+% \includegraphics[width=50pt]{agh_znak}
+ \includegraphics[bb=0 0 64 124]{logo}
+ \label{fig:orzel_agh}
+\end{figure}
+
+% \vskip 80pt
+\begin{center}
+{\bf \large Tytuł pracy}
+\vskip 10pt
+{\bf \Large Wykorzystanie środowiska PhysX do modelowania przepływów}
+\end{center}
+
+\vskip 60pt
+\begin{center}
+{\Large \bf Piotr Janisz}\\
+{piotrekjanisz@gmail.com}
+\end{center}
+
+\vskip 50pt
+\begin{center}
+{\bf
+    Promotor pracy: dr inż. Witold Alda
+}
+\end{center}
+
+\noindent
+\rule{\textwidth}{.1mm}
+\begin{center}
+Kraków, 2012
+\end{center}
 
 
 %: ----------------------- abstract ------------------------
